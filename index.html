@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystic Vision - Inner Journey Companion</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome 6 for modern icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Mystic Vision</h1>
+            <p>Your Path to Inner Harmony & Wisdom</p>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="container">
+            <button class="nav-button active" data-section="dashboard-section"><i class="fas fa-home"></i> Home</button>
+            <button class="nav-button" data-section="meditation-section"><i class="fas fa-om"></i> Meditation</button>
+            <button class="nav-button" data-section="books-section"><i class="fas fa-book-reader"></i> Books</button>
+            <button class="nav-button" data-section="statistics-section"><i class="fas fa-chart-line"></i> Stats</button>
+            <button class="nav-button" data-section="goals-section"><i class="fas fa-bullseye"></i> Goals</button>
+            <button class="nav-button" data-section="achievements-section"><i class="fas fa-trophy"></i> Achievements</button>
+            <button class="nav-button" data-section="settings-section"><i class="fas fa-cog"></i> Settings</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="app-section active-section">
+            <div class="card dashboard-welcome">
+                <h2>Welcome, Seeker!</h2>
+                <p>A quick overview of your journey.</p>
+                <div class="stats-grid">
+                    <div><strong>Total Meditated:</strong> <span id="dash-total-med-time">0h 0m</span></div>
+                    <div><strong>Sessions:</strong> <span id="dash-total-med-sessions">0</span></div>
+                    <div><strong>Current Streak:</strong> <span id="dash-current-streak">0 days</span></div>
+                    <div><strong>Books Read:</strong> <span id="dash-books-finished">0</span></div>
+                </div>
+            </div>
+            <div class="card dashboard-recent-meds">
+                <h3>Recent Meditations</h3>
+                <ul id="dash-meditation-sessions-list">
+                    <!-- Recent sessions will be dynamically added here -->
+                </ul>
+                <button class="btn-sm" onclick="showSection('meditation-section')">View All Meditations</button>
+            </div>
+            <div class="card dashboard-recent-reads">
+                <h3>Currently Reading</h3>
+                <ul id="dash-current-reading-list">
+                    <!-- Currently reading books will be dynamically added here -->
+                </ul>
+                <button class="btn-sm" onclick="showSection('books-section')">View All Books</button>
+            </div>
+        </section>
+
+        <!-- Meditation Section -->
+        <section id="meditation-section" class="app-section">
+            <div class="card meditation-timer-card">
+                <h2><i class="fas fa-om"></i> Meditation Sanctuary</h2>
+                <div class="timer-display" id="meditation-timer-display">00:00:00</div>
+                <div class="preset-buttons">
+                    <button class="preset-meditation-time btn-sm" data-minutes="5">5 min</button>
+                    <button class="preset-meditation-time btn-sm" data-minutes="10">10 min</button>
+                    <button class="preset-meditation-time btn-sm" data-minutes="20">20 min</button>
+                    <button class="preset-meditation-time btn-sm" data-minutes="30">30 min</button>
+                    <button id="open-interval-timer-btn" class="btn-sm"><i class="fas fa-clock"></i> Interval</button>
+                </div>
+                <div class="timer-controls">
+                    <button id="start-meditation"><i class="fas fa-play"></i> Start</button>
+                    <button id="pause-meditation" disabled><i class="fas fa-pause"></i> Pause</button>
+                    <button id="stop-meditation" disabled><i class="fas fa-stop"></i> Stop</button>
+                    <button id="reset-meditation"><i class="fas fa-redo-alt"></i> Reset</button>
+                </div>
+
+                <h3>Ambient Sounds</h3>
+                <div class="sound-controls">
+                    <select id="ambient-sound-selector" class="input-field">
+                        <option value="none">None</option>
+                        <option value="rain">Rain</option>
+                        <option value="forest">Forest</option>
+                        <option value="ocean">Ocean Waves</option>
+                        <option value="chimes">Wind Chimes</option>
+                    </select>
+                    <input type="range" id="ambient-volume" min="0" max="1" step="0.05" value="0.5">
+                </div>
+            </div>
+
+            <div class="card meditation-history-card">
+                <h3><i class="fas fa-history"></i> Your Meditation Journey</h3>
+                <ul id="meditation-sessions-list">
+                    <!-- Meditation sessions will be dynamically added here -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Spiritual Books Section -->
+        <section id="books-section" class="app-section">
+            <div class="card">
+                <h2><i class="fas fa-book-reader"></i> Wisdom Scrolls</h2>
+                <div class="book-input-area">
+                    <input type="file" id="new-book-cover" accept="image/*" style="display: none;">
+                    <button id="upload-book-cover-btn" class="btn-icon" title="Upload Cover Image"><i class="fas fa-image"></i></button>
+                    <input type="text" id="new-book-title" placeholder="Book Title" class="input-field">
+                    <input type="text" id="new-book-author" placeholder="Author (optional)" class="input-field">
+                    <input type="number" id="new-book-pages" placeholder="Total Pages (optional)" class="input-field small-input">
+                    <input type="text" id="new-book-genre" placeholder="Genre (optional, e.g., Spiritual, Philosophy)" class="input-field">
+                    <button id="add-book"><i class="fas fa-plus"></i> Add Book</button>
+                </div>
+                <div class="search-input-area">
+                    <input type="text" id="book-search-input" placeholder="Search books by title, author, or genre..." class="input-field">
+                    <button id="clear-book-search" class="btn-icon"><i class="fas fa-times"></i></button>
+                </div>
+                <h3>Your Spiritual Library</h3>
+                <ul id="books-list">
+                    <!-- Books will be dynamically added here -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section id="statistics-section" class="app-section">
+            <div class="card card-full-width">
+                <h2><i class="fas fa-chart-line"></i> Meditation Statistics</h2>
+                <h3>Daily Meditation Time Trend</h3>
+                <canvas id="meditationTimeChart"></canvas>
+                <h3>Meditation Session Count</h3>
+                <canvas id="meditationSessionsChart"></canvas>
+                <h3>Mood Distribution</h3>
+                <canvas id="moodDistributionChart"></canvas>
+                <h3>Top Meditation Tags</h3>
+                <canvas id="topTagsChart"></canvas>
+            </div>
+            <div class="card card-full-width">
+                <h2><i class="fas fa-chart-pie"></i> Book Reading Statistics</h2>
+                <h3>Reading Time by Book</h3>
+                <canvas id="bookReadingTimeChart"></canvas>
+            </div>
+            <div class="card card-full-width">
+                <h2><i class="fas fa-calendar-alt"></i> Meditation Calendar</h2>
+                <div id="meditation-calendar" class="meditation-calendar"></div>
+            </div>
+        </section>
+
+        <!-- Goals Section -->
+        <section id="goals-section" class="app-section">
+            <div class="card">
+                <h2><i class="fas fa-bullseye"></i> Your Goals</h2>
+                <div class="goal-input-area">
+                    <select id="goal-type" class="input-field small-input">
+                        <option value="meditation_duration">Meditation Duration</option>
+                        <option value="meditation_days">Meditation Days</option>
+                        <option value="books_finished">Books Finished</option>
+                    </select>
+                    <input type="number" id="goal-value" placeholder="Target Value" class="input-field small-input" min="1">
+                    <select id="goal-period" class="input-field small-input">
+                        <option value="week">Per Week</option>
+                        <option value="month">Per Month</option>
+                        <option value="overall">Overall</option>
+                    </select>
+                    <button id="add-goal"><i class="fas fa-plus"></i> Add Goal</button>
+                </div>
+                <h3>Active Goals</h3>
+                <ul id="active-goals-list">
+                    <!-- Active goals will be dynamically added here -->
+                </ul>
+                <h3>Completed Goals</h3>
+                <ul id="completed-goals-list">
+                    <!-- Completed goals will be dynamically added here -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section id="achievements-section" class="app-section">
+            <div class="card card-full-width">
+                <h2><i class="fas fa-trophy"></i> Your Achievements</h2>
+                <div id="achievements-grid" class="achievements-grid">
+                    <!-- Achievements will be dynamically added here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="app-section">
+            <div class="card">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <div class="setting-item">
+                    <span>Theme:</span>
+                    <select id="theme-selector" class="input-field small-input">
+                        <option value="light">Light (Serene)</option>
+                        <option value="dark">Dark (Mystic Night)</option>
+                        <option value="cosmic">Cosmic Whisper</option>
+                        <option value="forest">Forest Bloom</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <span>Custom Background Image:</span>
+                    <input type="file" id="custom-background-file" accept="image/*" style="display: none;">
+                    <button id="upload-custom-background-btn"><i class="fas fa-upload"></i> Upload Image</button>
+                    <button id="clear-custom-background-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                </div>
+                <hr>
+                <div class="setting-item">
+                    <span>End Meditation Bell Sound:</span>
+                    <label class="switch">
+                        <input type="checkbox" id="bell-sound-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <span>Bell Volume:</span>
+                    <input type="range" id="bell-volume" min="0" max="1" step="0.05" value="0.5">
+                </div>
+                <div class="setting-item">
+                    <span>Daily Meditation Reminder:</span>
+                    <input type="time" id="daily-reminder-time" class="input-field small-input">
+                    <button id="set-daily-reminder-btn" class="btn-sm"><i class="fas fa-bell"></i> Set</button>
+                    <button id="clear-daily-reminder-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                </div>
+                <hr>
+                <div class="setting-item data-management-buttons">
+                    <button id="export-data-btn" class="export-button"><i class="fas fa-download"></i> Export Data</button>
+                    <input type="file" id="import-data-file" accept=".json" style="display: none;">
+                    <button id="import-data-btn" class="import-button"><i class="fas fa-upload"></i> Import Data</button>
+                    <button id="clear-all-data-btn" class="delete-button"><i class="fas fa-trash-alt"></i> Clear All Data</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="current-year"></span> Mystic Vision. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+
+    <!-- Meditation Journal Modal -->
+    <div id="meditation-journal-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" data-modal="meditation-journal-modal">&times;</span>
+            <h2>Meditation Reflection</h2>
+            <div class="journal-meta">
+                <div class="mood-tracker">
+                    <h4>Mood:</h4>
+                    <div class="mood-emojis">
+                        <span class="emoji" data-mood="calm">😌</span>
+                        <span class="emoji" data-mood="focused">🧐</span>
+                        <span class="emoji" data-mood="peaceful">🕊️</span>
+                        <span class="emoji" data-mood="energetic">⚡</span>
+                        <span class="emoji" data-mood="tired">😴</span>
+                        <span class="emoji" data-mood="anxious">😟</span>
+                        <span class="emoji" data-mood="happy">😊</span>
+                    </div>
+                </div>
+                <div class="energy-tracker">
+                    <h4>Energy Level:</h4>
+                    <input type="range" id="energy-level" min="0" max="10" value="5" class="slider-energy">
+                    <span id="energy-value">5</span>
+                </div>
+            </div>
+            <h4>Tags:</h4>
+            <input type="text" id="journal-tags-input" placeholder="Add tags (e.g., stress, focus, morning)" class="input-field">
+            <h4>Thoughts & Insights:</h4>
+            <textarea id="journal-text" placeholder="Write down your thoughts, insights, or feelings..."></textarea>
+            <h4>Gratitude:</h4>
+            <textarea id="gratitude-text" placeholder="What are you grateful for today?"></textarea>
+            <button id="save-journal-entry">Save Reflection</button>
+        </div>
+    </div>
+
+    <!-- Book Details/Notes Modal -->
+    <div id="book-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" data-modal="book-details-modal">&times;</span>
+            <div class="book-modal-header">
+                <img id="modal-book-cover-img" src="./img/default_book.png" alt="Book Cover" class="modal-book-cover">
+                <div>
+                    <h2 id="modal-book-title"></h2>
+                    <p><strong>Author:</strong> <span id="modal-book-author"></span></p>
+                    <p><strong>Genre:</strong> <span id="modal-book-genre"></span></p>
+                    <p><strong>Status:</strong> <span id="modal-book-status"></span></p>
+                    <div class="book-rating" id="modal-book-rating">
+                        <!-- Stars will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="book-modal-progress">
+                <p><strong>Total Pages:</strong> <span id="modal-book-total-pages"></span></p>
+                <label for="modal-book-current-page"><strong>Current Page:</strong></label>
+                <input type="number" id="modal-book-current-page" class="input-field small-input">
+                <p><strong>Progress:</strong> <span id="modal-book-progress">0%</span></p>
+                <div class="progress-bar-container"><div class="progress-bar" id="modal-progress-bar"></div></div>
+                <p><strong>Total Reading Time:</strong> <span id="modal-book-total-reading-time">0h 0m</span></p>
+            </div>
+            
+            <h3>Notes</h3>
+            <textarea id="modal-book-notes-input" placeholder="Add a new note..."></textarea>
+            <button id="add-book-note-btn">Add Note</button>
+            <ul id="modal-book-notes-list">
+                <!-- Book notes will be dynamically added here -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Interval Timer Setup Modal -->
+    <div id="interval-timer-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" data-modal="interval-timer-modal">&times;</span>
+            <h2><i class="fas fa-clock"></i> Set Up Interval Meditation</h2>
+            <div id="interval-steps-container">
+                <!-- Interval steps will be dynamically added here -->
+            </div>
+            <button id="add-interval-step" class="btn-sm"><i class="fas fa-plus"></i> Add Step</button>
+            <button id="start-interval-meditation">Start Interval Meditation</button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" data-modal="confirmation-modal">&times;</span>
+            <h2>Confirm Action</h2>
+            <p id="confirmation-message"></p>
+            <div class="modal-actions">
+                <button id="confirm-action-btn" class="delete-button">Confirm</button>
+                <button id="cancel-action-btn" class="secondary-button">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
