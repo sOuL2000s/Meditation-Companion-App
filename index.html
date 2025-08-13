@@ -36,7 +36,7 @@
         <section id="dashboard-section" class="app-section active-section">
             <div class="card dashboard-welcome">
                 <h2>Welcome, Seeker!</h2>
-                <p>A quick overview of your journey.</p>
+                <p class="card-description">A quick overview of your journey.</p>
                 <div class="stats-grid">
                     <div><strong>Total Meditated:</strong> <span id="dash-total-med-time">0h 0m</span></div>
                     <div><strong>Sessions:</strong> <span id="dash-total-med-sessions">0</span></div>
@@ -46,14 +46,14 @@
             </div>
             <div class="card dashboard-recent-meds">
                 <h3>Recent Meditations</h3>
-                <ul id="dash-meditation-sessions-list">
+                <ul id="dash-meditation-sessions-list" class="mini-list">
                     <!-- Recent sessions will be dynamically added here -->
                 </ul>
                 <button class="btn-sm" onclick="showSection('meditation-section')">View All Meditations</button>
             </div>
             <div class="card dashboard-recent-reads">
                 <h3>Currently Reading</h3>
-                <ul id="dash-current-reading-list">
+                <ul id="dash-current-reading-list" class="mini-list">
                     <!-- Currently reading books will be dynamically added here -->
                 </ul>
                 <button class="btn-sm" onclick="showSection('books-section')">View All Books</button>
@@ -65,13 +65,20 @@
             <div class="card meditation-timer-card">
                 <h2><i class="fas fa-om"></i> Meditation Sanctuary</h2>
                 <div class="timer-display" id="meditation-timer-display">00:00:00</div>
-                <div class="preset-buttons">
-                    <button class="preset-meditation-time btn-sm" data-minutes="5">5 min</button>
-                    <button class="preset-meditation-time btn-sm" data-minutes="10">10 min</button>
-                    <button class="preset-meditation-time btn-sm" data-minutes="20">20 min</button>
-                    <button class="preset-meditation-time btn-sm" data-minutes="30">30 min</button>
-                    <button id="open-interval-timer-btn" class="btn-sm"><i class="fas fa-clock"></i> Interval</button>
+                <div class="meditation-controls-group">
+                    <div class="preset-buttons">
+                        <button class="preset-meditation-time btn-sm" data-minutes="5">5 min</button>
+                        <button class="preset-meditation-time btn-sm" data-minutes="10">10 min</button>
+                        <button class="preset-meditation-time btn-sm" data-minutes="20">20 min</button>
+                        <button class="preset-meditation-time btn-sm" data-minutes="30">30 min</button>
+                        <button id="open-interval-timer-btn" class="btn-sm"><i class="fas fa-clock"></i> Interval</button>
+                    </div>
+                    <div class="custom-timer-input">
+                        <input type="number" id="custom-meditation-minutes" min="1" placeholder="Custom min" class="input-field small-input">
+                        <button id="set-custom-meditation" class="btn-sm"><i class="fas fa-check"></i> Set</button>
+                    </div>
                 </div>
+                
                 <div class="timer-controls">
                     <button id="start-meditation"><i class="fas fa-play"></i> Start</button>
                     <button id="pause-meditation" disabled><i class="fas fa-pause"></i> Pause</button>
@@ -81,7 +88,7 @@
 
                 <h3>Ambient Sounds</h3>
                 <div class="sound-controls">
-                    <select id="ambient-sound-selector" class="input-field">
+                    <select id="ambient-sound-selector" class="input-field small-input">
                         <option value="none">None</option>
                         <option value="rain">Rain</option>
                         <option value="forest">Forest</option>
@@ -102,7 +109,7 @@
 
         <!-- Spiritual Books Section -->
         <section id="books-section" class="app-section">
-            <div class="card">
+            <div class="card card-full-width">
                 <h2><i class="fas fa-book-reader"></i> Wisdom Scrolls</h2>
                 <div class="book-input-area">
                     <input type="file" id="new-book-cover" accept="image/*" style="display: none;">
@@ -118,7 +125,7 @@
                     <button id="clear-book-search" class="btn-icon"><i class="fas fa-times"></i></button>
                 </div>
                 <h3>Your Spiritual Library</h3>
-                <ul id="books-list">
+                <ul id="books-list" class="book-list">
                     <!-- Books will be dynamically added here -->
                 </ul>
             </div>
@@ -129,18 +136,18 @@
             <div class="card card-full-width">
                 <h2><i class="fas fa-chart-line"></i> Meditation Statistics</h2>
                 <h3>Daily Meditation Time Trend</h3>
-                <canvas id="meditationTimeChart"></canvas>
+                <div class="chart-container"><canvas id="meditationTimeChart"></canvas></div>
                 <h3>Meditation Session Count</h3>
-                <canvas id="meditationSessionsChart"></canvas>
+                <div class="chart-container"><canvas id="meditationSessionsChart"></canvas></div>
                 <h3>Mood Distribution</h3>
-                <canvas id="moodDistributionChart"></canvas>
+                <div class="chart-container"><canvas id="moodDistributionChart"></canvas></div>
                 <h3>Top Meditation Tags</h3>
-                <canvas id="topTagsChart"></canvas>
+                <div class="chart-container"><canvas id="topTagsChart"></canvas></div>
             </div>
             <div class="card card-full-width">
                 <h2><i class="fas fa-chart-pie"></i> Book Reading Statistics</h2>
                 <h3>Reading Time by Book</h3>
-                <canvas id="bookReadingTimeChart"></canvas>
+                <div class="chart-container"><canvas id="bookReadingTimeChart"></canvas></div>
             </div>
             <div class="card card-full-width">
                 <h2><i class="fas fa-calendar-alt"></i> Meditation Calendar</h2>
@@ -150,7 +157,7 @@
 
         <!-- Goals Section -->
         <section id="goals-section" class="app-section">
-            <div class="card">
+            <div class="card card-full-width">
                 <h2><i class="fas fa-bullseye"></i> Your Goals</h2>
                 <div class="goal-input-area">
                     <select id="goal-type" class="input-field small-input">
@@ -189,7 +196,7 @@
 
         <!-- Settings Section -->
         <section id="settings-section" class="app-section">
-            <div class="card">
+            <div class="card card-full-width">
                 <h2><i class="fas fa-cog"></i> Settings</h2>
                 <div class="setting-item">
                     <span>Theme:</span>
@@ -202,9 +209,11 @@
                 </div>
                 <div class="setting-item">
                     <span>Custom Background Image:</span>
-                    <input type="file" id="custom-background-file" accept="image/*" style="display: none;">
-                    <button id="upload-custom-background-btn"><i class="fas fa-upload"></i> Upload Image</button>
-                    <button id="clear-custom-background-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                    <div class="setting-buttons-group">
+                        <input type="file" id="custom-background-file" accept="image/*" style="display: none;">
+                        <button id="upload-custom-background-btn" class="btn-sm"><i class="fas fa-upload"></i> Upload Image</button>
+                        <button id="clear-custom-background-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                    </div>
                 </div>
                 <hr>
                 <div class="setting-item">
@@ -220,9 +229,11 @@
                 </div>
                 <div class="setting-item">
                     <span>Daily Meditation Reminder:</span>
-                    <input type="time" id="daily-reminder-time" class="input-field small-input">
-                    <button id="set-daily-reminder-btn" class="btn-sm"><i class="fas fa-bell"></i> Set</button>
-                    <button id="clear-daily-reminder-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                    <div class="setting-buttons-group">
+                        <input type="time" id="daily-reminder-time" class="input-field small-input">
+                        <button id="set-daily-reminder-btn" class="btn-sm"><i class="fas fa-bell"></i> Set</button>
+                        <button id="clear-daily-reminder-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                    </div>
                 </div>
                 <hr>
                 <div class="setting-item data-management-buttons">
@@ -252,19 +263,18 @@
                 <div class="mood-tracker">
                     <h4>Mood:</h4>
                     <div class="mood-emojis">
-                        <span class="emoji" data-mood="calm">😌</span>
-                        <span class="emoji" data-mood="focused">🧐</span>
-                        <span class="emoji" data-mood="peaceful">🕊️</span>
-                        <span class="emoji" data-mood="energetic">⚡</span>
-                        <span class="emoji" data-mood="tired">😴</span>
-                        <span class="emoji" data-mood="anxious">😟</span>
-                        <span class="emoji" data-mood="happy">😊</span>
+                        <span class="emoji" data-mood="calm" title="Calm">😌</span>
+                        <span class="emoji" data-mood="focused" title="Focused">🧐</span>
+                        <span class="emoji" data-mood="peaceful" title="Peaceful">🕊️</span>
+                        <span class="emoji" data-mood="energetic" title="Energetic">⚡</span>
+                        <span class="emoji" data-mood="tired" title="Tired">😴</span>
+                        <span class="emoji" data-mood="anxious" title="Anxious">😟</span>
+                        <span class="emoji" data-mood="happy" title="Happy">😊</span>
                     </div>
                 </div>
                 <div class="energy-tracker">
-                    <h4>Energy Level:</h4>
+                    <h4>Energy Level: <span id="energy-value">5</span>/10</h4>
                     <input type="range" id="energy-level" min="0" max="10" value="5" class="slider-energy">
-                    <span id="energy-value">5</span>
                 </div>
             </div>
             <h4>Tags:</h4>
@@ -283,11 +293,11 @@
             <span class="close-button" data-modal="book-details-modal">&times;</span>
             <div class="book-modal-header">
                 <img id="modal-book-cover-img" src="./img/default_book.png" alt="Book Cover" class="modal-book-cover">
-                <div>
+                <div class="book-info-text">
                     <h2 id="modal-book-title"></h2>
                     <p><strong>Author:</strong> <span id="modal-book-author"></span></p>
                     <p><strong>Genre:</strong> <span id="modal-book-genre"></span></p>
-                    <p><strong>Status:</strong> <span id="modal-book-status"></span></p>
+                    <p><strong>Status:</strong> <span id="modal-book-status-container"></span></p>
                     <div class="book-rating" id="modal-book-rating">
                         <!-- Stars will be dynamically added here -->
                     </div>
@@ -296,8 +306,10 @@
             
             <div class="book-modal-progress">
                 <p><strong>Total Pages:</strong> <span id="modal-book-total-pages"></span></p>
-                <label for="modal-book-current-page"><strong>Current Page:</strong></label>
-                <input type="number" id="modal-book-current-page" class="input-field small-input">
+                <div class="page-input-group">
+                    <label for="modal-book-current-page"><strong>Current Page:</strong></label>
+                    <input type="number" id="modal-book-current-page" class="input-field small-input" min="0">
+                </div>
                 <p><strong>Progress:</strong> <span id="modal-book-progress">0%</span></p>
                 <div class="progress-bar-container"><div class="progress-bar" id="modal-progress-bar"></div></div>
                 <p><strong>Total Reading Time:</strong> <span id="modal-book-total-reading-time">0h 0m</span></p>
@@ -306,7 +318,7 @@
             <h3>Notes</h3>
             <textarea id="modal-book-notes-input" placeholder="Add a new note..."></textarea>
             <button id="add-book-note-btn">Add Note</button>
-            <ul id="modal-book-notes-list">
+            <ul id="modal-book-notes-list" class="notes-list">
                 <!-- Book notes will be dynamically added here -->
             </ul>
         </div>
@@ -321,13 +333,13 @@
                 <!-- Interval steps will be dynamically added here -->
             </div>
             <button id="add-interval-step" class="btn-sm"><i class="fas fa-plus"></i> Add Step</button>
-            <button id="start-interval-meditation">Start Interval Meditation</button>
+            <button id="start-interval-meditation" class="btn-success">Start Interval Meditation</button>
         </div>
     </div>
 
     <!-- Confirmation Modal -->
     <div id="confirmation-modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content modal-small">
             <span class="close-button" data-modal="confirmation-modal">&times;</span>
             <h2>Confirm Action</h2>
             <p id="confirmation-message"></p>

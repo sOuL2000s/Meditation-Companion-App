@@ -1,3 +1,357 @@
+
+--- START FILE: index.html ---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystic Vision - Inner Journey Companion</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome 6 for modern icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Mystic Vision</h1>
+            <p>Your Path to Inner Harmony & Wisdom</p>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="container">
+            <button class="nav-button active" data-section="dashboard-section"><i class="fas fa-home"></i> Home</button>
+            <button class="nav-button" data-section="meditation-section"><i class="fas fa-om"></i> Meditation</button>
+            <button class="nav-button" data-section="books-section"><i class="fas fa-book-reader"></i> Books</button>
+            <button class="nav-button" data-section="statistics-section"><i class="fas fa-chart-line"></i> Stats</button>
+            <button class="nav-button" data-section="goals-section"><i class="fas fa-bullseye"></i> Goals</button>
+            <button class="nav-button" data-section="achievements-section"><i class="fas fa-trophy"></i> Achievements</button>
+            <button class="nav-button" data-section="settings-section"><i class="fas fa-cog"></i> Settings</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="app-section active-section">
+            <div class="card dashboard-welcome">
+                <h2>Welcome, Seeker!</h2>
+                <p>A quick overview of your journey.</p>
+                <div class="stats-grid">
+                    <div><strong>Total Meditated:</strong> <span id="dash-total-med-time">0h 0m</span></div>
+                    <div><strong>Sessions:</strong> <span id="dash-total-med-sessions">0</span></div>
+                    <div><strong>Current Streak:</strong> <span id="dash-current-streak">0 days</span></div>
+                    <div><strong>Books Read:</strong> <span id="dash-books-finished">0</span></div>
+                </div>
+            </div>
+            <div class="card dashboard-recent-meds">
+                <h3>Recent Meditations</h3>
+                <ul id="dash-meditation-sessions-list">
+                    <!-- Recent sessions will be dynamically added here -->
+                </ul>
+                <button class="btn-sm" onclick="showSection('meditation-section')">View All Meditations</button>
+            </div>
+            <div class="card dashboard-recent-reads">
+                <h3>Currently Reading</h3>
+                <ul id="dash-current-reading-list">
+                    <!-- Currently reading books will be dynamically added here -->
+                </ul>
+                <button class="btn-sm" onclick="showSection('books-section')">View All Books</button>
+            </div>
+        </section>
+
+        <!-- Meditation Section -->
+        <section id="meditation-section" class="app-section">
+            <div class="card meditation-timer-card">
+                <h2><i class="fas fa-om"></i> Meditation Sanctuary</h2>
+                <div class="timer-display" id="meditation-timer-display">00:00:00</div>
+                <div class="preset-buttons">
+                    <button class="preset-meditation-time btn-sm" data-minutes="5">5 min</button>
+                    <button class="preset-meditation-time btn-sm" data-minutes="10">10 min</button>
+                    <button class="preset-meditation-time btn-sm" data-minutes="20">20 min</button>
+                    <button class="preset-meditation-time btn-sm" data-minutes="30">30 min</button>
+                    <button id="open-interval-timer-btn" class="btn-sm"><i class="fas fa-clock"></i> Interval</button>
+                </div>
+                <div class="timer-controls">
+                    <button id="start-meditation"><i class="fas fa-play"></i> Start</button>
+                    <button id="pause-meditation" disabled><i class="fas fa-pause"></i> Pause</button>
+                    <button id="stop-meditation" disabled><i class="fas fa-stop"></i> Stop</button>
+                    <button id="reset-meditation"><i class="fas fa-redo-alt"></i> Reset</button>
+                </div>
+
+                <h3>Ambient Sounds</h3>
+                <div class="sound-controls">
+                    <select id="ambient-sound-selector" class="input-field">
+                        <option value="none">None</option>
+                        <option value="rain">Rain</option>
+                        <option value="forest">Forest</option>
+                        <option value="ocean">Ocean Waves</option>
+                        <option value="chimes">Wind Chimes</option>
+                    </select>
+                    <input type="range" id="ambient-volume" min="0" max="1" step="0.05" value="0.5">
+                </div>
+            </div>
+
+            <div class="card meditation-history-card">
+                <h3><i class="fas fa-history"></i> Your Meditation Journey</h3>
+                <ul id="meditation-sessions-list">
+                    <!-- Meditation sessions will be dynamically added here -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Spiritual Books Section -->
+        <section id="books-section" class="app-section">
+            <div class="card">
+                <h2><i class="fas fa-book-reader"></i> Wisdom Scrolls</h2>
+                <div class="book-input-area">
+                    <input type="file" id="new-book-cover" accept="image/*" style="display: none;">
+                    <button id="upload-book-cover-btn" class="btn-icon" title="Upload Cover Image"><i class="fas fa-image"></i></button>
+                    <input type="text" id="new-book-title" placeholder="Book Title" class="input-field">
+                    <input type="text" id="new-book-author" placeholder="Author (optional)" class="input-field">
+                    <input type="number" id="new-book-pages" placeholder="Total Pages (optional)" class="input-field small-input">
+                    <input type="text" id="new-book-genre" placeholder="Genre (optional, e.g., Spiritual, Philosophy)" class="input-field">
+                    <button id="add-book"><i class="fas fa-plus"></i> Add Book</button>
+                </div>
+                <div class="search-input-area">
+                    <input type="text" id="book-search-input" placeholder="Search books by title, author, or genre..." class="input-field">
+                    <button id="clear-book-search" class="btn-icon"><i class="fas fa-times"></i></button>
+                </div>
+                <h3>Your Spiritual Library</h3>
+                <ul id="books-list">
+                    <!-- Books will be dynamically added here -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section id="statistics-section" class="app-section">
+            <div class="card card-full-width">
+                <h2><i class="fas fa-chart-line"></i> Meditation Statistics</h2>
+                <h3>Daily Meditation Time Trend</h3>
+                <canvas id="meditationTimeChart"></canvas>
+                <h3>Meditation Session Count</h3>
+                <canvas id="meditationSessionsChart"></canvas>
+                <h3>Mood Distribution</h3>
+                <canvas id="moodDistributionChart"></canvas>
+                <h3>Top Meditation Tags</h3>
+                <canvas id="topTagsChart"></canvas>
+            </div>
+            <div class="card card-full-width">
+                <h2><i class="fas fa-chart-pie"></i> Book Reading Statistics</h2>
+                <h3>Reading Time by Book</h3>
+                <canvas id="bookReadingTimeChart"></canvas>
+            </div>
+            <div class="card card-full-width">
+                <h2><i class="fas fa-calendar-alt"></i> Meditation Calendar</h2>
+                <div id="meditation-calendar" class="meditation-calendar"></div>
+            </div>
+        </section>
+
+        <!-- Goals Section -->
+        <section id="goals-section" class="app-section">
+            <div class="card">
+                <h2><i class="fas fa-bullseye"></i> Your Goals</h2>
+                <div class="goal-input-area">
+                    <select id="goal-type" class="input-field small-input">
+                        <option value="meditation_duration">Meditation Duration</option>
+                        <option value="meditation_days">Meditation Days</option>
+                        <option value="books_finished">Books Finished</option>
+                    </select>
+                    <input type="number" id="goal-value" placeholder="Target Value" class="input-field small-input" min="1">
+                    <select id="goal-period" class="input-field small-input">
+                        <option value="week">Per Week</option>
+                        <option value="month">Per Month</option>
+                        <option value="overall">Overall</option>
+                    </select>
+                    <button id="add-goal"><i class="fas fa-plus"></i> Add Goal</button>
+                </div>
+                <h3>Active Goals</h3>
+                <ul id="active-goals-list">
+                    <!-- Active goals will be dynamically added here -->
+                </ul>
+                <h3>Completed Goals</h3>
+                <ul id="completed-goals-list">
+                    <!-- Completed goals will be dynamically added here -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section id="achievements-section" class="app-section">
+            <div class="card card-full-width">
+                <h2><i class="fas fa-trophy"></i> Your Achievements</h2>
+                <div id="achievements-grid" class="achievements-grid">
+                    <!-- Achievements will be dynamically added here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="app-section">
+            <div class="card">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <div class="setting-item">
+                    <span>Theme:</span>
+                    <select id="theme-selector" class="input-field small-input">
+                        <option value="light">Light (Serene)</option>
+                        <option value="dark">Dark (Mystic Night)</option>
+                        <option value="cosmic">Cosmic Whisper</option>
+                        <option value="forest">Forest Bloom</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <span>Custom Background Image:</span>
+                    <input type="file" id="custom-background-file" accept="image/*" style="display: none;">
+                    <button id="upload-custom-background-btn"><i class="fas fa-upload"></i> Upload Image</button>
+                    <button id="clear-custom-background-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                </div>
+                <hr>
+                <div class="setting-item">
+                    <span>End Meditation Bell Sound:</span>
+                    <label class="switch">
+                        <input type="checkbox" id="bell-sound-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <span>Bell Volume:</span>
+                    <input type="range" id="bell-volume" min="0" max="1" step="0.05" value="0.5">
+                </div>
+                <div class="setting-item">
+                    <span>Daily Meditation Reminder:</span>
+                    <input type="time" id="daily-reminder-time" class="input-field small-input">
+                    <button id="set-daily-reminder-btn" class="btn-sm"><i class="fas fa-bell"></i> Set</button>
+                    <button id="clear-daily-reminder-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                </div>
+                <hr>
+                <div class="setting-item data-management-buttons">
+                    <button id="export-data-btn" class="export-button"><i class="fas fa-download"></i> Export Data</button>
+                    <input type="file" id="import-data-file" accept=".json" style="display: none;">
+                    <button id="import-data-btn" class="import-button"><i class="fas fa-upload"></i> Import Data</button>
+                    <button id="clear-all-data-btn" class="delete-button"><i class="fas fa-trash-alt"></i> Clear All Data</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="current-year"></span> Mystic Vision. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+
+    <!-- Meditation Journal Modal -->
+    <div id="meditation-journal-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" data-modal="meditation-journal-modal">&times;</span>
+            <h2>Meditation Reflection</h2>
+            <div class="journal-meta">
+                <div class="mood-tracker">
+                    <h4>Mood:</h4>
+                    <div class="mood-emojis">
+                        <span class="emoji" data-mood="calm">😌</span>
+                        <span class="emoji" data-mood="focused">🧐</span>
+                        <span class="emoji" data-mood="peaceful">🕊️</span>
+                        <span class="emoji" data-mood="energetic">⚡</span>
+                        <span class="emoji" data-mood="tired">😴</span>
+                        <span class="emoji" data-mood="anxious">😟</span>
+                        <span class="emoji" data-mood="happy">😊</span>
+                    </div>
+                </div>
+                <div class="energy-tracker">
+                    <h4>Energy Level:</h4>
+                    <input type="range" id="energy-level" min="0" max="10" value="5" class="slider-energy">
+                    <span id="energy-value">5</span>
+                </div>
+            </div>
+            <h4>Tags:</h4>
+            <input type="text" id="journal-tags-input" placeholder="Add tags (e.g., stress, focus, morning)" class="input-field">
+            <h4>Thoughts & Insights:</h4>
+            <textarea id="journal-text" placeholder="Write down your thoughts, insights, or feelings..."></textarea>
+            <h4>Gratitude:</h4>
+            <textarea id="gratitude-text" placeholder="What are you grateful for today?"></textarea>
+            <button id="save-journal-entry">Save Reflection</button>
+        </div>
+    </div>
+
+    <!-- Book Details/Notes Modal -->
+    <div id="book-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" data-modal="book-details-modal">&times;</span>
+            <div class="book-modal-header">
+                <img id="modal-book-cover-img" src="./img/default_book.png" alt="Book Cover" class="modal-book-cover">
+                <div>
+                    <h2 id="modal-book-title"></h2>
+                    <p><strong>Author:</strong> <span id="modal-book-author"></span></p>
+                    <p><strong>Genre:</strong> <span id="modal-book-genre"></span></p>
+                    <p><strong>Status:</strong> <span id="modal-book-status"></span></p>
+                    <div class="book-rating" id="modal-book-rating">
+                        <!-- Stars will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="book-modal-progress">
+                <p><strong>Total Pages:</strong> <span id="modal-book-total-pages"></span></p>
+                <label for="modal-book-current-page"><strong>Current Page:</strong></label>
+                <input type="number" id="modal-book-current-page" class="input-field small-input">
+                <p><strong>Progress:</strong> <span id="modal-book-progress">0%</span></p>
+                <div class="progress-bar-container"><div class="progress-bar" id="modal-progress-bar"></div></div>
+                <p><strong>Total Reading Time:</strong> <span id="modal-book-total-reading-time">0h 0m</span></p>
+            </div>
+            
+            <h3>Notes</h3>
+            <textarea id="modal-book-notes-input" placeholder="Add a new note..."></textarea>
+            <button id="add-book-note-btn">Add Note</button>
+            <ul id="modal-book-notes-list">
+                <!-- Book notes will be dynamically added here -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Interval Timer Setup Modal -->
+    <div id="interval-timer-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" data-modal="interval-timer-modal">&times;</span>
+            <h2><i class="fas fa-clock"></i> Set Up Interval Meditation</h2>
+            <div id="interval-steps-container">
+                <!-- Interval steps will be dynamically added here -->
+            </div>
+            <button id="add-interval-step" class="btn-sm"><i class="fas fa-plus"></i> Add Step</button>
+            <button id="start-interval-meditation">Start Interval Meditation</button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" data-modal="confirmation-modal">&times;</span>
+            <h2>Confirm Action</h2>
+            <p id="confirmation-message"></p>
+            <div class="modal-actions">
+                <button id="confirm-action-btn" class="delete-button">Confirm</button>
+                <button id="cancel-action-btn" class="secondary-button">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+--- END FILE: index.html ---
+
+--- START FILE: script.js ---
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- DOM Elements Cache ---
     const elements = {
@@ -20,13 +374,11 @@ document.addEventListener('DOMContentLoaded', () => {
         stopMeditationBtn: document.getElementById('stop-meditation'),
         resetMeditationBtn: document.getElementById('reset-meditation'),
         presetMeditationButtons: document.querySelectorAll('.preset-meditation-time'),
-        customMeditationMinutesInput: document.getElementById('custom-meditation-minutes'),
-        setCustomMeditationBtn: document.getElementById('set-custom-meditation'),
         meditationSessionsList: document.getElementById('meditation-sessions-list'),
         openIntervalTimerBtn: document.getElementById('open-interval-timer-btn'),
         ambientSoundSelector: document.getElementById('ambient-sound-selector'),
         ambientVolumeControl: document.getElementById('ambient-volume'),
-
+        
         // Book Section
         newBookCoverInput: document.getElementById('new-book-cover'),
         uploadBookCoverBtn: document.getElementById('upload-book-cover-btn'),
@@ -88,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalBookTitle: document.getElementById('modal-book-title'),
         modalBookAuthor: document.getElementById('modal-book-author'),
         modalBookGenre: document.getElementById('modal-book-genre'),
-        modalBookStatusContainer: document.getElementById('modal-book-status-container'), // This will hold the select dropdown
+        modalBookStatus: document.getElementById('modal-book-status'),
         modalBookRating: document.getElementById('modal-book-rating'),
         modalBookTotalPages: document.getElementById('modal-book-total-pages'),
         modalBookCurrentPage: document.getElementById('modal-book-current-page'),
@@ -119,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let meditationElapsedTime = 0;
     let meditationPaused = false;
     let meditationDurationTarget = 0; // In milliseconds, for presets & intervals
-    let meditationType = 'standard'; // 'standard' or 'interval' or 'freestyle' (for 0 duration target)
+    let meditationType = 'standard'; // 'standard' or 'interval'
     let currentIntervalIndex = 0;
     let intervalTimerSteps = []; // [{duration, sound, label}]
 
@@ -148,36 +500,18 @@ document.addEventListener('DOMContentLoaded', () => {
         customBackground: null
     });
 
-    // achievementsList: [{ id, name, description, check(), unlocked, icon }] (stored without check function)
-    const achievementsList = loadData('achievementsList', [
-        { id: 'first_session', name: 'First Step', description: 'Complete your first meditation session.', unlocked: false, icon: 'fas fa-shoe-prints' },
-        { id: 'seven_day_streak', name: '7-Day Streak', description: 'Meditate for 7 consecutive days.', unlocked: false, icon: 'fas fa-fire' },
-        { id: '30_min_meditation', name: 'Deep Dive', description: 'Complete a meditation session of 30 minutes or more.', unlocked: false, icon: 'fas fa-mountain' },
-        { id: '10_hours_meditated', name: 'Seasoned Seeker', description: 'Accumulate 10 hours of meditation.', unlocked: false, icon: 'fas fa-star' },
-        { id: 'first_book_finished', name: 'Wisdom Gained', description: 'Mark your first spiritual book as "Finished".', unlocked: false, icon: 'fas fa-feather-alt' },
-        { id: 'five_books_finished', name: 'Enlightened Library', description: 'Finish 5 spiritual books.', unlocked: false, icon: 'fas fa-book-sparkles' },
-        { id: 'first_journal_entry', name: 'Inner Voice', description: 'Write your first meditation journal entry.', unlocked: false, icon: 'fas fa-pen-nib' },
-        { id: 'first_book_note', name: 'Reflective Reader', description: 'Add your first note to a spiritual book.', unlocked: false, icon: 'fas fa-highlighter' },
-    ]);
-
-
     // --- Audio Context & Buffers ---
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const soundBuffers = {}; // To store loaded audio buffers
     const ambientSoundSources = {}; // To store active ambient sound sources
     let bellSoundVolumeNode, ambientSoundVolumeNode;
 
-    // Freesound.org URLs:
-    // Please note: These are example URLs from Freesound.org.
-    // Always check the specific license of each sound for your use case.
-    // You can download these or similar sounds from freesound.org.
-    // For Freesound, you usually need to create an account to download.
-    const BELL_SOUND_URL = 'https://freesound.org/data/previews/203/203061_2112423-lq.mp3'; // Meditation Bell (user: tmk_sound)
+    const BELL_SOUND_URL = 'https://freesound.org/data/previews/203/203061_2112423-lq.mp3'; // Example bell
     const AMBIENT_SOUND_URLS = {
-        rain: 'https://freesound.org/data/previews/25/25010_25086-lq.mp3', // Rain (user: Herbert Boland)
-        forest: 'https://freesound.org/data/previews/140/140645_1955038-lq.mp3', // Forest Birds (user: dobroide)
-        ocean: 'https://freesound.org/data/previews/165/165780_2984100-lq.mp3', // Ocean Waves (user: Erdie)
-        chimes: 'https://freesound.org/data/previews/131/131652_2415714-lq.mp3' // Wind Chimes (user: kyles)
+        rain: 'https://freesound.org/data/previews/25/25010_25086-lq.mp3', // Example rain
+        forest: 'https://freesound.org/data/previews/140/140645_1955038-lq.mp3', // Example forest birds
+        ocean: 'https://freesound.org/data/previews/165/165780_2984100-lq.mp3', // Example ocean waves
+        chimes: 'https://freesound.org/data/previews/131/131652_2415714-lq.mp3' // Example wind chimes
     };
 
     // --- Charts ---
@@ -278,7 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Shows a toast notification.
      * @param {string} message
-     * @param {string} type 'success', 'error', 'info', 'warning'
+     * @param {string} type 'success', 'error', 'info'
      */
     function showToast(message, type = 'info') {
         const toast = document.createElement('div');
@@ -286,15 +620,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let icon = '';
         if (type === 'success') icon = '<i class="fas fa-check-circle"></i>';
         else if (type === 'error') icon = '<i class="fas fa-exclamation-triangle"></i>';
-        else if (type === 'warning') icon = '<i class="fas fa-exclamation-circle"></i>';
         else icon = '<i class="fas fa-info-circle"></i>';
 
         toast.innerHTML = `${icon} <span>${message}</span>`;
         elements.toastContainer.appendChild(toast);
 
-        // Allow reflow for transition
-        void toast.offsetWidth; // Trigger reflow
-        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10); // Small delay to trigger transition
 
         setTimeout(() => {
             toast.classList.remove('show');
@@ -317,13 +650,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function playSound(buffer, volumeNode, loop = false) {
-        if (!buffer) {
-            console.warn(`Attempted to play undefined sound buffer: ${buffer}`);
-            return null;
-        }
-        if (audioContext.state === 'suspended') {
-            audioContext.resume(); // Resume audio context if it's suspended (e.g., on first user interaction)
-        }
+        if (!buffer) return null;
 
         const source = audioContext.createBufferSource();
         source.buffer = buffer;
@@ -340,8 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 source.stop();
                 source.disconnect();
             } catch (e) {
-                // Audio node might have already stopped or been disconnected
-                // console.warn("Error stopping sound source (might already be stopped):", e);
+                // Already stopped or disconnected
             }
         }
     }
@@ -373,10 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Meditation Logic ---
 
     function startMeditationTimer(durationMinutes = 0, type = 'standard') {
-        if (meditationTimerInterval) {
-            showToast('Meditation already running!', 'warning');
-            return;
-        }
+        if (meditationTimerInterval) return;
 
         meditationDurationTarget = durationMinutes * 60 * 1000;
         meditationType = type;
@@ -392,7 +715,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateMeditationButtonStates(true, false, false);
         startAmbientSound(settings.ambientSound);
-        showToast('Meditation started.', 'info');
 
         meditationTimerInterval = setInterval(() => {
             meditationElapsedTime = Date.now() - meditationStartTime;
@@ -403,9 +725,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 playSound(soundBuffers['bell'], bellSoundVolumeNode);
                 showToast('Meditation session completed!', 'success');
             } else if (meditationType === 'interval' && intervalTimerSteps.length > 0) {
-                const totalIntervalDurationSoFar = intervalTimerSteps.slice(0, currentIntervalIndex + 1).reduce((sum, step) => sum + (step.duration * 1000), 0);
+                const totalIntervalDuration = intervalTimerSteps.slice(0, currentIntervalIndex + 1).reduce((sum, step) => sum + (step.duration * 1000), 0);
 
-                if (meditationElapsedTime >= totalIntervalDurationSoFar) {
+                if (meditationElapsedTime >= totalIntervalDuration) {
                     currentIntervalIndex++;
                     if (currentIntervalIndex < intervalTimerSteps.length) {
                         const nextStep = intervalTimerSteps[currentIntervalIndex];
@@ -440,7 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const durationMs = meditationElapsedTime;
 
-        if (durationMs > 5000) { // Only record sessions longer than 5 seconds
+        if (durationMs > 5000) {
             const session = {
                 id: generateId(),
                 startTime: meditationStartTime,
@@ -463,7 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
             openMeditationJournalModal(session.id);
             showToast('Meditation session recorded!', 'success');
         } else {
-            showToast('Meditation session was too short to record (min 5s).', 'info');
+            showToast('Meditation session was too short to record (>5s required).', 'info');
         }
 
         resetMeditationDisplay();
@@ -480,7 +802,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentIntervalIndex = 0;
         stopAllAmbientSounds();
         elements.meditationTimerDisplay.textContent = '00:00:00';
-        elements.customMeditationMinutesInput.value = ''; // Clear custom input
         updateMeditationButtonStates(false, true, true);
     }
 
@@ -491,8 +812,6 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.resetMeditationBtn.disabled = !isTimerRunning && !isTimerPaused;
         elements.presetMeditationButtons.forEach(btn => btn.disabled = isTimerRunning);
         elements.openIntervalTimerBtn.disabled = isTimerRunning;
-        elements.setCustomMeditationBtn.disabled = isTimerRunning;
-        elements.customMeditationMinutesInput.disabled = isTimerRunning;
     }
 
     function renderMeditationSessions() {
@@ -502,7 +821,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortedSessions = [...meditationSessions].sort((a, b) => b.startTime - a.startTime);
 
         if (sortedSessions.length === 0) {
-            elements.meditationSessionsList.innerHTML = '<li class="info-message">No meditation sessions recorded yet. Start your journey!</li>';
+            elements.meditationSessionsList.innerHTML = '<li>No meditation sessions recorded yet. Start your journey!</li>';
         }
 
         sortedSessions.forEach(session => {
@@ -511,8 +830,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const tags = session.tags && session.tags.length > 0 ? `<br><small>Tags: ${session.tags.join(', ')}</small>` : '';
             li.innerHTML = `
                 <div>
-                    <span class="session-date">${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                    <br><strong class="session-duration">${formatDuration(session.durationMs)}</strong> (${session.type === 'interval' ? 'Interval' : 'Standard'})
+                    <span>${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <br><strong>${formatDuration(session.durationMs)}</strong> (${session.type === 'interval' ? 'Interval' : 'Standard'})
                     ${session.mood ? `<span class="session-mood-emoji" title="Mood: ${session.mood}"> ${getEmojiForMood(session.mood)}</span>` : ''}
                     ${tags}
                 </div>
@@ -527,13 +846,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const li = document.createElement('li');
                 const date = new Date(session.startTime);
                 li.innerHTML = `
-                    <span class="session-date">${date.toLocaleDateString()}: ${formatDuration(session.durationMs)}</span>
+                    <span>${date.toLocaleDateString()}: ${formatDuration(session.durationMs)}</span>
                     ${session.mood ? `<span class="session-mood-emoji" title="Mood: ${session.mood}"> ${getEmojiForMood(session.mood)}</span>` : ''}
                 `;
                 elements.dashMeditationSessionsList.appendChild(li);
             });
         } else {
-            elements.dashMeditationSessionsList.innerHTML = '<li class="info-message">No recent meditations.</li>';
+            elements.dashMeditationSessionsList.innerHTML = '<li>No recent meditations.</li>';
         }
 
         document.querySelectorAll('.view-journal-btn').forEach(btn => {
@@ -543,7 +862,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateMeditationStats() {
         const totalDurationMs = meditationSessions.reduce((sum, session) => sum + session.durationMs, 0);
-        
+        const uniqueDates = new Set(meditationSessions.map(session => session.date));
+        const avgDurationMs = meditationSessions.length > 0 ? totalDurationMs / meditationSessions.length : 0;
+
         const { currentStreak, longestStreak } = calculateStreaks();
 
         // Update Dashboard Stats
@@ -561,29 +882,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return { currentStreak: 0, longestStreak: 0 };
         }
 
-        const uniqueDates = [...new Set(meditationSessions
-            .map(session => {
-                const d = new Date(session.startTime);
-                return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(); // Normalize to midnight
-            }))]
-            .sort((a, b) => a - b); // Sort chronologically
+        const sortedDates = [...new Set(meditationSessions
+            .map(session => new Date(session.startTime).toDateString()))]
+            .sort((a, b) => new Date(a) - new Date(b));
 
         let currentStreak = 0;
         let longestStreak = 0;
+        let lastDate = null;
         let tempCurrentStreak = 0;
-        let lastDateMs = null;
 
-        const todayMs = new Date();
-        todayMs.setHours(0,0,0,0);
-        const yesterdayMs = new Date(todayMs);
-        yesterdayMs.setDate(todayMs.getDate() - 1);
-
-        for (let i = 0; i < uniqueDates.length; i++) {
-            const currentDateMs = uniqueDates[i];
-            if (lastDateMs === null) {
+        sortedDates.forEach(dateStr => {
+            const currentDate = new Date(dateStr);
+            if (lastDate === null) {
                 tempCurrentStreak = 1;
             } else {
-                const dayDiff = (currentDateMs - lastDateMs) / (1000 * 60 * 60 * 24);
+                const dayDiff = Math.round((currentDate - lastDate) / (1000 * 60 * 60 * 24));
                 if (dayDiff === 1) {
                     tempCurrentStreak++;
                 } else if (dayDiff > 1) {
@@ -591,28 +904,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             longestStreak = Math.max(longestStreak, tempCurrentStreak);
-            lastDateMs = currentDateMs;
+            lastDate = currentDate;
+        });
+
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+
+        const latestMedDate = sortedDates.length > 0 ? new Date(sortedDates[sortedDates.length - 1]) : null;
+
+        if (latestMedDate) {
+            latestMedDate.setHours(0,0,0,0);
+            if (latestMedDate.getTime() === today.getTime()) {
+                currentStreak = tempCurrentStreak;
+            } else if (latestMedDate.getTime() === yesterday.getTime()) {
+                let streakFromYesterday = 0;
+                let tempLastDate = null;
+                for (let i = sortedDates.length - 1; i >= 0; i--) {
+                    const d = new Date(sortedDates[i]);
+                    d.setHours(0,0,0,0);
+                    if (tempLastDate === null) {
+                        if (d.getTime() === yesterday.getTime()) {
+                            streakFromYesterday = 1;
+                        } else {
+                            break;
+                        }
+                    } else {
+                        const dayDiff = Math.round((tempLastDate - d) / (1000 * 60 * 60 * 24));
+                        if (dayDiff === 1) {
+                            streakFromYesterday++;
+                        } else {
+                            break;
+                        }
+                    }
+                    tempLastDate = d;
+                }
+                currentStreak = streakFromYesterday;
+            } else {
+                currentStreak = 0;
+            }
+        } else {
+            currentStreak = 0;
         }
 
-        // Calculate current streak based on today or yesterday
-        currentStreak = 0;
-        if (uniqueDates.includes(todayMs.getTime())) {
-            currentStreak = tempCurrentStreak; // If today has a session, current streak is the last calculated one
-        } else if (uniqueDates.includes(yesterdayMs.getTime())) {
-            // If the last session was yesterday, current streak is the streak ending yesterday
-            let streakEndingYesterday = 0;
-            let tempDate = yesterdayMs.getTime();
-            for (let i = uniqueDates.length - 1; i >= 0; i--) {
-                if (uniqueDates[i] === tempDate) {
-                    streakEndingYesterday++;
-                    tempDate -= (1000 * 60 * 60 * 24);
-                } else if (uniqueDates[i] < tempDate) {
-                    break;
-                }
-            }
-            currentStreak = streakEndingYesterday;
-        }
-        
         return { currentStreak, longestStreak };
     }
 
@@ -633,7 +968,7 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.journalTextInput.value = session.journalEntry || '';
             elements.gratitudeTextInput.value = session.gratitudeEntry || '';
 
-            elements.saveJournalEntryBtn.onclick = () => {
+            saveJournalEntryBtn.onclick = () => {
                 session.mood = document.querySelector('.mood-emojis .emoji.selected')?.dataset.mood || null;
                 session.energy = parseInt(elements.journalEnergyLevel.value, 10);
                 session.tags = elements.journalTagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag);
@@ -644,7 +979,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeModal(elements.meditationJournalModal);
                 renderMeditationSessions(); // Re-render to show mood/tags
                 updateMeditationStats(); // Re-render charts
-                updateAchievements(); // Check for 'first_journal_entry' achievement
                 showToast('Journal entry saved!', 'success');
             };
             openModal(elements.meditationJournalModal);
@@ -670,12 +1004,12 @@ document.addEventListener('DOMContentLoaded', () => {
         div.className = 'interval-step';
         div.innerHTML = `
             <label>Step ${stepCount + 1}:</label>
-            <input type="number" value="60" min="5" placeholder="Seconds" data-type="duration" class="input-field small-input"><span>s</span>
-            <select data-type="sound" class="input-field small-input">
+            <input type="number" value="60" min="5" placeholder="Seconds" data-type="duration">s
+            <select data-type="sound">
                 <option value="bell">Bell</option>
                 <option value="chimes">Chimes</option>
             </select>
-            <input type="text" placeholder="Label (e.g., Focus)" data-type="label" class="input-field">
+            <input type="text" placeholder="Label (e.g., Focus)" data-type="label">
             <button class="delete-step-btn delete-button btn-sm"><i class="fas fa-times"></i></button>
         `;
         elements.intervalStepsContainer.appendChild(div);
@@ -764,7 +1098,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const durationMs = endTime - bookReadingStartTime;
 
         const book = books.find(b => b.id === bookId);
-        if (book && durationMs > 5000) { // Only record sessions longer than 5 seconds
+        if (book && durationMs > 5000) {
             book.readingSessions.push({
                 startTime: bookReadingStartTime,
                 endTime: endTime,
@@ -807,9 +1141,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (filteredBooks.length === 0 && filterText === '') {
-            elements.booksList.innerHTML = '<li class="info-message">No spiritual books added yet. Add your first scroll of wisdom!</li>';
+            elements.booksList.innerHTML = '<li>No spiritual books added yet. Add your first scroll of wisdom!</li>';
         } else if (filteredBooks.length === 0 && filterText !== '') {
-            elements.booksList.innerHTML = `<li class="info-message">No books matching "${filterText}".</li>`;
+            elements.booksList.innerHTML = `<li>No books matching "${filterText}".</li>`;
         }
 
         filteredBooks.forEach(book => {
@@ -860,7 +1194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 elements.dashCurrentReadingList.appendChild(li);
             });
         } else {
-            elements.dashCurrentReadingList.innerHTML = '<li class="info-message">No books currently being read.</li>';
+            elements.dashCurrentReadingList.innerHTML = '<li>No books currently being read.</li>';
         }
 
         updateBookButtonsState(); // Set initial button states after rendering
@@ -891,7 +1225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.modalBookTitle.textContent = book.title;
         elements.modalBookAuthor.textContent = book.author;
         elements.modalBookGenre.textContent = book.genre || 'N/A';
-        
+        elements.modalBookStatus.textContent = book.status;
         elements.modalBookTotalPages.textContent = book.totalPages;
         elements.modalBookCurrentPage.value = book.currentPage;
 
@@ -903,7 +1237,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const progress = book.totalPages > 0 ? ((book.currentPage / book.totalPages) * 100).toFixed(1) : 0;
             elements.modalBookProgress.textContent = `${progress}%`;
             elements.modalProgressBar.style.width = `${progress}%`;
-            elements.modalProgressBar.ariaValueNow = progress; // For accessibility
         };
         updateProgressDisplay();
 
@@ -917,8 +1250,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateAchievements();
                 updateGoals();
             } else {
-                e.target.value = book.currentPage; // Revert to previous valid page
-                showToast('Invalid page number! Must be between 0 and total pages.', 'error');
+                e.target.value = book.currentPage;
+                showToast('Invalid page number!', 'error');
             }
         };
 
@@ -950,14 +1283,13 @@ document.addEventListener('DOMContentLoaded', () => {
         statusSelect.onchange = (e) => {
             book.status = e.target.value;
             saveData('books', books);
+            elements.modalBookStatus.textContent = book.status;
             renderBooks(); // Update status in main list
             updateAchievements(); // Check for 'Books Finished' achievement
             updateGoals();
             showToast(`Status for "${book.title}" changed to "${book.status}".`, 'info');
         };
-        elements.modalBookStatusContainer.innerHTML = ''; // Clear previous content
-        elements.modalBookStatusContainer.appendChild(statusSelect);
-
+        elements.modalBookStatus.replaceWith(statusSelect); // Replace span with select
 
         elements.modalBookNotesInput.value = ''; // Clear input for new note
         renderBookNotes(book);
@@ -970,8 +1302,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 elements.modalBookNotesInput.value = '';
                 renderBookNotes(book);
                 showToast('Note added!', 'success');
-            } else {
-                showToast('Note cannot be empty!', 'warning');
             }
         };
 
@@ -981,13 +1311,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderBookNotes(book) {
         elements.modalBookNotesList.innerHTML = '';
         if (book.notes.length === 0) {
-            elements.modalBookNotesList.innerHTML = '<li class="info-message">No notes yet. Add your insights!</li>';
+            elements.modalBookNotesList.innerHTML = '<li>No notes yet. Add your insights!</li>';
             return;
         }
 
         book.notes.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(note => { // Newest first
             const li = document.createElement('li');
-            li.className = 'note-item';
             li.innerHTML = `
                 <div class="note-content">${note.text}</div>
                 <span class="note-date">${new Date(note.date).toLocaleDateString()} ${new Date(note.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
@@ -1018,30 +1347,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderMeditationCharts() {
-        // Common chart options
-        const commonOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
-            },
-            scales: {
-                x: {
-                    type: 'time',
-                    time: { unit: 'day', tooltipFormat: 'MMM d, yyyy' },
-                    title: { display: true, text: 'Date', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
-                },
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Value', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
-                }
-            }
-        };
-
         // Data for Meditation Time Trend (Daily)
         const dailyMedTime = {};
         meditationSessions.forEach(session => {
@@ -1055,14 +1360,25 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Daily Meditation Time (minutes)',
                 data: medTimeData,
-                borderColor: getComputedStyle(document.body).getPropertyValue('--secondary-color'),
-                tension: 0.3,
-                fill: true,
-                backgroundColor: 'rgba(124, 58, 237, 0.2)', // Light fill for line chart
-                pointRadius: 3,
-                pointHoverRadius: 6
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1,
+                fill: false
             }]
-        }, { ...commonOptions, scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Minutes' } } } });
+        }, {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    type: 'time',
+                    time: { unit: 'day' },
+                    title: { display: true, text: 'Date' }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Minutes' }
+                }
+            }
+        });
 
         // Data for Meditation Session Count
         const dailySessionCount = {};
@@ -1076,11 +1392,24 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Daily Meditation Sessions',
                 data: sessionCountData,
-                backgroundColor: getComputedStyle(document.body).getPropertyValue('--primary-color'),
-                borderColor: getComputedStyle(document.body).getPropertyValue('--primary-color'),
-                borderWidth: 1
+                backgroundColor: 'rgba(153, 102, 255, 0.6)'
             }]
-        }, { ...commonOptions, scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Sessions' }, ticks: { precision: 0 } } } });
+        }, {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    type: 'time',
+                    time: { unit: 'day' },
+                    title: { display: true, text: 'Date' }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Sessions' },
+                    ticks: { precision: 0 }
+                }
+            }
+        });
 
         // Mood Distribution Chart
         const moodCounts = {};
@@ -1108,33 +1437,14 @@ document.addEventListener('DOMContentLoaded', () => {
             labels: moodLabels,
             datasets: [{
                 data: moodData,
-                backgroundColor: moodColors,
-                borderColor: getComputedStyle(document.body).getPropertyValue('--card-background'),
-                borderWidth: 2
+                backgroundColor: moodColors
             }]
         }, {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'top', labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
-                title: { display: true, text: 'Mood Distribution', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed !== null) {
-                                label += context.parsed;
-                                const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
-                                const percentage = ((context.parsed / total) * 100).toFixed(1) + '%';
-                                label += ` (${percentage})`;
-                            }
-                            return label;
-                        }
-                    }
-                }
+                legend: { position: 'top' },
+                title: { display: true, text: 'Mood Distribution' }
             }
         });
 
@@ -1156,35 +1466,24 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Tag Usage',
                 data: tagData,
-                backgroundColor: getComputedStyle(document.body).getPropertyValue('--accent-color'),
-                borderColor: getComputedStyle(document.body).getPropertyValue('--accent-color'),
-                borderWidth: 1
+                backgroundColor: 'rgba(75, 192, 192, 0.6)'
             }]
         }, {
             responsive: true,
             maintainAspectRatio: false,
             indexAxis: 'y', // Horizontal bars
-            plugins: {
-                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
-                title: { display: true, text: 'Top Meditation Tags', color: getComputedStyle(document.body).getPropertyValue('--primary-color') }
-            },
             scales: {
                 x: {
                     beginAtZero: true,
-                    title: { display: true, text: 'Count', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { precision: 0, color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                    title: { display: true, text: 'Count' },
+                    ticks: { precision: 0 }
                 },
                 y: {
-                    title: { display: true, text: 'Tag', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                    title: { display: true, text: 'Tag' }
                 }
             }
         });
-    }
 
-    function updateBookStatistics() {
         // Book Reading Time Chart
         const bookReadingTotals = {};
         books.forEach(book => {
@@ -1199,28 +1498,18 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Total Reading Time (hours)',
                 data: bookData,
-                backgroundColor: getComputedStyle(document.body).getPropertyValue('--secondary-color'),
-                borderColor: getComputedStyle(document.body).getPropertyValue('--secondary-color'),
-                borderWidth: 1
+                backgroundColor: 'rgba(255, 99, 132, 0.6)'
             }]
         }, {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
-                title: { display: true, text: 'Book Reading Time by Book', color: getComputedStyle(document.body).getPropertyValue('--primary-color') }
-            },
             scales: {
                 x: {
                     beginAtZero: true,
-                    title: { display: true, text: 'Book Title', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                    title: { display: true, text: 'Book Title' }
                 },
                 y: {
-                    title: { display: true, text: 'Hours', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                    title: { display: true, text: 'Hours' }
                 }
             }
         });
@@ -1297,7 +1586,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const period = elements.goalPeriodSelect.value;
 
         if (isNaN(value) || value <= 0) {
-            showToast('Please enter a valid target value for your goal (must be a positive number).', 'error');
+            showToast('Please enter a valid target value for your goal.', 'error');
             return;
         }
 
@@ -1322,40 +1611,36 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateGoals() {
         const now = new Date();
         goals.forEach(goal => {
-            if (goal.completed) return; // Don't update completed goals
+            if (goal.completed) return;
 
             let currentProgress = 0;
-            let relevantMeditations = [];
-            let relevantBooks = [];
+            let relevantSessions = [];
 
             if (goal.period === 'week') {
                 const startOfWeek = new Date(now);
-                startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday (adjust if your week starts on Monday)
+                startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday
                 startOfWeek.setHours(0,0,0,0);
-                relevantMeditations = meditationSessions.filter(s => new Date(s.startTime) >= startOfWeek);
-                // For books, we'll continue to count finished books overall for simplicity, as per-week finished books is complex
-                relevantBooks = books; 
+                relevantSessions = meditationSessions.filter(s => new Date(s.startTime) >= startOfWeek);
+                // For books, we need to re-evaluate the count for the current week, if it were dynamic.
+                // For simplicity, for books, we will count overall finished books.
             } else if (goal.period === 'month') {
                 const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-                relevantMeditations = meditationSessions.filter(s => new Date(s.startTime) >= startOfMonth);
-                relevantBooks = books;
+                relevantSessions = meditationSessions.filter(s => new Date(s.startTime) >= startOfMonth);
             } else { // 'overall'
-                relevantMeditations = meditationSessions;
-                relevantBooks = books;
+                relevantSessions = meditationSessions;
             }
 
             if (goal.type === 'meditation_duration') {
-                currentProgress = relevantMeditations.reduce((sum, s) => sum + s.durationMs, 0) / (1000 * 60);
+                currentProgress = relevantSessions.reduce((sum, s) => sum + s.durationMs, 0) / (1000 * 60);
             } else if (goal.type === 'meditation_days') {
-                currentProgress = new Set(relevantMeditations.map(s => new Date(s.startTime).toDateString())).size;
+                currentProgress = new Set(relevantSessions.map(s => new Date(s.startTime).toDateString())).size;
             } else if (goal.type === 'books_finished') {
-                currentProgress = relevantBooks.filter(b => b.status === 'Finished').length;
+                currentProgress = books.filter(b => b.status === 'Finished').length;
             }
 
             goal.currentProgress = currentProgress;
             if (goal.currentProgress >= goal.targetValue) {
                 goal.completed = true;
-                goal.lastUpdate = new Date().toISOString(); // Mark completion date
                 showToast(`Goal Completed: ${GOAL_TYPES[goal.type].label} of ${goal.targetValue} ${GOAL_TYPES[goal.type].unit} ${goal.period === 'overall' ? '' : 'per ' + goal.period}!`, 'success');
             }
         });
@@ -1371,39 +1656,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const completedGoals = goals.filter(g => g.completed);
 
         if (activeGoals.length === 0 && completedGoals.length === 0) {
-            elements.activeGoalsList.innerHTML = '<li class="info-message">No goals set yet. Set a goal to start tracking your progress!</li>';
+            elements.activeGoalsList.innerHTML = '<li>No goals set yet. Set a goal to start tracking!</li>';
             return;
         }
 
         activeGoals.forEach(goal => {
             const li = document.createElement('li');
-            li.className = 'goal-item';
             const progress = Math.min(100, (goal.currentProgress / goal.targetValue) * 100).toFixed(1);
             li.innerHTML = `
                 <div>
                     <strong>${GOAL_TYPES[goal.type].label}: ${goal.currentProgress.toFixed(1)} / ${goal.targetValue} ${GOAL_TYPES[goal.type].unit} ${goal.period === 'overall' ? '' : 'per ' + goal.period}</strong>
-                    <div class="goal-progress-bar-container" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">
-                        <div class="goal-progress-bar" style="width: ${progress}%"></div>
-                    </div>
+                    <div class="goal-progress-bar-container"><div class="goal-progress-bar" style="width: ${progress}%"></div></div>
                     <span>Progress: ${progress}%</span>
                 </div>
-                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}" title="Delete Goal"><i class="fas fa-trash-alt"></i></button>
+                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}"><i class="fas fa-trash-alt"></i></button>
             `;
             elements.activeGoalsList.appendChild(li);
         });
 
         completedGoals.forEach(goal => {
             const li = document.createElement('li');
-            li.className = 'goal-item completed';
+            li.className = 'completed';
             li.innerHTML = `
                 <div>
                     <strong>${GOAL_TYPES[goal.type].label}: ${goal.targetValue} ${GOAL_TYPES[goal.type].unit} ${goal.period === 'overall' ? '' : 'per ' + goal.period}</strong>
-                    <div class="goal-progress-bar-container" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                        <div class="goal-progress-bar" style="width: 100%"></div>
-                    </div>
+                    <div class="goal-progress-bar-container"><div class="goal-progress-bar" style="width: 100%"></div></div>
                     <span>Completed on: ${new Date(goal.lastUpdate).toLocaleDateString()}</span>
                 </div>
-                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}" title="Delete Goal"><i class="fas fa-trash-alt"></i></button>
+                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}"><i class="fas fa-trash-alt"></i></button>
             `;
             elements.completedGoalsList.appendChild(li);
         });
@@ -1426,39 +1706,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Achievements Logic ---
 
-    // Define check functions dynamically to allow for data updates
-    const achievementCheckFunctions = {
-        'first_session': () => meditationSessions.length >= 1,
-        'seven_day_streak': () => calculateStreaks().longestStreak >= 7,
-        '30_min_meditation': () => meditationSessions.some(s => s.durationMs >= 30 * 60 * 1000),
-        '10_hours_meditated': () => meditationSessions.reduce((sum, s) => sum + s.durationMs, 0) >= 10 * 60 * 60 * 1000,
-        'first_book_finished': () => books.some(b => b.status === 'Finished'),
-        'five_books_finished': () => books.filter(b => b.status === 'Finished').length >= 5,
-        'first_journal_entry': () => meditationSessions.some(s => s.journalEntry && s.journalEntry.length > 0),
-        'first_book_note': () => books.some(b => b.notes && b.notes.length > 0),
-    };
-
+    const achievementsList = [
+        { id: 'first_session', name: 'First Step', description: 'Complete your first meditation session.', check: () => meditationSessions.length >= 1, unlocked: false, icon: 'fas fa-shoe-prints' },
+        { id: 'seven_day_streak', name: '7-Day Streak', description: 'Meditate for 7 consecutive days.', check: () => calculateStreaks().longestStreak >= 7, unlocked: false, icon: 'fas fa-fire' },
+        { id: '30_min_meditation', name: 'Deep Dive', description: 'Complete a meditation session of 30 minutes or more.', check: () => meditationSessions.some(s => s.durationMs >= 30 * 60 * 1000), unlocked: false, icon: 'fas fa-mountain' },
+        { id: '10_hours_meditated', name: 'Seasoned Seeker', description: 'Accumulate 10 hours of meditation.', check: () => meditationSessions.reduce((sum, s) => sum + s.durationMs, 0) >= 10 * 60 * 60 * 1000, unlocked: false, icon: 'fas fa-star' },
+        { id: 'first_book_finished', name: 'Wisdom Gained', description: 'Mark your first spiritual book as "Finished".', check: () => books.some(b => b.status === 'Finished'), unlocked: false, icon: 'fas fa-feather-alt' },
+        { id: 'five_books_finished', name: 'Enlightened Library', description: 'Finish 5 spiritual books.', check: () => books.filter(b => b.status === 'Finished').length >= 5, unlocked: false, icon: 'fas fa-book-sparkles' },
+        { id: 'first_journal_entry', name: 'Inner Voice', description: 'Write your first meditation journal entry.', check: () => meditationSessions.some(s => s.journalEntry && s.journalEntry.length > 0), unlocked: false, icon: 'fas fa-pen-nib' },
+        { id: 'first_book_note', name: 'Reflective Reader', description: 'Add your first note to a spiritual book.', check: () => books.some(b => b.notes && b.notes.length > 0), unlocked: false, icon: 'fas fa-highlighter' },
+    ];
 
     function updateAchievements() {
         let changed = false;
         achievementsList.forEach(achievement => {
-            // Apply the check function from the map
-            if (!achievement.unlocked && achievementCheckFunctions[achievement.id] && achievementCheckFunctions[achievement.id]()) {
+            if (!achievement.unlocked && achievement.check()) {
                 achievement.unlocked = true;
                 changed = true;
                 showToast(`Achievement Unlocked: ${achievement.name}!`, 'success');
             }
         });
         if (changed) {
-            saveData('achievementsList', achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked }))); // Save only id and unlocked status
+            saveData('achievementsList', achievementsList); // Save updated unlocked status
             renderAchievements();
         }
     }
 
     function renderAchievements() {
         elements.achievementsGrid.innerHTML = '';
-        // Use the globally defined achievementsList which should have its unlocked status updated
+        const savedAchievements = loadData('achievementsList', achievementsList.map(a => ({ id: a.id, unlocked: false })));
+
         achievementsList.forEach(achievement => {
+            const savedState = savedAchievements.find(sa => sa.id === achievement.id);
+            if (savedState) achievement.unlocked = savedState.unlocked; // Apply saved state
+
             const card = document.createElement('div');
             card.className = `achievement-card ${achievement.unlocked ? 'unlocked' : ''}`;
             card.innerHTML = `
@@ -1507,25 +1788,15 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('Settings saved!', 'info');
     }
 
-    let reminderIntervalId = null;
-
     function setDailyReminder() {
-        // Clear existing interval if any
-        if (reminderIntervalId) {
-            clearInterval(reminderIntervalId);
-            reminderIntervalId = null;
-        }
-
         if (!settings.dailyReminderTime) {
             showToast('Please select a time for the reminder.', 'error');
             return;
         }
-
         if (!('Notification' in window)) {
             showToast('This browser does not support desktop notifications.', 'error');
             return;
         }
-
         if (Notification.permission === 'default') {
             Notification.requestPermission().then(permission => {
                 if (permission === 'granted') {
@@ -1536,49 +1807,36 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } else if (Notification.permission === 'granted') {
             scheduleReminder();
-        } else { // Permission denied or blocked
+        } else { // Permission denied
             showToast('Notification permission blocked. Please enable it in browser settings.', 'warning');
         }
     }
 
+    let reminderIntervalId = null;
     function scheduleReminder() {
-        const [hour, minute] = settings.dailyReminderTime.split(':').map(Number);
-
-        // Schedule the initial notification
-        const now = new Date();
-        let nextReminder = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0, 0);
-
-        if (nextReminder.getTime() <= now.getTime()) {
-            // If the time has already passed today, schedule for tomorrow
-            nextReminder.setDate(nextReminder.getDate() + 1);
+        // Clear existing interval if any
+        if (reminderIntervalId) {
+            clearInterval(reminderIntervalId);
         }
 
-        const timeUntilNextReminder = nextReminder.getTime() - now.getTime();
+        const [hour, minute] = settings.dailyReminderTime.split(':').map(Number);
 
-        // Use setTimeout for the first notification, then setInterval for daily repeats
-        reminderIntervalId = setTimeout(() => {
-            new Notification('Mystic Vision', {
-                body: 'Time for your daily meditation!',
-                icon: './img/icon.png' // Ensure you have an icon.png in your img folder
-            });
-
-            // Set interval for subsequent daily reminders (every 24 hours)
-            reminderIntervalId = setInterval(() => {
+        reminderIntervalId = setInterval(() => {
+            const now = new Date();
+            if (now.getHours() === hour && now.getMinutes() === minute && now.getSeconds() === 0) {
                 new Notification('Mystic Vision', {
                     body: 'Time for your daily meditation!',
-                    icon: './img/icon.png'
+                    icon: './img/icon.png' // Add a small app icon for notifications
                 });
-            }, 24 * 60 * 60 * 1000); // 24 hours
-        }, timeUntilNextReminder);
+            }
+        }, 1000); // Check every second
 
         showToast(`Daily meditation reminder set for ${settings.dailyReminderTime}.`, 'success');
     }
 
-
     function clearDailyReminder() {
         if (reminderIntervalId) {
             clearInterval(reminderIntervalId);
-            clearTimeout(reminderIntervalId); // Clear both in case it's the initial timeout
             reminderIntervalId = null;
         }
         settings.dailyReminderTime = '';
@@ -1622,9 +1880,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (importedData.goals) goals = importedData.goals;
                     if (importedData.settings) settings = importedData.settings;
                     if (importedData.achievementsList) {
-                        importedData.achievementsList.forEach(importedAch => {
-                            const localAch = achievementsList.find(la => la.id === importedAch.id);
-                            if (localAch) localAch.unlocked = importedAch.unlocked;
+                        achievementsList.forEach(localAch => {
+                            const importedAch = importedData.achievementsList.find(ia => ia.id === localAch.id);
+                            if (importedAch) localAch.unlocked = importedAch.unlocked;
                         });
                     }
 
@@ -1635,16 +1893,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     saveData('achievementsList', achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked })));
 
                     initializeApp();
-                    showToast('Data imported successfully! The page will refresh.', 'success');
+                    showToast('Data imported successfully!', 'success');
                     closeModal(elements.confirmationModal);
-                    // A full page reload might be necessary for all changes to take effect due to global state
-                    setTimeout(() => window.location.reload(), 1000); 
                 });
             } catch (error) {
                 showToast('Error importing data: Invalid JSON file. ' + error.message, 'error');
                 console.error('Import error:', error);
-            } finally {
-                event.target.value = ''; // Clear the file input
             }
         };
         reader.readAsText(file);
@@ -1656,12 +1910,11 @@ document.addEventListener('DOMContentLoaded', () => {
             meditationSessions = [];
             books = [];
             goals = [];
-            settings = { theme: 'light', bellSound: true, bellVolume: 0.5, ambientSound: 'none', ambientVolume: 0.5, dailyReminderTime: '', customBackground: null };
+            settings = { theme: 'light', bellSound: true, bellVolume: 0.5, ambientSound: 'none', ambientVolume: 0.5, dailyReminderTime: null, customBackground: null };
             achievementsList.forEach(a => a.unlocked = false); // Reset achievements
             initializeApp();
-            showToast('All data cleared! The page will refresh.', 'success');
+            showToast('All data cleared!', 'success');
             closeModal(elements.confirmationModal);
-            setTimeout(() => window.location.reload(), 1000); // Full page reload for complete reset
         });
     }
 
@@ -1697,8 +1950,8 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.bookSearchInput.value = ''; // Clear search on section change
         } else if (sectionId === 'statistics-section') {
             renderMeditationCharts();
-            updateBookStatistics(); // Updates book chart
             renderMeditationCalendar();
+            updateBookStatistics(); // Updates book chart
         } else if (sectionId === 'goals-section') {
             renderGoals();
         } else if (sectionId === 'achievements-section') {
@@ -1707,6 +1960,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateDashboard() {
+        // This will be mostly handled by updateMeditationStats and renderBooks etc.
+        // Just ensures the right elements are updated.
         updateMeditationStats(); // Populates meditation stats and streaks on dashboard
         elements.dashBooksFinished.textContent = books.filter(b => b.status === 'Finished').length;
         renderMeditationSessions(); // Populates recent meditations on dashboard
@@ -1714,25 +1969,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Event Listeners ---
-    elements.startMeditationBtn.addEventListener('click', () => {
-        const customMinutes = parseInt(elements.customMeditationMinutesInput.value, 10);
-        if (!isNaN(customMinutes) && customMinutes > 0) {
-            startMeditationTimer(customMinutes);
-        } else {
-            // If no custom minutes are set or it's 0, treat as freestyle
-            startMeditationTimer(0, 'freestyle');
-        }
-    });
-
-    elements.setCustomMeditationBtn.addEventListener('click', () => {
-        const customMinutes = parseInt(elements.customMeditationMinutesInput.value, 10);
-        if (isNaN(customMinutes) || customMinutes <= 0) {
-            showToast('Please enter a valid custom duration in minutes (e.g., 15).', 'error');
-            return;
-        }
-        showToast(`Custom meditation set for ${customMinutes} minutes. Click Start when ready!`, 'info');
-    });
-
+    elements.startMeditationBtn.addEventListener('click', () => startMeditationTimer(0));
     elements.pauseMeditationBtn.addEventListener('click', pauseMeditationTimer);
     elements.stopMeditationBtn.addEventListener('click', stopMeditationTimer);
     elements.resetMeditationBtn.addEventListener('click', resetMeditationDisplay);
@@ -1740,8 +1977,8 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.presetMeditationButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             const minutes = parseInt(e.target.dataset.minutes, 10);
-            elements.customMeditationMinutesInput.value = minutes; // Set custom input field
-            showToast(`Meditation preset set for ${minutes} minutes. Click Start when ready!`, 'info');
+            resetMeditationDisplay();
+            startMeditationTimer(minutes);
         });
     });
 
@@ -1778,13 +2015,6 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.newBookCoverInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > 500 * 1024) { // 500 KB limit
-                showToast('Image size too large! Max 500KB.', 'error');
-                e.target.value = ''; // Clear the input
-                newBookCoverBase64 = null;
-                elements.uploadBookCoverBtn.innerHTML = '<i class="fas fa-image"></i>';
-                return;
-            }
             const reader = new FileReader();
             reader.onloadend = () => {
                 newBookCoverBase64 = reader.result;
@@ -1794,24 +2024,6 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.readAsDataURL(file);
         }
     });
-
-    // Event delegation for book actions (start, stop, details, delete)
-    elements.booksList.addEventListener('click', (e) => {
-        const bookItem = e.target.closest('.book-item');
-        if (!bookItem) return;
-        const bookId = bookItem.dataset.id;
-
-        if (e.target.classList.contains('start-reading') || e.target.closest('.start-reading')) {
-            startBookReading(bookId);
-        } else if (e.target.classList.contains('stop-reading') || e.target.closest('.stop-reading')) {
-            stopBookReading(bookId);
-        } else if (e.target.classList.contains('view-book-details') || e.target.closest('.view-book-details')) {
-            openBookDetailsModal(bookId);
-        } else if (e.target.classList.contains('delete-book') || e.target.closest('.delete-book')) {
-            deleteBook(bookId);
-        }
-    });
-
 
     elements.bookSearchInput.addEventListener('input', (e) => renderBooks(e.target.value));
     elements.clearBookSearchBtn.addEventListener('click', () => {
@@ -1853,11 +2065,6 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.customBackgroundFileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > 1024 * 1024) { // 1 MB limit for background
-                showToast('Image size too large! Max 1MB.', 'error');
-                e.target.value = '';
-                return;
-            }
             const reader = new FileReader();
             reader.onloadend = () => {
                 settings.customBackground = reader.result;
@@ -1896,9 +2103,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updateBookStatistics(); // Call to initialize book charts
         renderGoals();
         updateGoals(); // Initial goal check
-        // Achievements should be updated *after* other data, then rendered
-        updateAchievements(); 
         renderAchievements();
+        updateAchievements(); // Initial achievement check
 
         if (settings.dailyReminderTime) {
             setDailyReminder(); // Re-schedule reminder on load
@@ -1911,3 +2117,1309 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initializeApp();
 });
+
+--- END FILE: script.js ---
+
+--- START FILE: style.css ---
+
+/* --- Global & Root Variables --- */
+:root {
+    /* Light Theme (Serene) */
+    --light-primary: #5b21b6; /* Deep Violet */
+    --light-secondary: #7c3aed; /* Amethyst Purple */
+    --light-accent: #f59e0b; /* Golden Amber */
+    --light-bg-gradient-start: #f3e8ff; /* Very Light Purple */
+    --light-bg-gradient-end: #e9d5ff; /* Light Purple */
+    --light-text-color: #333;
+    --light-light-text-color: #f0f0f0;
+    --light-card-bg: #ffffff;
+    --light-border-color: #d8b4fe;
+    --light-shadow-light: rgba(0, 0, 0, 0.08);
+    --light-shadow-medium: rgba(0, 0, 0, 0.15);
+    --light-input-bg: #f9f4ff;
+
+    /* General */
+    --button-hover-darken: #4c1d95;
+    --delete-color: #ef4444;
+    --delete-hover: #dc2626;
+    --success-color: #22c55e;
+    --success-hover: #16a34a;
+    --info-color: #3b82f6;
+    --info-hover: #2563eb;
+    --warning-color: #f59e0b;
+    --warning-hover: #d97706;
+
+    /* Modal */
+    --modal-bg: rgba(0, 0, 0, 0.6);
+    --modal-content-bg: #fff;
+
+    /* Active Theme Variables (default to Light) */
+    --primary-color: var(--light-primary);
+    --secondary-color: var(--light-secondary);
+    --accent-color: var(--light-accent);
+    --background-gradient-start: var(--light-bg-gradient-start);
+    --background-gradient-end: var(--light-bg-gradient-end);
+    --text-color: var(--light-text-color);
+    --light-text-color: var(--light-light-text-color);
+    --card-background: var(--light-card-bg);
+    --border-color: var(--light-border-color);
+    --shadow-light: var(--light-shadow-light);
+    --shadow-medium: var(--light-shadow-medium);
+    --input-bg: var(--light-input-bg);
+    --meditation-timer-bg: var(--light-bg-gradient-end);
+    --stats-grid-bg: var(--light-bg-gradient-end);
+    --list-item-bg: var(--light-bg-gradient-end);
+    --toast-bg: rgba(0,0,0,0.8);
+    --toast-text: #fff;
+    --progress-bar-bg: #e0e0e0;
+    --progress-bar-fill: var(--secondary-color);
+}
+
+/* --- Dark Theme (Mystic Night) --- */
+body.dark-theme {
+    --primary-color: #a78bfa;
+    --secondary-color: #c4b5fd;
+    --accent-color: #fde047;
+    --background-gradient-start: #1e093d;
+    --background-gradient-end: #3b0764;
+    --text-color: #e0e0e0;
+    --light-text-color: #f0f0f0;
+    --card-background: #2c0b5e;
+    --border-color: #5b21b6;
+    --shadow-light: rgba(255, 255, 255, 0.05);
+    --shadow-medium: rgba(255, 255, 255, 0.1);
+    --input-bg: #3b0764;
+    --meditation-timer-bg: #220546;
+    --stats-grid-bg: #220546;
+    --list-item-bg: #220546;
+    --modal-content-bg: #3b0764;
+    --progress-bar-bg: #4c1d95;
+    --progress-bar-fill: var(--primary-color);
+}
+
+/* --- Cosmic Whisper Theme --- */
+body.cosmic-theme {
+    --primary-color: #6d28d9;
+    --secondary-color: #8b5cf6;
+    --accent-color: #fcd34d;
+    --background-gradient-start: #0f031c; /* Deep Space */
+    --background-gradient-end: #2a0e4d; /* Nebula Purple */
+    --text-color: #e0e0e0;
+    --light-text-color: #f0f0f0;
+    --card-background: #1a082c;
+    --border-color: #4b0d87;
+    --shadow-light: rgba(255, 255, 255, 0.05);
+    --shadow-medium: rgba(255, 255, 255, 0.1);
+    --input-bg: #2a0e4d;
+    --meditation-timer-bg: #11041b;
+    --stats-grid-bg: #11041b;
+    --list-item-bg: #11041b;
+    --modal-content-bg: #2a0e4d;
+    --progress-bar-bg: #3b0764;
+    --progress-bar-fill: var(--secondary-color);
+}
+
+/* --- Forest Bloom Theme --- */
+body.forest-theme {
+    --primary-color: #166534; /* Dark Forest Green */
+    --secondary-color: #4ade80; /* Light Green */
+    --accent-color: #fbbf24; /* Yellow Sun */
+    --background-gradient-start: #ecfdf5; /* Pale Green */
+    --background-gradient-end: #d1fae5; /* Lighter Green */
+    --text-color: #222;
+    --light-text-color: #f0fdf5;
+    --card-background: #ffffff;
+    --border-color: #a7f3d0;
+    --shadow-light: rgba(0, 0, 0, 0.07);
+    --shadow-medium: rgba(0, 0, 0, 0.12);
+    --input-bg: #d1fae5;
+    --meditation-timer-bg: #a7f3d0;
+    --stats-grid-bg: #a7f3d0;
+    --list-item-bg: #a7f3d0;
+    --modal-content-bg: #ffffff;
+    --button-hover-darken: #115e3a;
+    --progress-bar-bg: #cbf9e2;
+    --progress-bar-fill: var(--secondary-color);
+}
+
+
+/* --- Global Styles --- */
+body {
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, var(--background-gradient-start), var(--background-gradient-end));
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    box-sizing: border-box;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    overflow-y: scroll; /* Always show scrollbar to prevent layout jump */
+}
+
+/* Custom Scrollbar */
+body::-webkit-scrollbar {
+    width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+    background: var(--background-gradient-start);
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: var(--secondary-color);
+    border-radius: 6px;
+    border: 3px solid var(--background-gradient-start);
+}
+
+body.modal-open {
+    overflow: hidden; /* Prevent scrolling when modal is open */
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1.5em;
+}
+
+header {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: var(--light-text-color);
+    padding: 2em 0;
+    text-align: center;
+    box-shadow: 0 6px 15px var(--shadow-medium);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 3.5em;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+header p {
+    margin: 0.5em 0 0;
+    font-size: 1.3em;
+    opacity: 0.9;
+}
+
+/* --- Navigation --- */
+.main-nav {
+    background-color: var(--card-background);
+    padding: 1em 0;
+    box-shadow: 0 3px 8px var(--shadow-light);
+    margin-bottom: 2.5em;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.main-nav .container {
+    display: flex;
+    justify-content: center;
+    gap: 1.2em;
+    flex-wrap: wrap;
+}
+
+.nav-button {
+    background-color: transparent;
+    border: none;
+    color: var(--primary-color);
+    padding: 1em 1.8em;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.nav-button i {
+    font-size: 1.3em;
+}
+
+.nav-button:hover {
+    background-color: var(--background-gradient-end);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px var(--shadow-light);
+}
+
+.nav-button.active {
+    background-color: var(--secondary-color);
+    color: var(--light-text-color);
+    box-shadow: 0 4px 12px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.nav-button.active:hover {
+    background-color: var(--primary-color);
+    transform: none;
+    box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+/* --- Main Content Layout --- */
+main {
+    flex-grow: 1;
+    padding-bottom: 3em;
+}
+
+.app-section {
+    display: none;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.app-section.active-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Flexible grid layout */
+    gap: 2.5em;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Card Styles */
+.card {
+    background-color: var(--card-background);
+    border-radius: 15px;
+    box-shadow: 0 10px 25px var(--shadow-light);
+    padding: 3em;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 15px 35px var(--shadow-medium);
+}
+
+.card-full-width {
+    grid-column: 1 / -1; /* Make card span full width in grid */
+}
+
+
+h2 {
+    color: var(--primary-color);
+    margin-top: 0;
+    font-size: 2.5em;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.8em;
+    margin-bottom: 1.5em;
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+}
+
+h2 i {
+    margin-right: 15px;
+    color: var(--accent-color);
+    font-size: 1.2em;
+}
+
+h3 {
+    color: var(--secondary-color);
+    margin-top: 2em;
+    margin-bottom: 1.5em;
+    font-size: 1.8em;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 0.6em;
+    font-weight: 600;
+}
+
+/* --- Buttons --- */
+button {
+    background-color: var(--secondary-color);
+    color: var(--light-text-color);
+    border: none;
+    padding: 1em 2em;
+    border-radius: 30px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+button:hover:not(:disabled) {
+    background-color: var(--button-hover-darken);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px var(--shadow-light);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.3);
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+    transform: none;
+}
+
+.btn-sm {
+    padding: 0.7em 1.4em;
+    font-size: 0.95em;
+    border-radius: 25px;
+}
+
+.btn-icon {
+    padding: 0.7em 1em;
+    font-size: 1.1em;
+    border-radius: 50%;
+    min-width: 40px;
+    min-height: 40px;
+}
+.btn-icon i {
+    margin: 0;
+}
+
+.delete-button { background-color: var(--delete-color); }
+.delete-button:hover:not(:disabled) { background-color: var(--delete-hover); }
+
+.export-button { background-color: var(--success-color); }
+.export-button:hover { background-color: var(--success-hover); }
+
+.import-button { background-color: var(--info-color); }
+.import-button:hover { background-color: var(--info-hover); }
+
+.secondary-button { background-color: #9ca3af; }
+.secondary-button:hover { background-color: #6b7280; }
+
+/* --- Forms & Inputs --- */
+.input-field, select {
+    flex-grow: 1;
+    padding: 1em 1.2em;
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    font-size: 1em;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    min-width: 150px;
+}
+
+.input-field:focus, select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2);
+}
+
+.small-input {
+    min-width: unset;
+    width: 120px;
+    padding: 0.8em 1em;
+    border-radius: 20px;
+}
+
+/* --- Lists (ul, li) --- */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 1.5em 0 0;
+    flex-grow: 1; /* Make lists take available space */
+}
+
+ul li {
+    background-color: var(--list-item-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 1.2em;
+    padding: 1.5em 2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+ul li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+ul li:last-child {
+    margin-bottom: 0;
+}
+
+/* --- Meditation Specifics --- */
+.meditation-timer-card {
+    grid-column: span 1; /* Occupy single column */
+}
+.meditation-history-card {
+    grid-column: span 1; /* Occupy single column */
+}
+
+.timer-display {
+    font-size: 5.5em;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-align: center;
+    margin: 1.5em 0;
+    background-color: var(--meditation-timer-bg);
+    padding: 0.8em 1.2em;
+    border-radius: 15px;
+    border: 2px solid var(--secondary-color);
+    box-shadow: inset 0 3px 10px var(--shadow-light);
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.preset-buttons, .timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-bottom: 2em;
+    flex-wrap: wrap;
+}
+
+.preset-meditation-time {
+    background-color: var(--primary-color);
+}
+.preset-meditation-time:hover:not(:disabled) {
+    background-color: var(--button-hover-darken);
+}
+
+.sound-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 1em;
+    flex-wrap: wrap;
+}
+#ambient-volume {
+    width: 150px;
+    accent-color: var(--secondary-color);
+    cursor: pointer;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.2em;
+    background-color: var(--stats-grid-bg);
+    padding: 1.8em;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 2px 8px var(--shadow-light);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.stats-grid div {
+    padding: 1em;
+    border-bottom: 1px dashed var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
+
+.stats-grid div:nth-last-child(-n+2) { /* remove bottom border from last two items */
+    border-bottom: none;
+}
+@media (max-width: 600px) { /* On smaller screens, single column */
+    .stats-grid div:nth-last-child(-n+2) { border-bottom: 1px dashed var(--border-color); }
+    .stats-grid div:last-child { border-bottom: none; }
+}
+
+
+.stats-grid strong {
+    color: var(--primary-color);
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+/* --- Book Specifics --- */
+.book-input-area, .search-input-area {
+    display: flex;
+    gap: 1em;
+    margin-bottom: 1.8em;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.book-input-area .input-field {
+    flex: 1 1 180px; /* Allow fields to grow but have a base */
+}
+.book-input-area .small-input {
+    flex: 0 0 100px; /* Fixed size for pages */
+}
+.book-input-area button {
+    flex-shrink: 0;
+}
+.book-item-info {
+    flex: 1 1 55%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.book-item-info span {
+    font-size: 0.95em;
+    opacity: 0.85;
+}
+.book-item-info strong {
+    font-size: 1.2em;
+    color: var(--primary-color);
+}
+
+.book-item-controls {
+    display: flex;
+    gap: 0.8em;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.book-item-controls button {
+    padding: 0.7em 1.4em;
+    font-size: 0.95em;
+    border-radius: 25px;
+}
+
+.book-cover-thumbnail {
+    width: 60px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-right: 1em;
+    flex-shrink: 0;
+}
+
+/* --- Statistics Section --- */
+.chart-container {
+    padding: 1.5em;
+    background-color: var(--background-gradient-start);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    margin-top: 1.5em;
+}
+
+/* Meditation Calendar */
+.meditation-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    padding: 1em;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--stats-grid-bg);
+}
+
+.calendar-header {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.calendar-day-name, .calendar-day {
+    padding: 8px;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 0.9em;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+}
+
+.calendar-day-name {
+    font-weight: bold;
+    background-color: var(--secondary-color);
+    color: var(--light-text-color);
+}
+
+.calendar-day.empty {
+    background-color: var(--background-gradient-start);
+    border-color: transparent;
+}
+
+.calendar-day.meditated {
+    background-color: var(--success-color); /* Green for meditated days */
+    color: white;
+    font-weight: bold;
+    border-color: var(--success-hover);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
+
+.calendar-day.current-day {
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+/* --- Goals Section --- */
+.goal-input-area {
+    display: flex;
+    gap: 1em;
+    margin-bottom: 2em;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.goal-input-area .input-field {
+    flex: 1 1 150px;
+}
+.goal-input-area .small-input {
+    flex: 0 0 100px;
+}
+
+.goal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 1.5em;
+    border-radius: 10px;
+    background-color: var(--list-item-bg);
+    border: 1px solid var(--border-color);
+    margin-bottom: 1em;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+.goal-item.completed {
+    opacity: 0.7;
+    text-decoration: line-through;
+    background-color: var(--success-color);
+    color: var(--light-text-color);
+}
+
+.goal-progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background-color: var(--progress-bar-bg);
+    border-radius: 4px;
+    margin-top: 0.5em;
+    overflow: hidden;
+}
+
+.goal-progress-bar {
+    height: 100%;
+    background-color: var(--secondary-color);
+    width: 0%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+.goal-item.completed .goal-progress-bar {
+    background-color: var(--light-text-color);
+}
+
+/* --- Achievements Section --- */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5em;
+    padding: 1em;
+}
+
+.achievement-card {
+    background-color: var(--list-item-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    padding: 1.5em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px var(--shadow-light);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.achievement-card i {
+    font-size: 3em;
+    color: #ccc; /* Default grey for locked */
+    margin-bottom: 0.5em;
+}
+
+.achievement-card.unlocked {
+    background-color: var(--background-gradient-end);
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 15px var(--warning-color);
+}
+
+.achievement-card.unlocked i {
+    color: var(--accent-color);
+    text-shadow: 0 0 10px var(--accent-color);
+}
+
+.achievement-card h4 {
+    margin: 0.5em 0;
+    color: var(--primary-color);
+    font-size: 1.2em;
+}
+
+.achievement-card p {
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+/* --- Settings Section --- */
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 0;
+    border-bottom: 1px dashed var(--border-color);
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: 0.5em;
+}
+
+.setting-item:last-of-type {
+    border-bottom: none;
+}
+
+.setting-item span {
+    font-size: 1.1em;
+    color: var(--text-color);
+    flex-shrink: 0;
+}
+
+.setting-item .input-field, .setting-item select, .setting-item button {
+    margin-left: auto; /* Push input/button to the right */
+    flex-shrink: 0;
+}
+.data-management-buttons button {
+    margin-left: 0; /* Override margin-left: auto for row buttons */
+}
+.data-management-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    justify-content: center;
+}
+
+/* Toggle Switch (reused) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc; -webkit-transition: .4s; transition: .4s; border-radius: 28px;
+}
+.slider:before {
+    position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px;
+    background-color: white; -webkit-transition: .4s; transition: .4s; border-radius: 50%;
+}
+input:checked + .slider { background-color: var(--secondary-color); }
+input:focus + .slider { box-shadow: 0 0 1px var(--secondary-color); }
+input:checked + .slider:before { -webkit-transform: translateX(22px); -ms-transform: translateX(22px); transform: translateX(22px); }
+
+#bell-volume {
+    width: 150px;
+    accent-color: var(--secondary-color);
+    cursor: pointer;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 2em 0;
+}
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    padding: 1.8em;
+    margin-top: 3em;
+    background-color: var(--primary-color);
+    color: var(--light-text-color);
+    font-size: 0.9em;
+    box-shadow: 0 -4px 12px var(--shadow-medium);
+}
+
+/* --- Modals --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 200;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    overflow: auto;
+    background-color: var(--modal-bg);
+    padding-top: 60px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    background-color: var(--modal-content-bg);
+    margin: 3% auto;
+    padding: 3em;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 700px;
+    box-shadow: 0 15px 40px var(--shadow-medium);
+    position: relative;
+    animation: slideInTop 0.4s ease-out;
+    color: var(--text-color);
+    max-height: 90vh; /* Limit height to prevent overflow */
+    overflow-y: auto; /* Scroll content if too tall */
+}
+
+.modal-content h2 {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.8em;
+    margin-bottom: 1.5em;
+}
+
+.modal-content p {
+    margin-bottom: 1em;
+    line-height: 1.6;
+}
+
+.modal-content textarea {
+    width: calc(100% - 24px);
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1em;
+    line-height: 1.5;
+    resize: vertical;
+    margin-bottom: 1.5em;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-content textarea:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+}
+
+.modal-content button {
+    margin-top: 1.5em;
+    width: auto;
+    min-width: 150px;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+    position: absolute;
+    right: 25px;
+    top: 15px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: var(--primary-color);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5em;
+    margin-top: 2em;
+}
+
+/* Journal Modal Specifics */
+.journal-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+    margin-bottom: 1.5em;
+}
+.mood-tracker, .energy-tracker {
+    flex: 1 1 45%;
+    min-width: 250px;
+}
+.mood-tracker h4, .energy-tracker h4 {
+    margin-top: 0;
+    margin-bottom: 0.8em;
+    color: var(--secondary-color);
+}
+.mood-emojis {
+    display: flex;
+    gap: 0.8em;
+    flex-wrap: wrap;
+}
+.mood-emojis .emoji {
+    font-size: 2em;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 8px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.mood-emojis .emoji:hover {
+    transform: scale(1.1);
+    background-color: var(--background-gradient-end);
+}
+.mood-emojis .emoji.selected {
+    background-color: var(--accent-color);
+    border-color: var(--warning-hover);
+    transform: scale(1.15);
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+.slider-energy {
+    width: calc(100% - 40px);
+    vertical-align: middle;
+    accent-color: var(--secondary-color);
+}
+#energy-value {
+    vertical-align: middle;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-left: 10px;
+}
+
+/* Book Modal Specifics */
+.book-modal-header {
+    display: flex;
+    gap: 1.5em;
+    align-items: flex-start;
+    margin-bottom: 2em;
+    flex-wrap: wrap;
+}
+.modal-book-cover {
+    width: 120px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    flex-shrink: 0;
+}
+.book-modal-header h2 {
+    margin-top: 0;
+    font-size: 2em;
+    border: none;
+    padding: 0;
+    margin-bottom: 0.5em;
+}
+.book-modal-header p {
+    margin: 0.3em 0;
+    font-size: 1.1em;
+}
+.book-rating .fa-star {
+    color: #ccc;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+.book-rating .fa-star.active {
+    color: var(--accent-color);
+}
+.book-modal-progress {
+    margin-bottom: 2em;
+    padding-top: 1em;
+    border-top: 1px dashed var(--border-color);
+}
+.progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background-color: var(--progress-bar-bg);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 0.8em;
+}
+.progress-bar {
+    height: 100%;
+    background-color: var(--progress-bar-fill);
+    width: 0%;
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+#modal-book-notes-list li {
+    background-color: var(--background-gradient-start);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    gap: 0.8em;
+}
+#modal-book-notes-list li .note-content {
+    flex-grow: 1;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 1em;
+}
+#modal-book-notes-list li .note-date {
+    font-size: 0.8em;
+    color: #777;
+    text-align: right;
+    width: 100%;
+}
+#modal-book-notes-list li .delete-note-btn {
+    padding: 0.4em 0.8em;
+    font-size: 0.8em;
+    min-width: unset;
+    margin-top: 0;
+}
+
+/* Interval Timer Modal Specifics */
+.interval-step {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 1em;
+    padding: 0.8em;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--input-bg);
+    flex-wrap: wrap;
+}
+.interval-step label {
+    font-weight: bold;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+.interval-step input[type="number"], .interval-step select {
+    width: 80px;
+    padding: 0.6em;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+.interval-step .delete-step-btn {
+    margin-left: auto; /* Push delete button to the right */
+    padding: 0.5em 0.8em;
+    font-size: 0.9em;
+}
+#interval-timer-modal button {
+    margin-top: 1.5em;
+}
+#add-interval-step {
+    background-color: var(--secondary-color);
+}
+#start-interval-meditation {
+    background-color: var(--success-color);
+    margin-left: 1em;
+}
+
+/* --- Toast Notifications --- */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background-color: var(--toast-bg);
+    color: var(--toast-text);
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    min-width: 250px;
+    max-width: 350px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast.hide {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.toast i {
+    font-size: 1.5em;
+    color: var(--accent-color); /* Neutral color for icon */
+}
+.toast.success i { color: var(--success-color); }
+.toast.error i { color: var(--delete-color); }
+.toast.info i { color: var(--info-color); }
+
+
+/* --- Keyframe Animations --- */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInTop { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1200px) {
+    .container {
+        padding: 0 1em;
+    }
+    header h1 {
+        font-size: 3em;
+    }
+    .main-nav .container {
+        gap: 0.8em;
+    }
+    .nav-button {
+        font-size: 1.1em;
+        padding: 0.8em 1.2em;
+    }
+    .app-section.active-section {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2em;
+    }
+    .card {
+        padding: 2.5em;
+    }
+    .timer-display {
+        font-size: 5em;
+    }
+    h2 {
+        font-size: 2.2em;
+    }
+    h3 {
+        font-size: 1.6em;
+    }
+    .modal-content {
+        max-width: 600px;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 1.5em 0;
+    }
+    header h1 {
+        font-size: 2.5em;
+    }
+    header p {
+        font-size: 1.1em;
+    }
+    .main-nav {
+        margin-bottom: 1.5em;
+        overflow-x: auto; /* Allow horizontal scrolling for many nav items */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        justify-content: flex-start; /* Align to start for scrollable content */
+    }
+    .main-nav .container {
+        flex-wrap: nowrap; /* Prevent wrapping in nav bar */
+        justify-content: flex-start;
+        padding: 0 1em;
+        min-width: max-content; /* Ensure enough width for all buttons */
+    }
+    .nav-button {
+        font-size: 1em;
+        padding: 0.7em 1em;
+    }
+    .app-section.active-section {
+        grid-template-columns: 1fr; /* Stack cards vertically */
+        gap: 1.5em;
+    }
+    .card {
+        padding: 2em;
+    }
+    .timer-display {
+        font-size: 4em;
+    }
+    .preset-buttons, .timer-controls, .sound-controls {
+        flex-direction: column;
+        gap: 0.8em;
+    }
+    button {
+        width: 100%;
+        padding: 0.9em 1.5em;
+        font-size: 1em;
+    }
+    .btn-icon {
+        width: auto; /* Allow auto width for icons when stacked */
+        border-radius: 30px; /* Make them pill-shaped when wider */
+    }
+    .book-input-area, .search-input-area {
+        flex-direction: column;
+        align-items: stretch; /* Stretch items to full width */
+        gap: 0.8em;
+    }
+    .book-input-area .input-field, .search-input-area .input-field {
+        width: 100%; /* Full width inputs */
+    }
+    .book-input-area .btn-icon, .search-input-area .btn-icon {
+        width: 100%;
+    }
+    .book-item li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .book-item-controls {
+        width: 100%;
+        justify-content: center;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .modal-content {
+        width: 95%;
+        padding: 2em;
+        margin: 2% auto;
+    }
+    .close-button {
+        font-size: 35px;
+        right: 15px;
+        top: 10px;
+    }
+    .journal-meta, .book-modal-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .mood-emojis {
+        justify-content: center;
+    }
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .setting-item span, .setting-item .input-field, .setting-item select, .setting-item button {
+        margin-left: 0;
+        width: 100%;
+        text-align: left;
+    }
+    .setting-item .input-field.small-input {
+        text-align: left;
+    }
+    .data-management-buttons {
+        flex-direction: column;
+    }
+    #toast-container {
+        top: unset;
+        bottom: 20px;
+        right: 10px;
+        left: 10px;
+    }
+    .toast {
+        max-width: unset;
+        transform: translateY(100%);
+    }
+    .toast.show {
+        transform: translateY(0);
+    }
+    .toast.hide {
+        transform: translateY(100%);
+    }
+}
+
+--- END FILE: style.css ---
+
+---------------------------------------------------------------------------------------------
+
+do the following : 
+
+Improve the website significantly. In every aspect of it. The thing I want to tell you is that. The website in case of the CSS in case of the different themes in it. The color combination and. Texts in them. Are not well aligned and. And the default theme which is the light mode, the serene theme. The texts are not coming out great, so fix that. Whilst improving the website significantly in every aspect of it. And also guide me where can I find those sounds that you have inputted. Features. Add a timer option also. And do whatever you think is necessary in this website and. Make it look like a professional website that can be accessed through mobile phones and through desktops as well. And the main focus is mobile phones so. Users can use this website as a web application. That's all. Any other improvements you think do them? And send me the final update. Thank you.
