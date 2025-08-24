@@ -497,6 +497,20 @@ select {
     border-radius: 20px;
 }
 
+.tiny-input { /* New class for smaller inputs like H:M:S */
+    width: 50px; /* Fixed small width */
+    padding: 0.7em 0.4em; /* Reduced padding to fit */
+    text-align: center;
+    -moz-appearance: textfield; /* Remove number input arrows for Firefox */
+}
+/* Hide number input arrows for Chrome, Safari, Edge */
+.tiny-input::-webkit-outer-spin-button,
+.tiny-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
 /* --- Lists (ul, li) --- */
 ul {
     list-style: none;
@@ -645,6 +659,112 @@ ul li:last-child {
     font-size: 1.1em; /* Slightly smaller emoji */
     margin-left: 0.4em; /* Reduced margin */
 }
+
+/* --- General Countdown Card (New Feature) --- */
+.general-timer-card {
+    grid-column: span 1; /* Occupy single column */
+    text-align: center; /* Center content within the card */
+}
+
+.general-timer-card h2 {
+    justify-content: center; /* Center icon and text */
+}
+
+.general-timer-card .timer-input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em; /* Small gap between H:M:S */
+    margin-bottom: 1.5em;
+    flex-wrap: wrap; /* Allow wrapping on very small screens */
+}
+@media (max-width: 400px) {
+    .general-timer-card .timer-input-group {
+        flex-direction: column; /* Stack H:M:S inputs vertically */
+        gap: 0.8em;
+    }
+    .general-timer-card .timer-input-group input {
+        width: 100%;
+        max-width: none;
+    }
+    .general-timer-card .timer-input-group span { /* Hide ":" when stacked */
+        display: none;
+    }
+}
+
+.general-timer-card .timer-input-group span {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.general-timer-card .countdown-display {
+    font-size: clamp(3.5em, 8vw, 5em);
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 0 0 1.8em;
+    background-color: var(--meditation-timer-bg);
+    padding: 0.7em 1em;
+    border-radius: 15px;
+    border: 2px solid var(--info-color);
+    box-shadow: inset 0 2px 8px var(--shadow-light);
+    letter-spacing: 1px;
+}
+
+.general-timer-card .countdown-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.8em;
+    margin-bottom: 1.5em;
+    flex-wrap: wrap;
+}
+.general-timer-card .countdown-controls button {
+    flex: 1 1 110px;
+    max-width: 160px;
+}
+@media (max-width: 450px) { /* Stack countdown controls on smaller screens */
+    .general-timer-card .countdown-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .general-timer-card .countdown-controls button {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+
+.general-timer-card .countdown-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+}
+.general-timer-card .countdown-options .input-field {
+    width: 100%;
+    max-width: 300px; /* Limit width of label input */
+}
+.general-timer-card .countdown-options .notification-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+}
+.general-timer-card .countdown-options .notification-toggle span {
+    font-size: 1em;
+    color: var(--text-color);
+}
+.sr-only { /* For screen readers only */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
 
 /* Dashboard Specifics */
 .stats-grid {
@@ -1690,18 +1810,18 @@ footer {
         font-size: 0.9em;
         margin-bottom: 1.2em;
     }
-    .timer-display {
+    .timer-display, .countdown-display { /* Apply to both timers */
         font-size: clamp(2.5em, 10vw, 3.5em);
         margin: 1em 0 1.2em;
         padding: 0.5em 0.6em;
     }
-    .meditation-controls-group, .timer-controls {
+    .meditation-controls-group, .timer-controls, .countdown-controls { /* Apply to both timer controls */
         gap: 0.8em;
         margin-bottom: 1.2em;
         flex-direction: column; /* Stack controls on mobile */
         align-items: stretch;
     }
-    .meditation-controls-group button, .timer-controls button {
+    .meditation-controls-group button, .timer-controls button, .countdown-controls button {
         width: 100%;
         max-width: none;
     }
@@ -1766,15 +1886,15 @@ footer {
         margin-right: 1em; /* Add right margin */
         align-self: flex-start; /* Align to top left */
     }
-    .timer-display {
+    .timer-display, .countdown-display { /* Apply to both timers */
         font-size: clamp(3em, 6vw, 4.5em); /* Adjust font size */
     }
-    .meditation-controls-group, .timer-controls {
+    .meditation-controls-group, .timer-controls, .countdown-controls { /* Apply to both timer controls */
         flex-direction: row; /* Restore row layout for controls */
         align-items: center;
         justify-content: center;
     }
-    .meditation-controls-group button, .timer-controls button {
+    .meditation-controls-group button, .timer-controls button, .countdown-controls button {
         width: auto;
         max-width: 150px;
     }
@@ -1789,6 +1909,17 @@ footer {
     }
     .custom-timer-input button {
         width: auto;
+    }
+    .general-timer-card .timer-input-group { /* Restore row layout for H:M:S */
+        flex-direction: row;
+        gap: 0.5em;
+    }
+    .general-timer-card .timer-input-group input {
+        width: 50px; /* Restore fixed width */
+        max-width: none;
+    }
+    .general-timer-card .timer-input-group span {
+        display: inline; /* Show ":" again */
     }
     .book-input-area, .search-input-area, .goal-input-area, .setting-item {
         flex-direction: row; /* Restore row layout */

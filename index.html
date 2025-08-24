@@ -87,6 +87,35 @@
                 </div>
             </div>
 
+            <!-- New General Countdown Card -->
+            <div class="card general-timer-card">
+                <h2><i class="fas fa-hourglass-half"></i> General Countdown</h2>
+                <div class="timer-input-group">
+                    <input type="number" id="countdown-hours" min="0" max="23" placeholder="H" class="input-field tiny-input" aria-label="Countdown hours">
+                    <span>:</span>
+                    <input type="number" id="countdown-minutes" min="0" max="59" placeholder="M" class="input-field tiny-input" aria-label="Countdown minutes">
+                    <span>:</span>
+                    <input type="number" id="countdown-seconds" min="0" max="59" placeholder="S" class="input-field tiny-input" aria-label="Countdown seconds">
+                </div>
+                <div class="countdown-display" id="general-countdown-display">00:00:00</div>
+                <div class="countdown-controls">
+                    <button id="start-countdown" aria-label="Start Countdown"><i class="fas fa-play"></i> Start</button>
+                    <button id="pause-countdown" disabled aria-label="Pause Countdown"><i class="fas fa-pause"></i> Pause</button>
+                    <button id="stop-countdown" disabled aria-label="Stop Countdown"><i class="fas fa-stop"></i> Stop</button>
+                    <button id="reset-countdown" aria-label="Reset Countdown"><i class="fas fa-redo-alt"></i> Reset</button>
+                </div>
+                <div class="countdown-options">
+                    <input type="text" id="countdown-label" placeholder="e.g., Cooking Timer, Study Break" class="input-field" aria-label="Optional countdown label">
+                    <div class="notification-toggle">
+                        <span>Notify on Finish:</span>
+                        <label class="switch" aria-label="Toggle notification on finish">
+                            <input type="checkbox" id="countdown-notification-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <div class="card meditation-history-card">
                 <h3><i class="fas fa-history"></i> Your Meditation Journey</h3>
                 <ul id="meditation-sessions-list">

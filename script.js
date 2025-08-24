@@ -25,6 +25,18 @@ document.addEventListener('DOMContentLoaded', () => {
         meditationSessionsList: document.getElementById('meditation-sessions-list'),
         openIntervalTimerBtn: document.getElementById('open-interval-timer-btn'),
 
+        // General Countdown Timer (New)
+        countdownHoursInput: document.getElementById('countdown-hours'),
+        countdownMinutesInput: document.getElementById('countdown-minutes'),
+        countdownSecondsInput: document.getElementById('countdown-seconds'),
+        generalCountdownDisplay: document.getElementById('general-countdown-display'),
+        startCountdownBtn: document.getElementById('start-countdown'),
+        pauseCountdownBtn: document.getElementById('pause-countdown'),
+        stopCountdownBtn: document.getElementById('stop-countdown'),
+        resetCountdownBtn: document.getElementById('reset-countdown'),
+        countdownLabelInput: document.getElementById('countdown-label'),
+        countdownNotificationToggle: document.getElementById('countdown-notification-toggle'),
+
         // Book Section
         newBookCoverInput: document.getElementById('new-book-cover'),
         uploadBookCoverBtn: document.getElementById('upload-book-cover-btn'),
@@ -119,6 +131,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIntervalIndex = 0;
     let intervalTimerSteps = []; // [{duration, label}] (sounds removed)
 
+    // General Countdown Timer state (New)
+    let generalCountdownInterval = null;
+    let generalCountdownRemainingMs = 0;
+    let generalCountdownInitialMs = 0; // The total duration user set
+    let generalCountdownPaused = false;
+    let generalCountdownEndTime = 0; // When the timer should end if running
+
     let currentReadingBookId = null;
     let bookReadingTimerInterval;
     let bookReadingStartTime = 0;
@@ -139,6 +158,17 @@ document.addEventListener('DOMContentLoaded', () => {
         dailyReminderTime: '',
         customBackground: null
     });
+
+    // generalCountdown: { remainingMs, initialMs, paused, endTime, label, notify }
+    let generalCountdownState = loadData('generalCountdownState', {
+        remainingMs: 0,
+        initialMs: 0,
+        paused: false,
+        endTime: 0,
+        label: '',
+        notify: false
+    });
+
 
     // achievementsList: [{ id, name, description, check(), unlocked, icon }] (check function is part of the JS definition, only unlocked status is persisted)
     // Define achievement check functions here to ensure they are always present.
@@ -616,6 +646,194 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         return steps;
     }
+
+    // --- General Countdown Timer Logic (New) ---
+
+    function updateCountdownDisplay() {
+        elements.generalCountdownDisplay.textContent = formatTime(generalCountdownRemainingMs);
+        const hours = Math.floor(generalCountdownRemainingMs / (1000 * 60 * 60));
+        const minutes = Math.floor((generalCountdownRemainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((generalCountdownRemainingMs % (1000 * 60)) / 1000);
+        elements.countdownHoursInput.value = hours;
+        elements.countdownMinutesInput.value = minutes;
+        elements.countdownSecondsInput.value = seconds;
+    }
+
+    function updateCountdownButtonStates(isRunning, isPaused) {
+        elements.countdownHoursInput.disabled = isRunning || isPaused;
+        elements.countdownMinutesInput.disabled = isRunning || isPaused;
+        elements.countdownSecondsInput.disabled = isRunning || isPaused;
+        elements.countdownLabelInput.disabled = isRunning || isPaused;
+        elements.countdownNotificationToggle.disabled = isRunning || isPaused;
+
+        elements.startCountdownBtn.disabled = isRunning;
+        elements.pauseCountdownBtn.disabled = !isRunning;
+        elements.stopCountdownBtn.disabled = !isRunning && !isPaused;
+        elements.resetCountdownBtn.disabled = isRunning; // Reset should be available when paused or stopped
+        if (!isRunning && !isPaused && generalCountdownRemainingMs === 0) {
+            elements.resetCountdownBtn.disabled = true;
+        }
+    }
+
+    function startCountdown() {
+        if (generalCountdownInterval) {
+            showToast('Countdown already running!', 'warning');
+            return;
+        }
+
+        const h = parseInt(elements.countdownHoursInput.value) || 0;
+        const m = parseInt(elements.countdownMinutesInput.value) || 0;
+        const s = parseInt(elements.countdownSecondsInput.value) || 0;
+
+        let totalMs = (h * 3600 + m * 60 + s) * 1000;
+
+        if (totalMs <= 0 && generalCountdownRemainingMs <= 0) {
+            showToast('Please set a duration for the countdown!', 'error');
+            return;
+        }
+
+        if (!generalCountdownPaused) {
+            generalCountdownInitialMs = totalMs;
+            generalCountdownRemainingMs = totalMs;
+        } else {
+            totalMs = generalCountdownRemainingMs; // Resume from remaining time
+            generalCountdownPaused = false;
+        }
+
+        if (generalCountdownRemainingMs <= 0) { // If it was paused at 0 or set to 0 initially
+            showToast('Countdown finished. Please set a new duration.', 'info');
+            resetCountdown();
+            return;
+        }
+        
+        generalCountdownEndTime = Date.now() + generalCountdownRemainingMs;
+
+        updateCountdownButtonStates(true, false);
+        elements.countdownLabelInput.disabled = true; // Disable label edit while running
+        elements.countdownNotificationToggle.disabled = true; // Disable notification toggle while running
+        showToast(`Countdown "${elements.countdownLabelInput.value || 'Timer'}" started.`, 'info');
+
+        generalCountdownInterval = setInterval(() => {
+            generalCountdownRemainingMs = generalCountdownEndTime - Date.now();
+
+            if (generalCountdownRemainingMs <= 0) {
+                generalCountdownRemainingMs = 0;
+                stopCountdown(true); // Call stop with 'finished' flag
+                showToast(`Countdown "${elements.countdownLabelInput.value || 'Timer'}" finished!`, 'success');
+            }
+            updateCountdownDisplay();
+            saveCountdownState(); // Save state every second
+        }, 1000);
+    }
+
+    function pauseCountdown() {
+        if (!generalCountdownInterval) return;
+        clearInterval(generalCountdownInterval);
+        generalCountdownInterval = null;
+        generalCountdownPaused = true;
+        generalCountdownEndTime = 0; // Clear end time when paused
+        updateCountdownButtonStates(false, true);
+        saveCountdownState();
+        showToast(`Countdown "${elements.countdownLabelInput.value || 'Timer'}" paused.`, 'info');
+    }
+
+    function stopCountdown(finished = false) {
+        if (!generalCountdownInterval && !generalCountdownPaused) return; // Not running and not paused
+
+        clearInterval(generalCountdownInterval);
+        generalCountdownInterval = null;
+        generalCountdownPaused = false;
+        generalCountdownEndTime = 0;
+
+        if (finished) {
+            if (generalCountdownState.notify && Notification.permission === 'granted') {
+                new Notification('Yogify Countdown', {
+                    body: `${elements.countdownLabelInput.value || 'Your timer'} has finished!`,
+                    icon: './img/icon.png'
+                });
+            }
+            resetCountdown(); // Full reset after finishing
+        } else {
+            showToast(`Countdown "${elements.countdownLabelInput.value || 'Timer'}" stopped.`, 'info');
+            resetCountdown(); // Full reset if manually stopped
+        }
+    }
+
+    function resetCountdown() {
+        clearInterval(generalCountdownInterval);
+        generalCountdownInterval = null;
+        generalCountdownRemainingMs = 0;
+        generalCountdownInitialMs = 0;
+        generalCountdownPaused = false;
+        generalCountdownEndTime = 0;
+        
+        elements.countdownHoursInput.value = '';
+        elements.countdownMinutesInput.value = '';
+        elements.countdownSecondsInput.value = '';
+        elements.generalCountdownDisplay.textContent = '00:00:00';
+
+        elements.countdownLabelInput.value = ''; // Clear label
+        elements.countdownNotificationToggle.checked = false; // Reset notification toggle
+
+        updateCountdownButtonStates(false, false);
+        saveCountdownState();
+    }
+
+    function saveCountdownState() {
+        generalCountdownState = {
+            remainingMs: generalCountdownRemainingMs,
+            initialMs: generalCountdownInitialMs,
+            paused: generalCountdownPaused,
+            endTime: generalCountdownEndTime,
+            label: elements.countdownLabelInput.value,
+            notify: elements.countdownNotificationToggle.checked
+        };
+        saveData('generalCountdownState', generalCountdownState);
+    }
+
+    function loadCountdownState() {
+        elements.countdownLabelInput.value = generalCountdownState.label;
+        elements.countdownNotificationToggle.checked = generalCountdownState.notify;
+
+        if (generalCountdownState.paused) {
+            generalCountdownRemainingMs = generalCountdownState.remainingMs;
+            generalCountdownInitialMs = generalCountdownState.initialMs;
+            generalCountdownPaused = true;
+            updateCountdownDisplay();
+            updateCountdownButtonStates(false, true); // Set to paused state
+            showToast(`Countdown "${generalCountdownState.label || 'Timer'}" was paused.`, 'info');
+        } else if (generalCountdownState.endTime > 0) {
+            // Timer was running, calculate remaining time
+            generalCountdownRemainingMs = generalCountdownState.endTime - Date.now();
+            generalCountdownInitialMs = generalCountdownState.initialMs;
+
+            if (generalCountdownRemainingMs <= 0) {
+                // Timer finished while app was closed
+                generalCountdownRemainingMs = 0;
+                updateCountdownDisplay();
+                updateCountdownButtonStates(false, false);
+                if (generalCountdownState.notify && Notification.permission === 'granted') {
+                    new Notification('Yogify Countdown', {
+                        body: `${generalCountdownState.label || 'Your timer'} finished while you were away!`,
+                        icon: './img/icon.png'
+                    });
+                }
+                resetCountdown(); // Fully reset
+                showToast(`Countdown "${generalCountdownState.label || 'Timer'}" finished!`, 'success');
+            } else {
+                // Timer is still running
+                generalCountdownPaused = false; // Set to not paused to restart it
+                updateCountdownDisplay();
+                startCountdown(); // Restart the interval
+                showToast(`Countdown "${generalCountdownState.label || 'Timer'}" resumed.`, 'info');
+            }
+        } else {
+            // No active timer, set initial display
+            updateCountdownDisplay();
+            updateCountdownButtonStates(false, false);
+        }
+    }
+
 
     // --- Book Tracking Logic ---
 
@@ -1581,6 +1799,7 @@ document.addEventListener('DOMContentLoaded', () => {
             books: books,
             goals: goals,
             settings: settings,
+            generalCountdownState: generalCountdownState, // Include countdown state
             achievementsListStatus: achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked }))
         };
         const filename = `yogify_data_${new Date().toISOString().slice(0, 10)}.json`;
@@ -1609,6 +1828,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (importedData.books) books = importedData.books;
                     if (importedData.goals) goals = importedData.goals;
                     if (importedData.settings) settings = importedData.settings;
+                    if (importedData.generalCountdownState) generalCountdownState = importedData.generalCountdownState; // Import countdown state
                     if (importedData.achievementsListStatus) { // Check for the new key
                         achievementsList = loadAchievementsWithChecks(baseAchievements, importedData.achievementsListStatus);
                     }
@@ -1617,6 +1837,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     saveData('books', books);
                     saveData('goals', goals);
                     saveData('settings', settings);
+                    saveData('generalCountdownState', generalCountdownState); // Save imported countdown state
                     saveData('achievementsListStatus', achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked })));
 
                     initializeApp();
@@ -1642,6 +1863,7 @@ document.addEventListener('DOMContentLoaded', () => {
             books = [];
             goals = [];
             settings = { theme: 'yogify-serene', dailyReminderTime: '', customBackground: null };
+            generalCountdownState = { remainingMs: 0, initialMs: 0, paused: false, endTime: 0, label: '', notify: false }; // Reset countdown state
             achievementsList = loadAchievementsWithChecks(baseAchievements, []); // Reset achievements to default unlocked=false
             initializeApp();
             showToast('All data cleared! The page will refresh.', 'success');
@@ -1677,6 +1899,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateDashboard();
         } else if (sectionId === 'meditation-section') {
             renderMeditationSessions();
+            loadCountdownState(); // Ensure countdown state is loaded/resumed when section is visible
         } else if (sectionId === 'books-section') {
             renderBooks();
             elements.bookSearchInput.value = ''; // Clear search on section change
@@ -1773,6 +1996,48 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.journalEnergyLevel.addEventListener('input', (e) => {
         elements.journalEnergyValue.textContent = e.target.value;
     });
+
+    // General Countdown Timer Event Listeners (New)
+    elements.startCountdownBtn.addEventListener('click', startCountdown);
+    elements.pauseCountdownBtn.addEventListener('click', pauseCountdown);
+    elements.stopCountdownBtn.addEventListener('click', () => stopCountdown(false));
+    elements.resetCountdownBtn.addEventListener('click', resetCountdown);
+    // Persist changes to label and notify toggle
+    elements.countdownLabelInput.addEventListener('input', saveCountdownState);
+    elements.countdownNotificationToggle.addEventListener('change', () => {
+        if (elements.countdownNotificationToggle.checked && Notification.permission === 'default') {
+            Notification.requestPermission(); // Request permission when user enables toggle
+        }
+        saveCountdownState();
+    });
+    // Input validation for countdown inputs
+    [elements.countdownHoursInput, elements.countdownMinutesInput, elements.countdownSecondsInput].forEach(input => {
+        input.addEventListener('input', (e) => {
+            let value = parseInt(e.target.value, 10);
+            if (isNaN(value) || value < e.target.min) {
+                e.target.value = e.target.min;
+            } else if (value > e.target.max) {
+                e.target.value = e.target.max;
+            }
+            if (e.target.value.length === 1 && value < 10) { // Pad single digits with leading zero for display in input
+                e.target.value = String(value).padStart(2, '0');
+            }
+            if (e.target.value === '') e.target.value = '00'; // Default to 00 if cleared
+            if (generalCountdownInterval === null && !generalCountdownPaused) { // Only update display if not running/paused
+                 const h = parseInt(elements.countdownHoursInput.value) || 0;
+                 const m = parseInt(elements.countdownMinutesInput.value) || 0;
+                 const s = parseInt(elements.countdownSecondsInput.value) || 0;
+                 elements.generalCountdownDisplay.textContent = formatTime((h * 3600 + m * 60 + s) * 1000);
+            }
+            saveCountdownState(); // Save state on input change
+        });
+         input.addEventListener('blur', (e) => { // Ensure 00 on blur if empty
+             if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
+                 e.target.value = '00';
+             }
+         });
+    });
+
 
     elements.addBookBtn.addEventListener('click', addBook);
     elements.uploadBookCoverBtn.addEventListener('click', () => elements.newBookCoverInput.click());
@@ -1891,6 +2156,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (settings.dailyReminderTime) {
             setDailyReminder(); // Re-schedule reminder on load
+        }
+        
+        // Load countdown state only if the meditation section is active
+        // Otherwise, it will be loaded when the section is shown via showSection()
+        if (document.getElementById('meditation-section').classList.contains('active-section')) {
+            loadCountdownState();
+        } else {
+            // Otherwise, initialize the inputs with values from localStorage if they exist, but don't start the timer.
+            // This ensures inputs reflect last saved state even if not running.
+            const h = Math.floor(generalCountdownState.initialMs / (1000 * 60 * 60));
+            const m = Math.floor((generalCountdownState.initialMs % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((generalCountdownState.initialMs % (1000 * 60)) / 1000);
+            elements.countdownHoursInput.value = h > 0 ? String(h).padStart(2, '0') : '00';
+            elements.countdownMinutesInput.value = m > 0 ? String(m).padStart(2, '0') : '00';
+            elements.countdownSecondsInput.value = s > 0 ? String(s).padStart(2, '0') : '00';
+            elements.generalCountdownDisplay.textContent = formatTime(generalCountdownState.initialMs || 0); // Display initial duration
+            elements.countdownLabelInput.value = generalCountdownState.label;
+            elements.countdownNotificationToggle.checked = generalCountdownState.notify;
+            updateCountdownButtonStates(false, false); // Ensure buttons are reset
         }
 
         showSection('dashboard-section'); // Show dashboard by default
