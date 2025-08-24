@@ -315,19 +315,10 @@ main {
 
 .app-section.active-section {
     display: grid;
-    /* Adjusted minmax for better two-column fit before collapsing */
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-    gap: 2em; /* Reduced gap */
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* <-- UPDATED: Changed minmax from 280px to 350px */
+    gap: 2em;
     opacity: 1;
     transform: translateY(0);
-}
-
-/* Collapse to single column on screens smaller than ~600px */
-@media (max-width: 600px) {
-    .app-section.active-section {
-        grid-template-columns: 1fr;
-        gap: 1.5em; /* Further reduced gap */
-    }
 }
 
 
@@ -356,7 +347,7 @@ h2 {
     color: var(--primary-color);
     margin-top: 0;
     /* Adjusted clamp for better scaling on smaller screens */
-    font-size: clamp(1.4em, 5vw, 2.2em); 
+    font-size: clamp(1.4em, 5vw, 2.2em);
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 0.8em;
     margin-bottom: 1.5em;
@@ -505,7 +496,7 @@ select {
     text-align: center;
     -moz-appearance: textfield; /* Remove number input arrows for Firefox */
     /* Ensure vertical alignment */
-    vertical-align: middle; 
+    vertical-align: middle;
 }
 /* Hide number input arrows for Chrome, Safari, Edge */
 .tiny-input::-webkit-outer-spin-button,
@@ -584,20 +575,20 @@ ul li:last-child {
     grid-column: span 1;
 }
 
-.timer-display {
-    /* Adjusted clamp for better scaling on smaller screens */
-    font-size: clamp(2.5em, 10vw, 3.5em); 
+.timer-display, .countdown-display { /* <-- UPDATED: Combined with countdown-display, adjusted clamp & added max-width */
+    font-size: clamp(2.2em, 8vw, 3.2em); /* Slightly reduced clamp values for better fit */
     font-weight: bold;
     color: var(--primary-color);
     text-align: center;
-    margin: 1.2em 0 1.8em; /* Reduced margins */
+    margin: 1.2em auto 1.8em; /* Changed margin-left/right to auto for centering */
     background-color: var(--meditation-timer-bg);
-    padding: 0.7em 1em; /* Reduced padding */
+    padding: 0.7em 1em;
     border-radius: 15px;
-    border: 2px solid var(--info-color); /* Info color border */
+    border: 2px solid var(--info-color);
     box-shadow: inset 0 2px 8px var(--shadow-light);
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
     letter-spacing: 1px;
+    max-width: 90%; /* NEW: Constrain the max width of the display element itself */
 }
 
 .meditation-controls-group {
@@ -633,7 +624,8 @@ ul li:last-child {
     max-width: 120px; /* Reduced max-width */
     text-align: center;
 }
-@media (max-width: 400px) { /* On very small screens, stack custom input and button */
+/* This media query moved to 400px for consistency. Keep for reference if needed elsewhere. */
+/* @media (max-width: 400px) {
     .custom-timer-input {
         flex-direction: column;
         align-items: stretch;
@@ -643,7 +635,7 @@ ul li:last-child {
         max-width: none;
         text-align: left;
     }
-}
+} */
 
 .timer-controls {
     display: flex;
@@ -687,8 +679,8 @@ ul li:last-child {
     margin-bottom: 1.5em;
     flex-wrap: wrap; /* Allow wrapping on very small screens */
 }
-/* Stack H:M:S inputs vertically on very small screens */
-@media (max-width: 400px) {
+/* This media query moved to 400px for consistency. Keep for reference if needed elsewhere. */
+/* @media (max-width: 400px) {
     .custom-countdown-card .timer-input-group {
         flex-direction: column;
         gap: 0.8em;
@@ -697,10 +689,10 @@ ul li:last-child {
         width: 100%;
         max-width: none;
     }
-    .custom-countdown-card .timer-input-group .colon { /* Hide ":" when stacked */
+    .custom-countdown-card .timer-input-group .colon { // Hide ":" when stacked
         display: none;
     }
-}
+} */
 
 .custom-countdown-card .timer-input-group .colon { /* Specific for the colon separator */
     font-size: 1.5em;
@@ -708,12 +700,12 @@ ul li:last-child {
     color: var(--primary-color);
     /* Ensure vertical alignment with inputs */
     line-height: 1; /* Match line-height to input height if possible */
-    vertical-align: middle; 
+    vertical-align: middle;
 }
 
-.custom-countdown-card .countdown-display {
-    /* Adjusted clamp for better scaling on smaller screens */
-    font-size: clamp(2.5em, 10vw, 3.5em); 
+/* This block is now part of the combined .timer-display, .countdown-display rule above */
+/* .custom-countdown-card .countdown-display {
+    font-size: clamp(2.5em, 10vw, 3.5em);
     font-weight: bold;
     color: var(--primary-color);
     margin: 0 0 1.8em;
@@ -723,7 +715,7 @@ ul li:last-child {
     border: 2px solid var(--info-color);
     box-shadow: inset 0 2px 8px var(--shadow-light);
     letter-spacing: 1px;
-}
+} */
 
 .custom-countdown-card .countdown-controls {
     display: flex;
@@ -736,8 +728,8 @@ ul li:last-child {
     flex: 1 1 110px;
     max-width: 160px;
 }
-/* Stack countdown controls on smaller screens */
-@media (max-width: 450px) {
+/* This media query moved to 450px for consistency. Keep for reference if needed elsewhere. */
+/* @media (max-width: 450px) {
     .custom-countdown-card .countdown-controls {
         flex-direction: column;
         align-items: stretch;
@@ -746,7 +738,7 @@ ul li:last-child {
         width: 100%;
         max-width: none;
     }
-}
+} */
 
 .custom-countdown-card .countdown-options {
     display: flex;
@@ -803,7 +795,36 @@ ul li:last-child {
     }
 }
 
-/* --- Meditation Timers - Specific Responsive Adjustments --- */
+.stats-grid div {
+    padding: 0.7em; /* Reduced padding */
+    border-bottom: 1px dashed var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em; /* Reduced gap */
+}
+
+.stats-grid div:nth-child(odd) {
+    border-right: 1px dashed var(--border-color);
+}
+.stats-grid div:last-child,
+.stats-grid div:nth-last-child(2):nth-child(odd) { /* Last two items in a 2-column grid or last item in any grid */
+    border-bottom: none;
+}
+/* Ensure border-bottom is removed for last item in a single column layout */
+@media (max-width: 450px) {
+    .stats-grid div:last-child {
+        border-bottom: none;
+    }
+}
+
+
+.stats-grid strong {
+    color: var(--primary-color);
+    font-size: 1em; /* Slightly smaller font */
+    font-weight: 600;
+}
+
+/* --- Meditation Timers - Specific Responsive Adjustments (for very narrow screens) --- */
 /* For very small smartphones (e.g., iPhone SE) */
 @media (max-width: 400px) {
     /* Meditation Sanctuary Timer Controls */
@@ -860,99 +881,6 @@ ul li:last-child {
     }
 }
 
-/* Adjustments for tablet-sized screens (768px and below) - existing block */
-@media (max-width: 768px) {
-    /* ... existing rules ... */
-    
-    /* Modify existing rules related to timer controls here as well,
-       to ensure smooth transition from smaller to larger mobile screens */
-    .meditation-controls-group, .timer-controls, .countdown-controls {
-        gap: 0.8em;
-        margin-bottom: 1.2em;
-        /* CHANGE: Remove flex-direction: column; and align-items: stretch; here */
-        /* These will now be handled by the more specific 400px media query above
-           for full stacking, and flex-wrap will handle wrapping on larger mobiles. */
-    }
-    /* Add this if it's not already there and desired for tablets */
-    .preset-buttons {
-        flex-direction: row; /* Ensure presets wrap horizontally even if parent is column */
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.6em;
-    }
-    .preset-meditation-time {
-        flex: 1 1 80px; /* Give some flexibility */
-        max-width: 120px; /* Prevent over-stretching */
-    }
-}
-
-/* Landscape orientation for mobile devices (up to 900px wide) - existing block */
-@media (max-width: 900px) and (orientation: landscape) {
-    /* ... existing rules ... */
-
-    /* Ensure that if we switch to landscape on a small device, the timers try to go side-by-side again */
-    .meditation-controls-group, .timer-controls, .countdown-controls {
-        flex-direction: row; /* Allow row layout in landscape again */
-        align-items: center;
-        justify-content: center;
-    }
-    .meditation-controls-group button, .timer-controls button, .countdown-controls button {
-        width: auto;
-        max-width: 150px;
-    }
-    .custom-timer-input {
-        flex-direction: row; /* Restore row layout */
-        align-items: center;
-    }
-    .custom-timer-input .input-field {
-        width: auto;
-        max-width: 120px;
-        text-align: center;
-    }
-    .custom-timer-input button {
-        width: auto;
-    }
-    .custom-countdown-card .timer-input-group { /* Restore row layout for H:M:S */
-        flex-direction: row;
-        gap: 0.5em;
-    }
-    .custom-countdown-card .timer-input-group input {
-        width: 50px; /* Restore fixed width */
-        max-width: none;
-    }
-    .custom-countdown-card .timer-input-group .colon {
-        display: inline; /* Show ":" again */
-    }
-}
-
-.stats-grid div {
-    padding: 0.7em; /* Reduced padding */
-    border-bottom: 1px dashed var(--border-color);
-    display: flex;
-    flex-direction: column;
-    gap: 0.2em; /* Reduced gap */
-}
-
-.stats-grid div:nth-child(odd) {
-    border-right: 1px dashed var(--border-color);
-}
-.stats-grid div:last-child,
-.stats-grid div:nth-last-child(2):nth-child(odd) { /* Last two items in a 2-column grid or last item in any grid */
-    border-bottom: none;
-}
-/* Ensure border-bottom is removed for last item in a single column layout */
-@media (max-width: 450px) {
-    .stats-grid div:last-child {
-        border-bottom: none;
-    }
-}
-
-
-.stats-grid strong {
-    color: var(--primary-color);
-    font-size: 1em; /* Slightly smaller font */
-    font-weight: 600;
-}
 
 /* --- Book Specifics --- */
 .book-input-area, .search-input-area {
@@ -1413,27 +1341,41 @@ footer {
 }
 
 /* Modals become full-screen on mobile */
-@media (max-width: 768px) {
+@media (max-width: 992px) { /* <-- UPDATED: Modals go full-screen on 992px and below */
     .modal {
-        padding: 0; /* No padding on container, modal takes full space */
+        padding: 0;
     }
     .modal-content {
         width: 100%;
-        min-height: 100vh; /* Occupy full screen height */
+        min-height: 100vh;
         border-radius: 0;
-        padding: 1.2em; /* Reduced padding for content */
+        padding: 1.2em;
         margin: 0;
         box-shadow: none;
-        max-height: unset; /* Remove max height constraint */
+        max-height: unset;
     }
     .modal-content.modal-small {
-        min-height: unset; /* Restore min-height for small modal (e.g. confirmation) */
+        min-height: unset;
         border-radius: 10px;
         padding: 1.2em;
-        max-width: 90%; /* Still limit width of small modals */
-        margin: auto; /* Re-center small modals */
+        max-width: 90%;
+        margin: auto;
+    }
+    .close-button {
+        font-size: 28px;
+        right: 12px;
+        top: 10px;
+        background-color: var(--card-background);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     }
 }
+
 
 .modal-content h2 {
     color: var(--primary-color);
@@ -1508,22 +1450,22 @@ footer {
     cursor: pointer;
     transition: color 0.2s ease;
 }
-/* Make close button more touch-friendly on mobile */
-@media (max-width: 768px) {
+/* This media query block is now consolidated into the @media (max-width: 992px) block for modals */
+/* @media (max-width: 768px) {
     .close-button {
         font-size: 28px;
         right: 12px;
         top: 10px;
-        background-color: var(--card-background); /* Give it a background for visibility */
+        background-color: var(--card-background);
         border-radius: 50%;
         width: 36px;
         height: 36px;
-        display: flex; /* Use flex to center the X */
+        display: flex;
         align-items: center;
         justify-content: center;
         box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     }
-}
+} */
 
 .close-button:hover {
     color: var(--primary-color);
@@ -1905,16 +1847,19 @@ footer {
 
 /* --- General Responsive Adjustments --- */
 /* Breakpoints:
-   - Max-width 768px: General mobile (portrait & landscape tablet)
-   - Max-width 600px: Smaller tablets & larger phones
-   - Max-width 500px: Most smartphones
-   - Max-width 450px: Very small smartphones
-   - Max-width 400px: Extremely small smartphones */
+   - Max-width 992px: Tablets & smaller laptops (cards stack)
+   - Max-width 900px (landscape): Mobile landscape (cards might go side-by-side if enough room)
+   - Max-width 768px: General mobile (modals go full screen)
+   - Max-width 600px: Smaller tablets & larger phones (nav buttons wrap)
+   - Max-width 550px: Setting/Goal inputs stack
+   - Max-width 500px: Most smartphones (book items, modal buttons, data management buttons stack)
+   - Max-width 450px: Very small smartphones (stats grid, achievements grid stack)
+   - Max-width 400px: Extremely small smartphones (timer internal controls stack, H:M:S colons hide) */
 
-/* General adjustments for tablet-sized screens (768px and below) */
-@media (max-width: 768px) {
+/* General adjustments for tablet-sized screens (992px and below) */
+@media (max-width: 992px) { /* <-- UPDATED: Main stacking breakpoint for cards */
     .container {
-        padding: 0 1em; /* Reduce horizontal padding */
+        padding: 0 1em;
     }
     header {
         padding: 1.5em 0 0.8em;
@@ -1928,7 +1873,7 @@ footer {
         border-top-right-radius: 15px;
     }
     .card {
-        padding: 1.8em; /* Further reduce card padding */
+        padding: 1.8em;
         border-radius: 12px;
     }
     h2 {
@@ -1946,87 +1891,265 @@ footer {
         font-size: 0.9em;
         margin-bottom: 1.2em;
     }
-    .timer-display, .countdown-display { /* Apply to both timers */
-        font-size: clamp(2.5em, 10vw, 3.5em);
-        margin: 1em 0 1.2em;
+    /* Timer displays are already handled by the combined rule, but we ensure clamp for specific breakpoints */
+    .timer-display, .countdown-display {
+        font-size: clamp(2.2em, 8vw, 3.2em); /* Consistent clamp values */
+        margin: 1em auto 1.2em; /* Centered */
         padding: 0.5em 0.6em;
+        max-width: 90%; /* Consistent max-width */
     }
-    .meditation-controls-group, .timer-controls, .countdown-controls { /* Apply to both timer controls */
+    /* Force single column layout for all cards below 992px */
+    .app-section.active-section {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
+    }
+    /* Internal timer controls default to column */
+    .meditation-controls-group, .timer-controls, .countdown-controls {
         gap: 0.8em;
         margin-bottom: 1.2em;
-        flex-direction: column; /* Stack controls on mobile */
+        flex-direction: column;
         align-items: stretch;
     }
     .meditation-controls-group button, .timer-controls button, .countdown-controls button {
         width: 100%;
         max-width: none;
     }
-    .preset-buttons { /* Still allow wrapping within the stacked column */
+    .preset-buttons {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
         gap: 0.6em;
     }
     .preset-meditation-time {
-        flex: 1 1 80px; /* Give some flexibility */
-        max-width: 120px; /* Prevent over-stretching */
+        flex: 1 1 80px;
+        max-width: 120px;
     }
     .input-field, select {
         font-size: 0.9em;
         padding: 0.8em 1em;
     }
     .small-input {
-        width: 80px; /* Adjust width */
+        width: 80px;
         padding: 0.7em 0.9em;
     }
+    /* Modals go full-screen on 992px and below - consolidated this with the general modal rules */
+    /* .modal {
+        padding: 0;
+    }
+    .modal-content {
+        width: 100%;
+        min-height: 100vh;
+        border-radius: 0;
+        padding: 1.2em;
+        margin: 0;
+        box-shadow: none;
+        max-height: unset;
+    }
+    .modal-content.modal-small {
+        min-height: unset;
+        border-radius: 10px;
+        padding: 1.2em;
+        max-width: 90%;
+        margin: auto;
+    } */
+    /* Close button on modals */
+    /* .close-button {
+        font-size: 28px;
+        right: 12px;
+        top: 10px;
+        background-color: var(--card-background);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    } */
+    /* Modal buttons full width */
+    .modal-content button, .modal-actions button {
+        width: 100%;
+        max-width: none;
+    }
+    .modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    /* Journal and Book modal headers stack */
+    .journal-meta, .book-modal-header {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    .book-modal-header {
+        align-items: center;
+        text-align: center;
+    }
+    .modal-book-cover {
+        margin-bottom: 1em;
+    }
+    .mood-tracker, .energy-tracker {
+        flex: 1 1 100%;
+        min-width: unset;
+    }
+    .mood-emojis {
+        justify-content: center;
+    }
+    /* Page input group stacks */
+    .page-input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .page-input-group label {
+        width: 100%;
+        text-align: center;
+    }
+    .page-input-group input {
+        width: 100%;
+        max-width: none;
+    }
+    /* Interval steps stack */
+    .interval-step {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .interval-step label {
+        width: 100%;
+        text-align: center;
+    }
+    .interval-step input, .interval-step select {
+        width: 100%;
+        max-width: none;
+    }
+    .interval-step .delete-step-btn {
+        align-self: flex-end;
+    }
+    /* Achievements grid stacks */
+    .achievements-grid {
+        grid-template-columns: 1fr;
+    }
+    /* Settings items stack */
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .setting-item span {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 0.4em;
+    }
+    .setting-item .input-field,
+    .setting-item select,
+    .setting-buttons-group {
+        width: 100%;
+        max-width: none;
+        margin-left: 0;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .setting-buttons-group button,
+    .setting-item #daily-reminder-time {
+        width: 100%;
+        max-width: none;
+    }
+    /* Data management buttons stack */
+    .data-management-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .data-management-buttons button {
+        width: 100%;
+        max-width: none;
+    }
+    /* Book list items stack */
+    .book-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: center;
+    }
+    .book-cover-thumbnail {
+        margin-right: 0;
+        margin-bottom: 1em;
+        align-self: center;
+    }
+    .book-item-info {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 1em;
+    }
+    .book-item-controls {
+        width: 100%;
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.6em;
+    }
+    .book-item-controls button {
+        width: 100%;
+        max-width: none;
+    }
+    /* Goal items stack */
+    .goal-item {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    .goal-item > div {
+        width: 100%;
+        margin-bottom: 0.8em;
+    }
+    .goal-item button {
+        align-self: flex-end;
+    }
 }
+
 
 /* Landscape orientation for mobile devices (up to 900px wide) */
 @media (max-width: 900px) and (orientation: landscape) {
     .container {
-        padding: 0 1.5em; /* Restore some padding for landscape */
+        padding: 0 1.5em;
     }
     .main-nav .container {
-        flex-wrap: wrap; /* Allow wrapping in landscape for better use of space */
+        flex-wrap: wrap;
         justify-content: center;
         overflow-x: visible;
     }
     .app-section.active-section {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Allow multiple columns again */
+        /* On landscape, if there's enough space, allow multiple columns to utilize width */
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Restore two-column on landscape if space allows */
         gap: 1.5em;
     }
     .card {
-        padding: 1.5em; /* Adjust card padding */
+        padding: 1.5em;
     }
     .modal-content {
-        max-height: 90vh; /* Restrict height in landscape to prevent full-screen takeover */
+        max-height: 90vh;
         border-radius: 15px;
         margin: auto;
         padding: 1.8em;
-        min-height: unset; /* Do not force full height */
+        min-height: unset;
     }
     .journal-meta, .book-modal-header {
-        flex-direction: row; /* Allow side-by-side again if space permits */
+        flex-direction: row;
         align-items: flex-start;
         text-align: left;
     }
     .mood-tracker, .energy-tracker {
-        flex: 1 1 48%; /* Restore flex for side-by-side */
+        flex: 1 1 48%;
         min-width: unset;
     }
     .mood-emojis {
         justify-content: flex-start;
     }
     .book-modal-header .modal-book-cover {
-        margin-bottom: 0; /* Remove bottom margin */
-        margin-right: 1em; /* Add right margin */
-        align-self: flex-start; /* Align to top left */
+        margin-bottom: 0;
+        margin-right: 1em;
+        align-self: flex-start;
     }
-    .timer-display, .countdown-display { /* Apply to both timers */
-        font-size: clamp(3em, 6vw, 4.5em); /* Adjust font size */
+    .timer-display, .countdown-display {
+        font-size: clamp(3em, 6vw, 4.5em);
     }
-    .meditation-controls-group, .timer-controls, .countdown-controls { /* Apply to both timer controls */
-        flex-direction: row; /* Restore row layout for controls */
+    .meditation-controls-group, .timer-controls, .countdown-controls {
+        flex-direction: row;
         align-items: center;
         justify-content: center;
     }
@@ -2035,7 +2158,7 @@ footer {
         max-width: 150px;
     }
     .custom-timer-input {
-        flex-direction: row; /* Restore row layout */
+        flex-direction: row;
         align-items: center;
     }
     .custom-timer-input .input-field {
@@ -2046,19 +2169,19 @@ footer {
     .custom-timer-input button {
         width: auto;
     }
-    .custom-countdown-card .timer-input-group { /* Restore row layout for H:M:S */
+    .custom-countdown-card .timer-input-group {
         flex-direction: row;
         gap: 0.5em;
     }
     .custom-countdown-card .timer-input-group input {
-        width: 50px; /* Restore fixed width */
+        width: 50px;
         max-width: none;
     }
     .custom-countdown-card .timer-input-group .colon {
-        display: inline; /* Show ":" again */
+        display: inline;
     }
     .book-input-area, .search-input-area, .goal-input-area, .setting-item {
-        flex-direction: row; /* Restore row layout */
+        flex-direction: row;
         align-items: center;
         flex-wrap: wrap;
     }
@@ -2072,19 +2195,19 @@ footer {
     .setting-buttons-group button {
         width: auto;
         max-width: unset;
-        border-radius: 25px; /* Restore pill shape */
+        border-radius: 25px;
     }
     #daily-reminder-time {
         width: 90px;
     }
     #toast-container {
-        top: 15px; /* Move back to top-right in landscape */
+        top: 15px;
         bottom: unset;
         left: unset;
         right: 15px;
-        align-items: flex-end; /* Align to right */
+        align-items: flex-end;
     }
     .toast {
-        transform: translateX(120%); /* Slide from right */
+        transform: translateX(120%);
     }
 }
