@@ -39,7 +39,7 @@
         <section id="dashboard-section" class="app-section active-section">
             <div class="card dashboard-welcome">
                 <h2>Welcome, Seeker!</h2>
-                <p>A quick overview of your journey.</p>
+                <p class="card-description">A quick overview of your journey.</p>
                 <div class="stats-grid">
                     <div><strong>Total Meditated:</strong> <span id="dash-total-med-time">0h 0m</span></div>
                     <div><strong>Sessions:</strong> <span id="dash-total-med-sessions">0</span></div>
@@ -49,14 +49,14 @@
             </div>
             <div class="card dashboard-recent-meds">
                 <h3>Recent Meditations</h3>
-                <ul id="dash-meditation-sessions-list">
+                <ul id="dash-meditation-sessions-list" class="mini-list">
                     <!-- Recent sessions will be dynamically added here -->
                 </ul>
                 <button class="btn-sm" onclick="showSection('meditation-section')">View All Meditations</button>
             </div>
             <div class="card dashboard-recent-reads">
                 <h3>Currently Reading</h3>
-                <ul id="dash-current-reading-list">
+                <ul id="dash-current-reading-list" class="mini-list">
                     <!-- Currently reading books will be dynamically added here -->
                 </ul>
                 <button class="btn-sm" onclick="showSection('books-section')">View All Books</button>
@@ -68,13 +68,20 @@
             <div class="card meditation-timer-card">
                 <h2><i class="fas fa-om"></i> Meditation Sanctuary</h2>
                 <div class="timer-display" id="meditation-timer-display">00:00:00</div>
-                <div class="preset-buttons">
-                    <button class="preset-meditation-time btn-sm" data-minutes="5">5 min</button>
-                    <button class="preset-meditation-time btn-sm" data-minutes="10">10 min</button>
-                    <button class="preset-meditation-time btn-sm" data-minutes="20">20 min</button>
-                    <button class="preset-meditation-time btn-sm" data-minutes="30">30 min</button>
-                    <button id="open-interval-timer-btn" class="btn-sm"><i class="fas fa-clock"></i> Interval</button>
+                <div class="meditation-controls-group">
+                    <div class="preset-buttons">
+                        <button class="preset-meditation-time btn-sm" data-minutes="5">5 min</button>
+                        <button class="preset-meditation-time btn-sm" data-minutes="10">10 min</button>
+                        <button class="preset-meditation-time btn-sm" data-minutes="20">20 min</button>
+                        <button class="preset-meditation-time btn-sm" data-minutes="30">30 min</button>
+                        <button id="open-interval-timer-btn" class="btn-sm"><i class="fas fa-clock"></i> Interval</button>
+                    </div>
+                    <div class="custom-timer-input">
+                        <input type="number" id="custom-meditation-minutes" min="1" placeholder="Custom min" class="input-field small-input">
+                        <button id="set-custom-meditation" class="btn-sm"><i class="fas fa-check"></i> Set</button>
+                    </div>
                 </div>
+                
                 <div class="timer-controls">
                     <button id="start-meditation"><i class="fas fa-play"></i> Start</button>
                     <button id="pause-meditation" disabled><i class="fas fa-pause"></i> Pause</button>
@@ -84,7 +91,7 @@
 
                 <h3>Ambient Sounds</h3>
                 <div class="sound-controls">
-                    <select id="ambient-sound-selector" class="input-field">
+                    <select id="ambient-sound-selector" class="input-field small-input">
                         <option value="none">None</option>
                         <option value="rain">Rain</option>
                         <option value="forest">Forest</option>
@@ -105,7 +112,7 @@
 
         <!-- Spiritual Books Section -->
         <section id="books-section" class="app-section">
-            <div class="card">
+            <div class="card card-full-width">
                 <h2><i class="fas fa-book-reader"></i> Wisdom Scrolls</h2>
                 <div class="book-input-area">
                     <input type="file" id="new-book-cover" accept="image/*" style="display: none;">
@@ -121,7 +128,7 @@
                     <button id="clear-book-search" class="btn-icon"><i class="fas fa-times"></i></button>
                 </div>
                 <h3>Your Spiritual Library</h3>
-                <ul id="books-list">
+                <ul id="books-list" class="book-list">
                     <!-- Books will be dynamically added here -->
                 </ul>
             </div>
@@ -132,18 +139,18 @@
             <div class="card card-full-width">
                 <h2><i class="fas fa-chart-line"></i> Meditation Statistics</h2>
                 <h3>Daily Meditation Time Trend</h3>
-                <canvas id="meditationTimeChart"></canvas>
+                <div class="chart-container"><canvas id="meditationTimeChart"></canvas></div>
                 <h3>Meditation Session Count</h3>
-                <canvas id="meditationSessionsChart"></canvas>
+                <div class="chart-container"><canvas id="meditationSessionsChart"></canvas></div>
                 <h3>Mood Distribution</h3>
-                <canvas id="moodDistributionChart"></canvas>
+                <div class="chart-container"><canvas id="moodDistributionChart"></canvas></div>
                 <h3>Top Meditation Tags</h3>
-                <canvas id="topTagsChart"></canvas>
+                <div class="chart-container"><canvas id="topTagsChart"></canvas></div>
             </div>
             <div class="card card-full-width">
                 <h2><i class="fas fa-chart-pie"></i> Book Reading Statistics</h2>
                 <h3>Reading Time by Book</h3>
-                <canvas id="bookReadingTimeChart"></canvas>
+                <div class="chart-container"><canvas id="bookReadingTimeChart"></canvas></div>
             </div>
             <div class="card card-full-width">
                 <h2><i class="fas fa-calendar-alt"></i> Meditation Calendar</h2>
@@ -153,7 +160,7 @@
 
         <!-- Goals Section -->
         <section id="goals-section" class="app-section">
-            <div class="card">
+            <div class="card card-full-width">
                 <h2><i class="fas fa-bullseye"></i> Your Goals</h2>
                 <div class="goal-input-area">
                     <select id="goal-type" class="input-field small-input">
@@ -192,7 +199,7 @@
 
         <!-- Settings Section -->
         <section id="settings-section" class="app-section">
-            <div class="card">
+            <div class="card card-full-width">
                 <h2><i class="fas fa-cog"></i> Settings</h2>
                 <div class="setting-item">
                     <span>Theme:</span>
@@ -205,9 +212,11 @@
                 </div>
                 <div class="setting-item">
                     <span>Custom Background Image:</span>
-                    <input type="file" id="custom-background-file" accept="image/*" style="display: none;">
-                    <button id="upload-custom-background-btn"><i class="fas fa-upload"></i> Upload Image</button>
-                    <button id="clear-custom-background-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                    <div class="setting-buttons-group">
+                        <input type="file" id="custom-background-file" accept="image/*" style="display: none;">
+                        <button id="upload-custom-background-btn" class="btn-sm"><i class="fas fa-upload"></i> Upload Image</button>
+                        <button id="clear-custom-background-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                    </div>
                 </div>
                 <hr>
                 <div class="setting-item">
@@ -223,9 +232,11 @@
                 </div>
                 <div class="setting-item">
                     <span>Daily Meditation Reminder:</span>
-                    <input type="time" id="daily-reminder-time" class="input-field small-input">
-                    <button id="set-daily-reminder-btn" class="btn-sm"><i class="fas fa-bell"></i> Set</button>
-                    <button id="clear-daily-reminder-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                    <div class="setting-buttons-group">
+                        <input type="time" id="daily-reminder-time" class="input-field small-input">
+                        <button id="set-daily-reminder-btn" class="btn-sm"><i class="fas fa-bell"></i> Set</button>
+                        <button id="clear-daily-reminder-btn" class="delete-button btn-sm"><i class="fas fa-times"></i> Clear</button>
+                    </div>
                 </div>
                 <hr>
                 <div class="setting-item data-management-buttons">
@@ -255,19 +266,18 @@
                 <div class="mood-tracker">
                     <h4>Mood:</h4>
                     <div class="mood-emojis">
-                        <span class="emoji" data-mood="calm">😌</span>
-                        <span class="emoji" data-mood="focused">🧐</span>
-                        <span class="emoji" data-mood="peaceful">🕊️</span>
-                        <span class="emoji" data-mood="energetic">⚡</span>
-                        <span class="emoji" data-mood="tired">😴</span>
-                        <span class="emoji" data-mood="anxious">😟</span>
-                        <span class="emoji" data-mood="happy">😊</span>
+                        <span class="emoji" data-mood="calm" title="Calm">😌</span>
+                        <span class="emoji" data-mood="focused" title="Focused">🧐</span>
+                        <span class="emoji" data-mood="peaceful" title="Peaceful">🕊️</span>
+                        <span class="emoji" data-mood="energetic" title="Energetic">⚡</span>
+                        <span class="emoji" data-mood="tired" title="Tired">😴</span>
+                        <span class="emoji" data-mood="anxious" title="Anxious">😟</span>
+                        <span class="emoji" data-mood="happy" title="Happy">😊</span>
                     </div>
                 </div>
                 <div class="energy-tracker">
-                    <h4>Energy Level:</h4>
+                    <h4>Energy Level: <span id="energy-value">5</span>/10</h4>
                     <input type="range" id="energy-level" min="0" max="10" value="5" class="slider-energy">
-                    <span id="energy-value">5</span>
                 </div>
             </div>
             <h4>Tags:</h4>
@@ -286,11 +296,11 @@
             <span class="close-button" data-modal="book-details-modal">&times;</span>
             <div class="book-modal-header">
                 <img id="modal-book-cover-img" src="./img/default_book.png" alt="Book Cover" class="modal-book-cover">
-                <div>
+                <div class="book-info-text">
                     <h2 id="modal-book-title"></h2>
                     <p><strong>Author:</strong> <span id="modal-book-author"></span></p>
                     <p><strong>Genre:</strong> <span id="modal-book-genre"></span></p>
-                    <p><strong>Status:</strong> <span id="modal-book-status"></span></p>
+                    <p><strong>Status:</strong> <span id="modal-book-status-container"></span></p>
                     <div class="book-rating" id="modal-book-rating">
                         <!-- Stars will be dynamically added here -->
                     </div>
@@ -299,8 +309,10 @@
             
             <div class="book-modal-progress">
                 <p><strong>Total Pages:</strong> <span id="modal-book-total-pages"></span></p>
-                <label for="modal-book-current-page"><strong>Current Page:</strong></label>
-                <input type="number" id="modal-book-current-page" class="input-field small-input">
+                <div class="page-input-group">
+                    <label for="modal-book-current-page"><strong>Current Page:</strong></label>
+                    <input type="number" id="modal-book-current-page" class="input-field small-input" min="0">
+                </div>
                 <p><strong>Progress:</strong> <span id="modal-book-progress">0%</span></p>
                 <div class="progress-bar-container"><div class="progress-bar" id="modal-progress-bar"></div></div>
                 <p><strong>Total Reading Time:</strong> <span id="modal-book-total-reading-time">0h 0m</span></p>
@@ -309,7 +321,7 @@
             <h3>Notes</h3>
             <textarea id="modal-book-notes-input" placeholder="Add a new note..."></textarea>
             <button id="add-book-note-btn">Add Note</button>
-            <ul id="modal-book-notes-list">
+            <ul id="modal-book-notes-list" class="notes-list">
                 <!-- Book notes will be dynamically added here -->
             </ul>
         </div>
@@ -324,13 +336,13 @@
                 <!-- Interval steps will be dynamically added here -->
             </div>
             <button id="add-interval-step" class="btn-sm"><i class="fas fa-plus"></i> Add Step</button>
-            <button id="start-interval-meditation">Start Interval Meditation</button>
+            <button id="start-interval-meditation" class="btn-success">Start Interval Meditation</button>
         </div>
     </div>
 
     <!-- Confirmation Modal -->
     <div id="confirmation-modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content modal-small">
             <span class="close-button" data-modal="confirmation-modal">&times;</span>
             <h2>Confirm Action</h2>
             <p id="confirmation-message"></p>
@@ -349,6 +361,13 @@
 </html>
 
 --- END FILE: index.html ---
+
+--- START FILE: README.md ---
+
+Website link : https://mysticvision-meditation-companion-app.netlify.app/
+
+
+--- END FILE: README.md ---
 
 --- START FILE: script.js ---
 
@@ -374,11 +393,13 @@ document.addEventListener('DOMContentLoaded', () => {
         stopMeditationBtn: document.getElementById('stop-meditation'),
         resetMeditationBtn: document.getElementById('reset-meditation'),
         presetMeditationButtons: document.querySelectorAll('.preset-meditation-time'),
+        customMeditationMinutesInput: document.getElementById('custom-meditation-minutes'),
+        setCustomMeditationBtn: document.getElementById('set-custom-meditation'),
         meditationSessionsList: document.getElementById('meditation-sessions-list'),
         openIntervalTimerBtn: document.getElementById('open-interval-timer-btn'),
         ambientSoundSelector: document.getElementById('ambient-sound-selector'),
         ambientVolumeControl: document.getElementById('ambient-volume'),
-        
+
         // Book Section
         newBookCoverInput: document.getElementById('new-book-cover'),
         uploadBookCoverBtn: document.getElementById('upload-book-cover-btn'),
@@ -440,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalBookTitle: document.getElementById('modal-book-title'),
         modalBookAuthor: document.getElementById('modal-book-author'),
         modalBookGenre: document.getElementById('modal-book-genre'),
-        modalBookStatus: document.getElementById('modal-book-status'),
+        modalBookStatusContainer: document.getElementById('modal-book-status-container'), // This will hold the select dropdown
         modalBookRating: document.getElementById('modal-book-rating'),
         modalBookTotalPages: document.getElementById('modal-book-total-pages'),
         modalBookCurrentPage: document.getElementById('modal-book-current-page'),
@@ -471,7 +492,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let meditationElapsedTime = 0;
     let meditationPaused = false;
     let meditationDurationTarget = 0; // In milliseconds, for presets & intervals
-    let meditationType = 'standard'; // 'standard' or 'interval'
+    let meditationType = 'standard'; // 'standard' or 'interval' or 'freestyle' (for 0 duration target)
     let currentIntervalIndex = 0;
     let intervalTimerSteps = []; // [{duration, sound, label}]
 
@@ -500,18 +521,36 @@ document.addEventListener('DOMContentLoaded', () => {
         customBackground: null
     });
 
+    // achievementsList: [{ id, name, description, check(), unlocked, icon }] (stored without check function)
+    const achievementsList = loadData('achievementsList', [
+        { id: 'first_session', name: 'First Step', description: 'Complete your first meditation session.', unlocked: false, icon: 'fas fa-shoe-prints' },
+        { id: 'seven_day_streak', name: '7-Day Streak', description: 'Meditate for 7 consecutive days.', unlocked: false, icon: 'fas fa-fire' },
+        { id: '30_min_meditation', name: 'Deep Dive', description: 'Complete a meditation session of 30 minutes or more.', unlocked: false, icon: 'fas fa-mountain' },
+        { id: '10_hours_meditated', name: 'Seasoned Seeker', description: 'Accumulate 10 hours of meditation.', unlocked: false, icon: 'fas fa-star' },
+        { id: 'first_book_finished', name: 'Wisdom Gained', description: 'Mark your first spiritual book as "Finished".', unlocked: false, icon: 'fas fa-feather-alt' },
+        { id: 'five_books_finished', name: 'Enlightened Library', description: 'Finish 5 spiritual books.', unlocked: false, icon: 'fas fa-book-sparkles' },
+        { id: 'first_journal_entry', name: 'Inner Voice', description: 'Write your first meditation journal entry.', unlocked: false, icon: 'fas fa-pen-nib' },
+        { id: 'first_book_note', name: 'Reflective Reader', description: 'Add your first note to a spiritual book.', unlocked: false, icon: 'fas fa-highlighter' },
+    ]);
+
+
     // --- Audio Context & Buffers ---
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const soundBuffers = {}; // To store loaded audio buffers
     const ambientSoundSources = {}; // To store active ambient sound sources
     let bellSoundVolumeNode, ambientSoundVolumeNode;
 
-    const BELL_SOUND_URL = 'https://freesound.org/data/previews/203/203061_2112423-lq.mp3'; // Example bell
+    // Freesound.org URLs:
+    // Please note: These are example URLs from Freesound.org.
+    // Always check the specific license of each sound for your use case.
+    // You can download these or similar sounds from freesound.org.
+    // For Freesound, you usually need to create an account to download.
+    const BELL_SOUND_URL = 'https://freesound.org/data/previews/203/203061_2112423-lq.mp3'; // Meditation Bell (user: tmk_sound)
     const AMBIENT_SOUND_URLS = {
-        rain: 'https://freesound.org/data/previews/25/25010_25086-lq.mp3', // Example rain
-        forest: 'https://freesound.org/data/previews/140/140645_1955038-lq.mp3', // Example forest birds
-        ocean: 'https://freesound.org/data/previews/165/165780_2984100-lq.mp3', // Example ocean waves
-        chimes: 'https://freesound.org/data/previews/131/131652_2415714-lq.mp3' // Example wind chimes
+        rain: 'https://freesound.org/data/previews/25/25010_25086-lq.mp3', // Rain (user: Herbert Boland)
+        forest: 'https://freesound.org/data/previews/140/140645_1955038-lq.mp3', // Forest Birds (user: dobroide)
+        ocean: 'https://freesound.org/data/previews/165/165780_2984100-lq.mp3', // Ocean Waves (user: Erdie)
+        chimes: 'https://freesound.org/data/previews/131/131652_2415714-lq.mp3' // Wind Chimes (user: kyles)
     };
 
     // --- Charts ---
@@ -612,7 +651,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Shows a toast notification.
      * @param {string} message
-     * @param {string} type 'success', 'error', 'info'
+     * @param {string} type 'success', 'error', 'info', 'warning'
      */
     function showToast(message, type = 'info') {
         const toast = document.createElement('div');
@@ -620,14 +659,15 @@ document.addEventListener('DOMContentLoaded', () => {
         let icon = '';
         if (type === 'success') icon = '<i class="fas fa-check-circle"></i>';
         else if (type === 'error') icon = '<i class="fas fa-exclamation-triangle"></i>';
+        else if (type === 'warning') icon = '<i class="fas fa-exclamation-circle"></i>';
         else icon = '<i class="fas fa-info-circle"></i>';
 
         toast.innerHTML = `${icon} <span>${message}</span>`;
         elements.toastContainer.appendChild(toast);
 
-        setTimeout(() => {
-            toast.classList.add('show');
-        }, 10); // Small delay to trigger transition
+        // Allow reflow for transition
+        void toast.offsetWidth; // Trigger reflow
+        toast.classList.add('show');
 
         setTimeout(() => {
             toast.classList.remove('show');
@@ -650,7 +690,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function playSound(buffer, volumeNode, loop = false) {
-        if (!buffer) return null;
+        if (!buffer) {
+            console.warn(`Attempted to play undefined sound buffer: ${buffer}`);
+            return null;
+        }
+        if (audioContext.state === 'suspended') {
+            audioContext.resume(); // Resume audio context if it's suspended (e.g., on first user interaction)
+        }
 
         const source = audioContext.createBufferSource();
         source.buffer = buffer;
@@ -667,7 +713,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 source.stop();
                 source.disconnect();
             } catch (e) {
-                // Already stopped or disconnected
+                // Audio node might have already stopped or been disconnected
+                // console.warn("Error stopping sound source (might already be stopped):", e);
             }
         }
     }
@@ -699,7 +746,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Meditation Logic ---
 
     function startMeditationTimer(durationMinutes = 0, type = 'standard') {
-        if (meditationTimerInterval) return;
+        if (meditationTimerInterval) {
+            showToast('Meditation already running!', 'warning');
+            return;
+        }
 
         meditationDurationTarget = durationMinutes * 60 * 1000;
         meditationType = type;
@@ -715,6 +765,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateMeditationButtonStates(true, false, false);
         startAmbientSound(settings.ambientSound);
+        showToast('Meditation started.', 'info');
 
         meditationTimerInterval = setInterval(() => {
             meditationElapsedTime = Date.now() - meditationStartTime;
@@ -725,9 +776,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 playSound(soundBuffers['bell'], bellSoundVolumeNode);
                 showToast('Meditation session completed!', 'success');
             } else if (meditationType === 'interval' && intervalTimerSteps.length > 0) {
-                const totalIntervalDuration = intervalTimerSteps.slice(0, currentIntervalIndex + 1).reduce((sum, step) => sum + (step.duration * 1000), 0);
+                const totalIntervalDurationSoFar = intervalTimerSteps.slice(0, currentIntervalIndex + 1).reduce((sum, step) => sum + (step.duration * 1000), 0);
 
-                if (meditationElapsedTime >= totalIntervalDuration) {
+                if (meditationElapsedTime >= totalIntervalDurationSoFar) {
                     currentIntervalIndex++;
                     if (currentIntervalIndex < intervalTimerSteps.length) {
                         const nextStep = intervalTimerSteps[currentIntervalIndex];
@@ -762,7 +813,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const durationMs = meditationElapsedTime;
 
-        if (durationMs > 5000) {
+        if (durationMs > 5000) { // Only record sessions longer than 5 seconds
             const session = {
                 id: generateId(),
                 startTime: meditationStartTime,
@@ -785,7 +836,7 @@ document.addEventListener('DOMContentLoaded', () => {
             openMeditationJournalModal(session.id);
             showToast('Meditation session recorded!', 'success');
         } else {
-            showToast('Meditation session was too short to record (>5s required).', 'info');
+            showToast('Meditation session was too short to record (min 5s).', 'info');
         }
 
         resetMeditationDisplay();
@@ -802,6 +853,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentIntervalIndex = 0;
         stopAllAmbientSounds();
         elements.meditationTimerDisplay.textContent = '00:00:00';
+        elements.customMeditationMinutesInput.value = ''; // Clear custom input
         updateMeditationButtonStates(false, true, true);
     }
 
@@ -812,6 +864,8 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.resetMeditationBtn.disabled = !isTimerRunning && !isTimerPaused;
         elements.presetMeditationButtons.forEach(btn => btn.disabled = isTimerRunning);
         elements.openIntervalTimerBtn.disabled = isTimerRunning;
+        elements.setCustomMeditationBtn.disabled = isTimerRunning;
+        elements.customMeditationMinutesInput.disabled = isTimerRunning;
     }
 
     function renderMeditationSessions() {
@@ -821,7 +875,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortedSessions = [...meditationSessions].sort((a, b) => b.startTime - a.startTime);
 
         if (sortedSessions.length === 0) {
-            elements.meditationSessionsList.innerHTML = '<li>No meditation sessions recorded yet. Start your journey!</li>';
+            elements.meditationSessionsList.innerHTML = '<li class="info-message">No meditation sessions recorded yet. Start your journey!</li>';
         }
 
         sortedSessions.forEach(session => {
@@ -830,8 +884,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const tags = session.tags && session.tags.length > 0 ? `<br><small>Tags: ${session.tags.join(', ')}</small>` : '';
             li.innerHTML = `
                 <div>
-                    <span>${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                    <br><strong>${formatDuration(session.durationMs)}</strong> (${session.type === 'interval' ? 'Interval' : 'Standard'})
+                    <span class="session-date">${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <br><strong class="session-duration">${formatDuration(session.durationMs)}</strong> (${session.type === 'interval' ? 'Interval' : 'Standard'})
                     ${session.mood ? `<span class="session-mood-emoji" title="Mood: ${session.mood}"> ${getEmojiForMood(session.mood)}</span>` : ''}
                     ${tags}
                 </div>
@@ -846,13 +900,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const li = document.createElement('li');
                 const date = new Date(session.startTime);
                 li.innerHTML = `
-                    <span>${date.toLocaleDateString()}: ${formatDuration(session.durationMs)}</span>
+                    <span class="session-date">${date.toLocaleDateString()}: ${formatDuration(session.durationMs)}</span>
                     ${session.mood ? `<span class="session-mood-emoji" title="Mood: ${session.mood}"> ${getEmojiForMood(session.mood)}</span>` : ''}
                 `;
                 elements.dashMeditationSessionsList.appendChild(li);
             });
         } else {
-            elements.dashMeditationSessionsList.innerHTML = '<li>No recent meditations.</li>';
+            elements.dashMeditationSessionsList.innerHTML = '<li class="info-message">No recent meditations.</li>';
         }
 
         document.querySelectorAll('.view-journal-btn').forEach(btn => {
@@ -862,9 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateMeditationStats() {
         const totalDurationMs = meditationSessions.reduce((sum, session) => sum + session.durationMs, 0);
-        const uniqueDates = new Set(meditationSessions.map(session => session.date));
-        const avgDurationMs = meditationSessions.length > 0 ? totalDurationMs / meditationSessions.length : 0;
-
+        
         const { currentStreak, longestStreak } = calculateStreaks();
 
         // Update Dashboard Stats
@@ -882,21 +934,29 @@ document.addEventListener('DOMContentLoaded', () => {
             return { currentStreak: 0, longestStreak: 0 };
         }
 
-        const sortedDates = [...new Set(meditationSessions
-            .map(session => new Date(session.startTime).toDateString()))]
-            .sort((a, b) => new Date(a) - new Date(b));
+        const uniqueDates = [...new Set(meditationSessions
+            .map(session => {
+                const d = new Date(session.startTime);
+                return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(); // Normalize to midnight
+            }))]
+            .sort((a, b) => a - b); // Sort chronologically
 
         let currentStreak = 0;
         let longestStreak = 0;
-        let lastDate = null;
         let tempCurrentStreak = 0;
+        let lastDateMs = null;
 
-        sortedDates.forEach(dateStr => {
-            const currentDate = new Date(dateStr);
-            if (lastDate === null) {
+        const todayMs = new Date();
+        todayMs.setHours(0,0,0,0);
+        const yesterdayMs = new Date(todayMs);
+        yesterdayMs.setDate(todayMs.getDate() - 1);
+
+        for (let i = 0; i < uniqueDates.length; i++) {
+            const currentDateMs = uniqueDates[i];
+            if (lastDateMs === null) {
                 tempCurrentStreak = 1;
             } else {
-                const dayDiff = Math.round((currentDate - lastDate) / (1000 * 60 * 60 * 24));
+                const dayDiff = (currentDateMs - lastDateMs) / (1000 * 60 * 60 * 24);
                 if (dayDiff === 1) {
                     tempCurrentStreak++;
                 } else if (dayDiff > 1) {
@@ -904,50 +964,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             longestStreak = Math.max(longestStreak, tempCurrentStreak);
-            lastDate = currentDate;
-        });
-
-        const today = new Date();
-        today.setHours(0,0,0,0);
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-
-        const latestMedDate = sortedDates.length > 0 ? new Date(sortedDates[sortedDates.length - 1]) : null;
-
-        if (latestMedDate) {
-            latestMedDate.setHours(0,0,0,0);
-            if (latestMedDate.getTime() === today.getTime()) {
-                currentStreak = tempCurrentStreak;
-            } else if (latestMedDate.getTime() === yesterday.getTime()) {
-                let streakFromYesterday = 0;
-                let tempLastDate = null;
-                for (let i = sortedDates.length - 1; i >= 0; i--) {
-                    const d = new Date(sortedDates[i]);
-                    d.setHours(0,0,0,0);
-                    if (tempLastDate === null) {
-                        if (d.getTime() === yesterday.getTime()) {
-                            streakFromYesterday = 1;
-                        } else {
-                            break;
-                        }
-                    } else {
-                        const dayDiff = Math.round((tempLastDate - d) / (1000 * 60 * 60 * 24));
-                        if (dayDiff === 1) {
-                            streakFromYesterday++;
-                        } else {
-                            break;
-                        }
-                    }
-                    tempLastDate = d;
-                }
-                currentStreak = streakFromYesterday;
-            } else {
-                currentStreak = 0;
-            }
-        } else {
-            currentStreak = 0;
+            lastDateMs = currentDateMs;
         }
 
+        // Calculate current streak based on today or yesterday
+        currentStreak = 0;
+        if (uniqueDates.includes(todayMs.getTime())) {
+            currentStreak = tempCurrentStreak; // If today has a session, current streak is the last calculated one
+        } else if (uniqueDates.includes(yesterdayMs.getTime())) {
+            // If the last session was yesterday, current streak is the streak ending yesterday
+            let streakEndingYesterday = 0;
+            let tempDate = yesterdayMs.getTime();
+            for (let i = uniqueDates.length - 1; i >= 0; i--) {
+                if (uniqueDates[i] === tempDate) {
+                    streakEndingYesterday++;
+                    tempDate -= (1000 * 60 * 60 * 24);
+                } else if (uniqueDates[i] < tempDate) {
+                    break;
+                }
+            }
+            currentStreak = streakEndingYesterday;
+        }
+        
         return { currentStreak, longestStreak };
     }
 
@@ -968,7 +1006,7 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.journalTextInput.value = session.journalEntry || '';
             elements.gratitudeTextInput.value = session.gratitudeEntry || '';
 
-            saveJournalEntryBtn.onclick = () => {
+            elements.saveJournalEntryBtn.onclick = () => {
                 session.mood = document.querySelector('.mood-emojis .emoji.selected')?.dataset.mood || null;
                 session.energy = parseInt(elements.journalEnergyLevel.value, 10);
                 session.tags = elements.journalTagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag);
@@ -979,6 +1017,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeModal(elements.meditationJournalModal);
                 renderMeditationSessions(); // Re-render to show mood/tags
                 updateMeditationStats(); // Re-render charts
+                updateAchievements(); // Check for 'first_journal_entry' achievement
                 showToast('Journal entry saved!', 'success');
             };
             openModal(elements.meditationJournalModal);
@@ -1004,12 +1043,12 @@ document.addEventListener('DOMContentLoaded', () => {
         div.className = 'interval-step';
         div.innerHTML = `
             <label>Step ${stepCount + 1}:</label>
-            <input type="number" value="60" min="5" placeholder="Seconds" data-type="duration">s
-            <select data-type="sound">
+            <input type="number" value="60" min="5" placeholder="Seconds" data-type="duration" class="input-field small-input"><span>s</span>
+            <select data-type="sound" class="input-field small-input">
                 <option value="bell">Bell</option>
                 <option value="chimes">Chimes</option>
             </select>
-            <input type="text" placeholder="Label (e.g., Focus)" data-type="label">
+            <input type="text" placeholder="Label (e.g., Focus)" data-type="label" class="input-field">
             <button class="delete-step-btn delete-button btn-sm"><i class="fas fa-times"></i></button>
         `;
         elements.intervalStepsContainer.appendChild(div);
@@ -1098,7 +1137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const durationMs = endTime - bookReadingStartTime;
 
         const book = books.find(b => b.id === bookId);
-        if (book && durationMs > 5000) {
+        if (book && durationMs > 5000) { // Only record sessions longer than 5 seconds
             book.readingSessions.push({
                 startTime: bookReadingStartTime,
                 endTime: endTime,
@@ -1141,9 +1180,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (filteredBooks.length === 0 && filterText === '') {
-            elements.booksList.innerHTML = '<li>No spiritual books added yet. Add your first scroll of wisdom!</li>';
+            elements.booksList.innerHTML = '<li class="info-message">No spiritual books added yet. Add your first scroll of wisdom!</li>';
         } else if (filteredBooks.length === 0 && filterText !== '') {
-            elements.booksList.innerHTML = `<li>No books matching "${filterText}".</li>`;
+            elements.booksList.innerHTML = `<li class="info-message">No books matching "${filterText}".</li>`;
         }
 
         filteredBooks.forEach(book => {
@@ -1194,7 +1233,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 elements.dashCurrentReadingList.appendChild(li);
             });
         } else {
-            elements.dashCurrentReadingList.innerHTML = '<li>No books currently being read.</li>';
+            elements.dashCurrentReadingList.innerHTML = '<li class="info-message">No books currently being read.</li>';
         }
 
         updateBookButtonsState(); // Set initial button states after rendering
@@ -1225,7 +1264,7 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.modalBookTitle.textContent = book.title;
         elements.modalBookAuthor.textContent = book.author;
         elements.modalBookGenre.textContent = book.genre || 'N/A';
-        elements.modalBookStatus.textContent = book.status;
+        
         elements.modalBookTotalPages.textContent = book.totalPages;
         elements.modalBookCurrentPage.value = book.currentPage;
 
@@ -1237,6 +1276,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const progress = book.totalPages > 0 ? ((book.currentPage / book.totalPages) * 100).toFixed(1) : 0;
             elements.modalBookProgress.textContent = `${progress}%`;
             elements.modalProgressBar.style.width = `${progress}%`;
+            elements.modalProgressBar.ariaValueNow = progress; // For accessibility
         };
         updateProgressDisplay();
 
@@ -1250,8 +1290,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateAchievements();
                 updateGoals();
             } else {
-                e.target.value = book.currentPage;
-                showToast('Invalid page number!', 'error');
+                e.target.value = book.currentPage; // Revert to previous valid page
+                showToast('Invalid page number! Must be between 0 and total pages.', 'error');
             }
         };
 
@@ -1283,13 +1323,14 @@ document.addEventListener('DOMContentLoaded', () => {
         statusSelect.onchange = (e) => {
             book.status = e.target.value;
             saveData('books', books);
-            elements.modalBookStatus.textContent = book.status;
             renderBooks(); // Update status in main list
             updateAchievements(); // Check for 'Books Finished' achievement
             updateGoals();
             showToast(`Status for "${book.title}" changed to "${book.status}".`, 'info');
         };
-        elements.modalBookStatus.replaceWith(statusSelect); // Replace span with select
+        elements.modalBookStatusContainer.innerHTML = ''; // Clear previous content
+        elements.modalBookStatusContainer.appendChild(statusSelect);
+
 
         elements.modalBookNotesInput.value = ''; // Clear input for new note
         renderBookNotes(book);
@@ -1302,6 +1343,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 elements.modalBookNotesInput.value = '';
                 renderBookNotes(book);
                 showToast('Note added!', 'success');
+            } else {
+                showToast('Note cannot be empty!', 'warning');
             }
         };
 
@@ -1311,12 +1354,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderBookNotes(book) {
         elements.modalBookNotesList.innerHTML = '';
         if (book.notes.length === 0) {
-            elements.modalBookNotesList.innerHTML = '<li>No notes yet. Add your insights!</li>';
+            elements.modalBookNotesList.innerHTML = '<li class="info-message">No notes yet. Add your insights!</li>';
             return;
         }
 
         book.notes.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(note => { // Newest first
             const li = document.createElement('li');
+            li.className = 'note-item';
             li.innerHTML = `
                 <div class="note-content">${note.text}</div>
                 <span class="note-date">${new Date(note.date).toLocaleDateString()} ${new Date(note.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
@@ -1347,6 +1391,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderMeditationCharts() {
+        // Common chart options
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: { unit: 'day', tooltipFormat: 'MMM d, yyyy' },
+                    title: { display: true, text: 'Date', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
+                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
+                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Value', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
+                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
+                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                }
+            }
+        };
+
         // Data for Meditation Time Trend (Daily)
         const dailyMedTime = {};
         meditationSessions.forEach(session => {
@@ -1360,25 +1428,14 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Daily Meditation Time (minutes)',
                 data: medTimeData,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1,
-                fill: false
+                borderColor: getComputedStyle(document.body).getPropertyValue('--secondary-color'),
+                tension: 0.3,
+                fill: true,
+                backgroundColor: 'rgba(124, 58, 237, 0.2)', // Light fill for line chart
+                pointRadius: 3,
+                pointHoverRadius: 6
             }]
-        }, {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    type: 'time',
-                    time: { unit: 'day' },
-                    title: { display: true, text: 'Date' }
-                },
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Minutes' }
-                }
-            }
-        });
+        }, { ...commonOptions, scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Minutes' } } } });
 
         // Data for Meditation Session Count
         const dailySessionCount = {};
@@ -1392,24 +1449,11 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Daily Meditation Sessions',
                 data: sessionCountData,
-                backgroundColor: 'rgba(153, 102, 255, 0.6)'
+                backgroundColor: getComputedStyle(document.body).getPropertyValue('--primary-color'),
+                borderColor: getComputedStyle(document.body).getPropertyValue('--primary-color'),
+                borderWidth: 1
             }]
-        }, {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    type: 'time',
-                    time: { unit: 'day' },
-                    title: { display: true, text: 'Date' }
-                },
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Sessions' },
-                    ticks: { precision: 0 }
-                }
-            }
-        });
+        }, { ...commonOptions, scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Sessions' }, ticks: { precision: 0 } } } });
 
         // Mood Distribution Chart
         const moodCounts = {};
@@ -1437,14 +1481,33 @@ document.addEventListener('DOMContentLoaded', () => {
             labels: moodLabels,
             datasets: [{
                 data: moodData,
-                backgroundColor: moodColors
+                backgroundColor: moodColors,
+                borderColor: getComputedStyle(document.body).getPropertyValue('--card-background'),
+                borderWidth: 2
             }]
         }, {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'top' },
-                title: { display: true, text: 'Mood Distribution' }
+                legend: { position: 'top', labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
+                title: { display: true, text: 'Mood Distribution', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== null) {
+                                label += context.parsed;
+                                const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1) + '%';
+                                label += ` (${percentage})`;
+                            }
+                            return label;
+                        }
+                    }
+                }
             }
         });
 
@@ -1466,24 +1529,35 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Tag Usage',
                 data: tagData,
-                backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                backgroundColor: getComputedStyle(document.body).getPropertyValue('--accent-color'),
+                borderColor: getComputedStyle(document.body).getPropertyValue('--accent-color'),
+                borderWidth: 1
             }]
         }, {
             responsive: true,
             maintainAspectRatio: false,
             indexAxis: 'y', // Horizontal bars
+            plugins: {
+                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
+                title: { display: true, text: 'Top Meditation Tags', color: getComputedStyle(document.body).getPropertyValue('--primary-color') }
+            },
             scales: {
                 x: {
                     beginAtZero: true,
-                    title: { display: true, text: 'Count' },
-                    ticks: { precision: 0 }
+                    title: { display: true, text: 'Count', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
+                    ticks: { precision: 0, color: getComputedStyle(document.body).getPropertyValue('--text-color') },
+                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
                 },
                 y: {
-                    title: { display: true, text: 'Tag' }
+                    title: { display: true, text: 'Tag', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
+                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
+                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
                 }
             }
         });
+    }
 
+    function updateBookStatistics() {
         // Book Reading Time Chart
         const bookReadingTotals = {};
         books.forEach(book => {
@@ -1498,18 +1572,28 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Total Reading Time (hours)',
                 data: bookData,
-                backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                backgroundColor: getComputedStyle(document.body).getPropertyValue('--secondary-color'),
+                borderColor: getComputedStyle(document.body).getPropertyValue('--secondary-color'),
+                borderWidth: 1
             }]
         }, {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
+                title: { display: true, text: 'Book Reading Time by Book', color: getComputedStyle(document.body).getPropertyValue('--primary-color') }
+            },
             scales: {
                 x: {
                     beginAtZero: true,
-                    title: { display: true, text: 'Book Title' }
+                    title: { display: true, text: 'Book Title', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
+                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
+                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
                 },
                 y: {
-                    title: { display: true, text: 'Hours' }
+                    title: { display: true, text: 'Hours', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
+                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
+                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
                 }
             }
         });
@@ -1586,7 +1670,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const period = elements.goalPeriodSelect.value;
 
         if (isNaN(value) || value <= 0) {
-            showToast('Please enter a valid target value for your goal.', 'error');
+            showToast('Please enter a valid target value for your goal (must be a positive number).', 'error');
             return;
         }
 
@@ -1611,36 +1695,40 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateGoals() {
         const now = new Date();
         goals.forEach(goal => {
-            if (goal.completed) return;
+            if (goal.completed) return; // Don't update completed goals
 
             let currentProgress = 0;
-            let relevantSessions = [];
+            let relevantMeditations = [];
+            let relevantBooks = [];
 
             if (goal.period === 'week') {
                 const startOfWeek = new Date(now);
-                startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday
+                startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday (adjust if your week starts on Monday)
                 startOfWeek.setHours(0,0,0,0);
-                relevantSessions = meditationSessions.filter(s => new Date(s.startTime) >= startOfWeek);
-                // For books, we need to re-evaluate the count for the current week, if it were dynamic.
-                // For simplicity, for books, we will count overall finished books.
+                relevantMeditations = meditationSessions.filter(s => new Date(s.startTime) >= startOfWeek);
+                // For books, we'll continue to count finished books overall for simplicity, as per-week finished books is complex
+                relevantBooks = books; 
             } else if (goal.period === 'month') {
                 const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-                relevantSessions = meditationSessions.filter(s => new Date(s.startTime) >= startOfMonth);
+                relevantMeditations = meditationSessions.filter(s => new Date(s.startTime) >= startOfMonth);
+                relevantBooks = books;
             } else { // 'overall'
-                relevantSessions = meditationSessions;
+                relevantMeditations = meditationSessions;
+                relevantBooks = books;
             }
 
             if (goal.type === 'meditation_duration') {
-                currentProgress = relevantSessions.reduce((sum, s) => sum + s.durationMs, 0) / (1000 * 60);
+                currentProgress = relevantMeditations.reduce((sum, s) => sum + s.durationMs, 0) / (1000 * 60);
             } else if (goal.type === 'meditation_days') {
-                currentProgress = new Set(relevantSessions.map(s => new Date(s.startTime).toDateString())).size;
+                currentProgress = new Set(relevantMeditations.map(s => new Date(s.startTime).toDateString())).size;
             } else if (goal.type === 'books_finished') {
-                currentProgress = books.filter(b => b.status === 'Finished').length;
+                currentProgress = relevantBooks.filter(b => b.status === 'Finished').length;
             }
 
             goal.currentProgress = currentProgress;
             if (goal.currentProgress >= goal.targetValue) {
                 goal.completed = true;
+                goal.lastUpdate = new Date().toISOString(); // Mark completion date
                 showToast(`Goal Completed: ${GOAL_TYPES[goal.type].label} of ${goal.targetValue} ${GOAL_TYPES[goal.type].unit} ${goal.period === 'overall' ? '' : 'per ' + goal.period}!`, 'success');
             }
         });
@@ -1656,34 +1744,39 @@ document.addEventListener('DOMContentLoaded', () => {
         const completedGoals = goals.filter(g => g.completed);
 
         if (activeGoals.length === 0 && completedGoals.length === 0) {
-            elements.activeGoalsList.innerHTML = '<li>No goals set yet. Set a goal to start tracking!</li>';
+            elements.activeGoalsList.innerHTML = '<li class="info-message">No goals set yet. Set a goal to start tracking your progress!</li>';
             return;
         }
 
         activeGoals.forEach(goal => {
             const li = document.createElement('li');
+            li.className = 'goal-item';
             const progress = Math.min(100, (goal.currentProgress / goal.targetValue) * 100).toFixed(1);
             li.innerHTML = `
                 <div>
                     <strong>${GOAL_TYPES[goal.type].label}: ${goal.currentProgress.toFixed(1)} / ${goal.targetValue} ${GOAL_TYPES[goal.type].unit} ${goal.period === 'overall' ? '' : 'per ' + goal.period}</strong>
-                    <div class="goal-progress-bar-container"><div class="goal-progress-bar" style="width: ${progress}%"></div></div>
+                    <div class="goal-progress-bar-container" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">
+                        <div class="goal-progress-bar" style="width: ${progress}%"></div>
+                    </div>
                     <span>Progress: ${progress}%</span>
                 </div>
-                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}"><i class="fas fa-trash-alt"></i></button>
+                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}" title="Delete Goal"><i class="fas fa-trash-alt"></i></button>
             `;
             elements.activeGoalsList.appendChild(li);
         });
 
         completedGoals.forEach(goal => {
             const li = document.createElement('li');
-            li.className = 'completed';
+            li.className = 'goal-item completed';
             li.innerHTML = `
                 <div>
                     <strong>${GOAL_TYPES[goal.type].label}: ${goal.targetValue} ${GOAL_TYPES[goal.type].unit} ${goal.period === 'overall' ? '' : 'per ' + goal.period}</strong>
-                    <div class="goal-progress-bar-container"><div class="goal-progress-bar" style="width: 100%"></div></div>
+                    <div class="goal-progress-bar-container" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                        <div class="goal-progress-bar" style="width: 100%"></div>
+                    </div>
                     <span>Completed on: ${new Date(goal.lastUpdate).toLocaleDateString()}</span>
                 </div>
-                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}"><i class="fas fa-trash-alt"></i></button>
+                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}" title="Delete Goal"><i class="fas fa-trash-alt"></i></button>
             `;
             elements.completedGoalsList.appendChild(li);
         });
@@ -1706,40 +1799,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Achievements Logic ---
 
-    const achievementsList = [
-        { id: 'first_session', name: 'First Step', description: 'Complete your first meditation session.', check: () => meditationSessions.length >= 1, unlocked: false, icon: 'fas fa-shoe-prints' },
-        { id: 'seven_day_streak', name: '7-Day Streak', description: 'Meditate for 7 consecutive days.', check: () => calculateStreaks().longestStreak >= 7, unlocked: false, icon: 'fas fa-fire' },
-        { id: '30_min_meditation', name: 'Deep Dive', description: 'Complete a meditation session of 30 minutes or more.', check: () => meditationSessions.some(s => s.durationMs >= 30 * 60 * 1000), unlocked: false, icon: 'fas fa-mountain' },
-        { id: '10_hours_meditated', name: 'Seasoned Seeker', description: 'Accumulate 10 hours of meditation.', check: () => meditationSessions.reduce((sum, s) => sum + s.durationMs, 0) >= 10 * 60 * 60 * 1000, unlocked: false, icon: 'fas fa-star' },
-        { id: 'first_book_finished', name: 'Wisdom Gained', description: 'Mark your first spiritual book as "Finished".', check: () => books.some(b => b.status === 'Finished'), unlocked: false, icon: 'fas fa-feather-alt' },
-        { id: 'five_books_finished', name: 'Enlightened Library', description: 'Finish 5 spiritual books.', check: () => books.filter(b => b.status === 'Finished').length >= 5, unlocked: false, icon: 'fas fa-book-sparkles' },
-        { id: 'first_journal_entry', name: 'Inner Voice', description: 'Write your first meditation journal entry.', check: () => meditationSessions.some(s => s.journalEntry && s.journalEntry.length > 0), unlocked: false, icon: 'fas fa-pen-nib' },
-        { id: 'first_book_note', name: 'Reflective Reader', description: 'Add your first note to a spiritual book.', check: () => books.some(b => b.notes && b.notes.length > 0), unlocked: false, icon: 'fas fa-highlighter' },
-    ];
+    // Define check functions dynamically to allow for data updates
+    const achievementCheckFunctions = {
+        'first_session': () => meditationSessions.length >= 1,
+        'seven_day_streak': () => calculateStreaks().longestStreak >= 7,
+        '30_min_meditation': () => meditationSessions.some(s => s.durationMs >= 30 * 60 * 1000),
+        '10_hours_meditated': () => meditationSessions.reduce((sum, s) => sum + s.durationMs, 0) >= 10 * 60 * 60 * 1000,
+        'first_book_finished': () => books.some(b => b.status === 'Finished'),
+        'five_books_finished': () => books.filter(b => b.status === 'Finished').length >= 5,
+        'first_journal_entry': () => meditationSessions.some(s => s.journalEntry && s.journalEntry.length > 0),
+        'first_book_note': () => books.some(b => b.notes && b.notes.length > 0),
+    };
+
 
     function updateAchievements() {
         let changed = false;
         achievementsList.forEach(achievement => {
-            if (!achievement.unlocked && achievement.check()) {
+            // Apply the check function from the map
+            if (!achievement.unlocked && achievementCheckFunctions[achievement.id] && achievementCheckFunctions[achievement.id]()) {
                 achievement.unlocked = true;
                 changed = true;
                 showToast(`Achievement Unlocked: ${achievement.name}!`, 'success');
             }
         });
         if (changed) {
-            saveData('achievementsList', achievementsList); // Save updated unlocked status
+            saveData('achievementsList', achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked }))); // Save only id and unlocked status
             renderAchievements();
         }
     }
 
     function renderAchievements() {
         elements.achievementsGrid.innerHTML = '';
-        const savedAchievements = loadData('achievementsList', achievementsList.map(a => ({ id: a.id, unlocked: false })));
-
+        // Use the globally defined achievementsList which should have its unlocked status updated
         achievementsList.forEach(achievement => {
-            const savedState = savedAchievements.find(sa => sa.id === achievement.id);
-            if (savedState) achievement.unlocked = savedState.unlocked; // Apply saved state
-
             const card = document.createElement('div');
             card.className = `achievement-card ${achievement.unlocked ? 'unlocked' : ''}`;
             card.innerHTML = `
@@ -1788,15 +1880,25 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('Settings saved!', 'info');
     }
 
+    let reminderIntervalId = null;
+
     function setDailyReminder() {
+        // Clear existing interval if any
+        if (reminderIntervalId) {
+            clearInterval(reminderIntervalId);
+            reminderIntervalId = null;
+        }
+
         if (!settings.dailyReminderTime) {
             showToast('Please select a time for the reminder.', 'error');
             return;
         }
+
         if (!('Notification' in window)) {
             showToast('This browser does not support desktop notifications.', 'error');
             return;
         }
+
         if (Notification.permission === 'default') {
             Notification.requestPermission().then(permission => {
                 if (permission === 'granted') {
@@ -1807,36 +1909,49 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } else if (Notification.permission === 'granted') {
             scheduleReminder();
-        } else { // Permission denied
+        } else { // Permission denied or blocked
             showToast('Notification permission blocked. Please enable it in browser settings.', 'warning');
         }
     }
 
-    let reminderIntervalId = null;
     function scheduleReminder() {
-        // Clear existing interval if any
-        if (reminderIntervalId) {
-            clearInterval(reminderIntervalId);
-        }
-
         const [hour, minute] = settings.dailyReminderTime.split(':').map(Number);
 
-        reminderIntervalId = setInterval(() => {
-            const now = new Date();
-            if (now.getHours() === hour && now.getMinutes() === minute && now.getSeconds() === 0) {
+        // Schedule the initial notification
+        const now = new Date();
+        let nextReminder = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0, 0);
+
+        if (nextReminder.getTime() <= now.getTime()) {
+            // If the time has already passed today, schedule for tomorrow
+            nextReminder.setDate(nextReminder.getDate() + 1);
+        }
+
+        const timeUntilNextReminder = nextReminder.getTime() - now.getTime();
+
+        // Use setTimeout for the first notification, then setInterval for daily repeats
+        reminderIntervalId = setTimeout(() => {
+            new Notification('Mystic Vision', {
+                body: 'Time for your daily meditation!',
+                icon: './img/icon.png' // Ensure you have an icon.png in your img folder
+            });
+
+            // Set interval for subsequent daily reminders (every 24 hours)
+            reminderIntervalId = setInterval(() => {
                 new Notification('Mystic Vision', {
                     body: 'Time for your daily meditation!',
-                    icon: './img/icon.png' // Add a small app icon for notifications
+                    icon: './img/icon.png'
                 });
-            }
-        }, 1000); // Check every second
+            }, 24 * 60 * 60 * 1000); // 24 hours
+        }, timeUntilNextReminder);
 
         showToast(`Daily meditation reminder set for ${settings.dailyReminderTime}.`, 'success');
     }
 
+
     function clearDailyReminder() {
         if (reminderIntervalId) {
             clearInterval(reminderIntervalId);
+            clearTimeout(reminderIntervalId); // Clear both in case it's the initial timeout
             reminderIntervalId = null;
         }
         settings.dailyReminderTime = '';
@@ -1880,9 +1995,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (importedData.goals) goals = importedData.goals;
                     if (importedData.settings) settings = importedData.settings;
                     if (importedData.achievementsList) {
-                        achievementsList.forEach(localAch => {
-                            const importedAch = importedData.achievementsList.find(ia => ia.id === localAch.id);
-                            if (importedAch) localAch.unlocked = importedAch.unlocked;
+                        importedData.achievementsList.forEach(importedAch => {
+                            const localAch = achievementsList.find(la => la.id === importedAch.id);
+                            if (localAch) localAch.unlocked = importedAch.unlocked;
                         });
                     }
 
@@ -1893,12 +2008,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     saveData('achievementsList', achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked })));
 
                     initializeApp();
-                    showToast('Data imported successfully!', 'success');
+                    showToast('Data imported successfully! The page will refresh.', 'success');
                     closeModal(elements.confirmationModal);
+                    // A full page reload might be necessary for all changes to take effect due to global state
+                    setTimeout(() => window.location.reload(), 1000); 
                 });
             } catch (error) {
                 showToast('Error importing data: Invalid JSON file. ' + error.message, 'error');
                 console.error('Import error:', error);
+            } finally {
+                event.target.value = ''; // Clear the file input
             }
         };
         reader.readAsText(file);
@@ -1910,11 +2029,12 @@ document.addEventListener('DOMContentLoaded', () => {
             meditationSessions = [];
             books = [];
             goals = [];
-            settings = { theme: 'light', bellSound: true, bellVolume: 0.5, ambientSound: 'none', ambientVolume: 0.5, dailyReminderTime: null, customBackground: null };
+            settings = { theme: 'light', bellSound: true, bellVolume: 0.5, ambientSound: 'none', ambientVolume: 0.5, dailyReminderTime: '', customBackground: null };
             achievementsList.forEach(a => a.unlocked = false); // Reset achievements
             initializeApp();
-            showToast('All data cleared!', 'success');
+            showToast('All data cleared! The page will refresh.', 'success');
             closeModal(elements.confirmationModal);
+            setTimeout(() => window.location.reload(), 1000); // Full page reload for complete reset
         });
     }
 
@@ -1950,8 +2070,8 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.bookSearchInput.value = ''; // Clear search on section change
         } else if (sectionId === 'statistics-section') {
             renderMeditationCharts();
-            renderMeditationCalendar();
             updateBookStatistics(); // Updates book chart
+            renderMeditationCalendar();
         } else if (sectionId === 'goals-section') {
             renderGoals();
         } else if (sectionId === 'achievements-section') {
@@ -1960,8 +2080,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateDashboard() {
-        // This will be mostly handled by updateMeditationStats and renderBooks etc.
-        // Just ensures the right elements are updated.
         updateMeditationStats(); // Populates meditation stats and streaks on dashboard
         elements.dashBooksFinished.textContent = books.filter(b => b.status === 'Finished').length;
         renderMeditationSessions(); // Populates recent meditations on dashboard
@@ -1969,7 +2087,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Event Listeners ---
-    elements.startMeditationBtn.addEventListener('click', () => startMeditationTimer(0));
+    elements.startMeditationBtn.addEventListener('click', () => {
+        const customMinutes = parseInt(elements.customMeditationMinutesInput.value, 10);
+        if (!isNaN(customMinutes) && customMinutes > 0) {
+            startMeditationTimer(customMinutes);
+        } else {
+            // If no custom minutes are set or it's 0, treat as freestyle
+            startMeditationTimer(0, 'freestyle');
+        }
+    });
+
+    elements.setCustomMeditationBtn.addEventListener('click', () => {
+        const customMinutes = parseInt(elements.customMeditationMinutesInput.value, 10);
+        if (isNaN(customMinutes) || customMinutes <= 0) {
+            showToast('Please enter a valid custom duration in minutes (e.g., 15).', 'error');
+            return;
+        }
+        showToast(`Custom meditation set for ${customMinutes} minutes. Click Start when ready!`, 'info');
+    });
+
     elements.pauseMeditationBtn.addEventListener('click', pauseMeditationTimer);
     elements.stopMeditationBtn.addEventListener('click', stopMeditationTimer);
     elements.resetMeditationBtn.addEventListener('click', resetMeditationDisplay);
@@ -1977,8 +2113,8 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.presetMeditationButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             const minutes = parseInt(e.target.dataset.minutes, 10);
-            resetMeditationDisplay();
-            startMeditationTimer(minutes);
+            elements.customMeditationMinutesInput.value = minutes; // Set custom input field
+            showToast(`Meditation preset set for ${minutes} minutes. Click Start when ready!`, 'info');
         });
     });
 
@@ -2015,6 +2151,13 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.newBookCoverInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
+            if (file.size > 500 * 1024) { // 500 KB limit
+                showToast('Image size too large! Max 500KB.', 'error');
+                e.target.value = ''; // Clear the input
+                newBookCoverBase64 = null;
+                elements.uploadBookCoverBtn.innerHTML = '<i class="fas fa-image"></i>';
+                return;
+            }
             const reader = new FileReader();
             reader.onloadend = () => {
                 newBookCoverBase64 = reader.result;
@@ -2024,6 +2167,24 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.readAsDataURL(file);
         }
     });
+
+    // Event delegation for book actions (start, stop, details, delete)
+    elements.booksList.addEventListener('click', (e) => {
+        const bookItem = e.target.closest('.book-item');
+        if (!bookItem) return;
+        const bookId = bookItem.dataset.id;
+
+        if (e.target.classList.contains('start-reading') || e.target.closest('.start-reading')) {
+            startBookReading(bookId);
+        } else if (e.target.classList.contains('stop-reading') || e.target.closest('.stop-reading')) {
+            stopBookReading(bookId);
+        } else if (e.target.classList.contains('view-book-details') || e.target.closest('.view-book-details')) {
+            openBookDetailsModal(bookId);
+        } else if (e.target.classList.contains('delete-book') || e.target.closest('.delete-book')) {
+            deleteBook(bookId);
+        }
+    });
+
 
     elements.bookSearchInput.addEventListener('input', (e) => renderBooks(e.target.value));
     elements.clearBookSearchBtn.addEventListener('click', () => {
@@ -2065,6 +2226,11 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.customBackgroundFileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
+            if (file.size > 1024 * 1024) { // 1 MB limit for background
+                showToast('Image size too large! Max 1MB.', 'error');
+                e.target.value = '';
+                return;
+            }
             const reader = new FileReader();
             reader.onloadend = () => {
                 settings.customBackground = reader.result;
@@ -2103,8 +2269,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateBookStatistics(); // Call to initialize book charts
         renderGoals();
         updateGoals(); // Initial goal check
+        // Achievements should be updated *after* other data, then rendered
+        updateAchievements(); 
         renderAchievements();
-        updateAchievements(); // Initial achievement check
 
         if (settings.dailyReminderTime) {
             setDailyReminder(); // Re-schedule reminder on load
@@ -2122,140 +2289,169 @@ document.addEventListener('DOMContentLoaded', () => {
 
 --- START FILE: style.css ---
 
-/* --- Global & Root Variables --- */
+/* --- Global & Root Variables (Defaulting to Light Theme) --- */
 :root {
-    /* Light Theme (Serene) */
-    --light-primary: #5b21b6; /* Deep Violet */
-    --light-secondary: #7c3aed; /* Amethyst Purple */
-    --light-accent: #f59e0b; /* Golden Amber */
-    --light-bg-gradient-start: #f3e8ff; /* Very Light Purple */
-    --light-bg-gradient-end: #e9d5ff; /* Light Purple */
-    --light-text-color: #333;
-    --light-light-text-color: #f0f0f0;
-    --light-card-bg: #ffffff;
-    --light-border-color: #d8b4fe;
-    --light-shadow-light: rgba(0, 0, 0, 0.08);
-    --light-shadow-medium: rgba(0, 0, 0, 0.15);
-    --light-input-bg: #f9f4ff;
-
-    /* General */
-    --button-hover-darken: #4c1d95;
-    --delete-color: #ef4444;
-    --delete-hover: #dc2626;
-    --success-color: #22c55e;
-    --success-hover: #16a34a;
-    --info-color: #3b82f6;
-    --info-hover: #2563eb;
-    --warning-color: #f59e0b;
-    --warning-hover: #d97706;
-
-    /* Modal */
-    --modal-bg: rgba(0, 0, 0, 0.6);
-    --modal-content-bg: #fff;
-
-    /* Active Theme Variables (default to Light) */
-    --primary-color: var(--light-primary);
-    --secondary-color: var(--light-secondary);
-    --accent-color: var(--light-accent);
-    --background-gradient-start: var(--light-bg-gradient-start);
-    --background-gradient-end: var(--light-bg-gradient-end);
-    --text-color: var(--light-text-color);
-    --light-text-color: var(--light-light-text-color);
-    --card-background: var(--light-card-bg);
-    --border-color: var(--light-border-color);
-    --shadow-light: var(--light-shadow-light);
-    --shadow-medium: var(--light-shadow-medium);
-    --input-bg: var(--light-input-bg);
-    --meditation-timer-bg: var(--light-bg-gradient-end);
-    --stats-grid-bg: var(--light-bg-gradient-end);
-    --list-item-bg: var(--light-bg-gradient-end);
-    --toast-bg: rgba(0,0,0,0.8);
-    --toast-text: #fff;
-    --progress-bar-bg: #e0e0e0;
-    --progress-bar-fill: var(--secondary-color);
-}
-
-/* --- Dark Theme (Mystic Night) --- */
-body.dark-theme {
-    --primary-color: #a78bfa;
-    --secondary-color: #c4b5fd;
-    --accent-color: #fde047;
-    --background-gradient-start: #1e093d;
-    --background-gradient-end: #3b0764;
-    --text-color: #e0e0e0;
-    --light-text-color: #f0f0f0;
-    --card-background: #2c0b5e;
-    --border-color: #5b21b6;
-    --shadow-light: rgba(255, 255, 255, 0.05);
-    --shadow-medium: rgba(255, 255, 255, 0.1);
-    --input-bg: #3b0764;
-    --meditation-timer-bg: #220546;
-    --stats-grid-bg: #220546;
-    --list-item-bg: #220546;
-    --modal-content-bg: #3b0764;
-    --progress-bar-bg: #4c1d95;
-    --progress-bar-fill: var(--primary-color);
-}
-
-/* --- Cosmic Whisper Theme --- */
-body.cosmic-theme {
-    --primary-color: #6d28d9;
-    --secondary-color: #8b5cf6;
-    --accent-color: #fcd34d;
-    --background-gradient-start: #0f031c; /* Deep Space */
-    --background-gradient-end: #2a0e4d; /* Nebula Purple */
-    --text-color: #e0e0e0;
-    --light-text-color: #f0f0f0;
-    --card-background: #1a082c;
-    --border-color: #4b0d87;
-    --shadow-light: rgba(255, 255, 255, 0.05);
-    --shadow-medium: rgba(255, 255, 255, 0.1);
-    --input-bg: #2a0e4d;
-    --meditation-timer-bg: #11041b;
-    --stats-grid-bg: #11041b;
-    --list-item-bg: #11041b;
-    --modal-content-bg: #2a0e4d;
-    --progress-bar-bg: #3b0764;
-    --progress-bar-fill: var(--secondary-color);
-}
-
-/* --- Forest Bloom Theme --- */
-body.forest-theme {
-    --primary-color: #166534; /* Dark Forest Green */
-    --secondary-color: #4ade80; /* Light Green */
-    --accent-color: #fbbf24; /* Yellow Sun */
-    --background-gradient-start: #ecfdf5; /* Pale Green */
-    --background-gradient-end: #d1fae5; /* Lighter Green */
-    --text-color: #222;
-    --light-text-color: #f0fdf5;
+    /* Light Theme (Serene) - Refined Palette */
+    --primary-color: #5c6bc0; /* Indigo Blue */
+    --secondary-color: #7986cb; /* Lighter Indigo */
+    --accent-color: #ffb300; /* Amber */
+    --background-gradient-start: #e8eaf6; /* Light Lavender */
+    --background-gradient-end: #c5cae9; /* Medium Lavender */
+    --text-color: #212121; /* Main text color for readability on light backgrounds */
+    --inverted-text-color: #ffffff; /* Text color for elements with primary/secondary backgrounds (e.g., header, buttons) */
     --card-background: #ffffff;
-    --border-color: #a7f3d0;
+    --border-color: #9fa8da; /* Muted Blue-grey */
     --shadow-light: rgba(0, 0, 0, 0.07);
     --shadow-medium: rgba(0, 0, 0, 0.12);
-    --input-bg: #d1fae5;
-    --meditation-timer-bg: #a7f3d0;
-    --stats-grid-bg: #a7f3d0;
-    --list-item-bg: #a7f3d0;
+    --input-bg: #f5f5f5; /* Very light grey */
+    --meditation-timer-bg: #e0e0e0; /* Slightly darker than input-bg, but still light */
+    --stats-grid-bg: #f5f5f5;
+    --list-item-bg: #f5f5f5;
     --modal-content-bg: #ffffff;
-    --button-hover-darken: #115e3a;
-    --progress-bar-bg: #cbf9e2;
+    --progress-bar-bg: #e0e0e0;
     --progress-bar-fill: var(--secondary-color);
+    --secondary-color-alpha: rgba(121, 134, 203, 0.2); /* Alpha version of secondary for shadows */
+    --button-hover-darken: #4b5a99; /* Specific darken for light theme primary */
+
+    /* General fixed colors (not theme-dependent) */
+    --delete-color: #ef4444; /* Red */
+    --delete-hover: #dc2626;
+    --success-color: #22c55e; /* Green */
+    --success-hover: #16a34a;
+    --info-color: #3b82f6; /* Blue */
+    --info-hover: #2563eb;
+    --warning-color: #f59e0b; /* Orange */
+    --warning-hover: #d97706;
+    --warning-color-rgb: 245, 158, 11; /* For rgba shadows */
+
+    /* Modal general styles */
+    --modal-bg: rgba(0, 0, 0, 0.65);
+    /* Toast notifications */
+    --toast-bg: rgba(33,33,33,0.9);
+    --toast-text: #fff;
+}
+
+/* --- Theme Overrides --- */
+
+/* Light Theme (Serene) - Explicitly set for clarity, though already defaults in :root */
+body.light-theme {
+    --primary-color: #5c6bc0;
+    --secondary-color: #7986cb;
+    --accent-color: #ffb300;
+    --background-gradient-start: #e8eaf6;
+    --background-gradient-end: #c5cae9;
+    --text-color: #212121; /* Dark grey for light backgrounds */
+    --inverted-text-color: #ffffff; /* White for dark backgrounds */
+    --card-background: #ffffff;
+    --border-color: #9fa8da;
+    --shadow-light: rgba(0, 0, 0, 0.07);
+    --shadow-medium: rgba(0, 0, 0, 0.12);
+    --input-bg: #f5f5f5;
+    --meditation-timer-bg: #e0e0e0;
+    --stats-grid-bg: #f5f5f5;
+    --list-item-bg: #f5f5f5;
+    --modal-content-bg: #ffffff;
+    --progress-bar-bg: #e0e0e0;
+    --progress-bar-fill: var(--secondary-color);
+    --secondary-color-alpha: rgba(121, 134, 203, 0.2);
+    --button-hover-darken: #4b5a99; /* Specific darken for light theme primary */
+}
+
+/* Dark Theme (Mystic Night) */
+body.dark-theme {
+    --primary-color: #b39ddb; /* Deep Lilac */
+    --secondary-color: #e0b0ff; /* Light Lavender */
+    --accent-color: #ffd54f; /* Yellow Amber */
+    --background-gradient-start: #1c0032; /* Very Dark Purple */
+    --background-gradient-end: #38006b; /* Dark Purple */
+    --text-color: #e0e0e0; /* Light grey for dark backgrounds */
+    --inverted-text-color: #ffffff; /* White for dark backgrounds */
+    --card-background: #2a004a;
+    --border-color: #5d0087;
+    --shadow-light: rgba(255, 255, 255, 0.05);
+    --shadow-medium: rgba(255, 255, 255, 0.1);
+    --input-bg: #3d006f;
+    --meditation-timer-bg: #2a004a;
+    --stats-grid-bg: #2a004a;
+    --list-item-bg: #2a004a;
+    --modal-content-bg: #2a004a;
+    --button-hover-darken: #9a76cc;
+    --progress-bar-bg: #4d0087;
+    --progress-bar-fill: var(--primary-color);
+    --secondary-color-alpha: rgba(224, 176, 255, 0.2);
+    --toast-bg: rgba(0,0,0,0.9);
+}
+
+/* Cosmic Whisper Theme */
+body.cosmic-theme {
+    --primary-color: #6a05ad; /* Deep Violet */
+    --secondary-color: #9d52d2; /* Lighter Violet */
+    --accent-color: #f7b731; /* Golden Yellow */
+    --background-gradient-start: #0a011a; /* Black-Blue Space */
+    --background-gradient-end: #1e0539; /* Deep Purple Space */
+    --text-color: #d1c4e9; /* Light Purple-grey */
+    --inverted-text-color: #ffffff; /* White for dark backgrounds */
+    --card-background: #15022e;
+    --border-color: #3b0a68;
+    --shadow-light: rgba(255, 255, 255, 0.05);
+    --shadow-medium: rgba(255, 255, 255, 0.1);
+    --input-bg: #28084f;
+    --meditation-timer-bg: #15022e;
+    --stats-grid-bg: #15022e;
+    --list-item-bg: #15022e;
+    --modal-content-bg: #1e0539;
+    --button-hover-darken: #570494;
+    --progress-bar-bg: #3b0a68;
+    --progress-bar-fill: var(--secondary-color);
+    --secondary-color-alpha: rgba(157, 82, 210, 0.2);
+    --toast-bg: rgba(0,0,0,0.9);
+}
+
+/* Forest Bloom Theme */
+body.forest-theme {
+    --primary-color: #2e7d32; /* Deep Green */
+    --secondary-color: #66bb6a; /* Medium Green */
+    --accent-color: #ffa000; /* Dark Orange */
+    --background-gradient-start: #e8f5e9; /* Very Light Green */
+    --background-gradient-end: #c8e6c9; /* Light Green */
+    --text-color: #388e3c; /* Darker Green text */
+    --inverted-text-color: #ffffff; /* White for dark backgrounds */
+    --card-background: #ffffff;
+    --border-color: #a5d6a7;
+    --shadow-light: rgba(0, 0, 0, 0.07);
+    --shadow-medium: rgba(0, 0, 0, 0.12);
+    --input-bg: #f1f8e9; /* Off-white green tint */
+    --meditation-timer-bg: #c8e6c9;
+    --stats-grid-bg: #f1f8e9;
+    --list-item-bg: #f1f8e9;
+    --modal-content-bg: #ffffff;
+    --button-hover-darken: #246328;
+    --progress-bar-bg: #dcedc8;
+    --progress-bar-fill: var(--secondary-color);
+    --secondary-color-alpha: rgba(102, 187, 106, 0.2);
+    --toast-bg: rgba(0,0,0,0.85);
 }
 
 
 /* --- Global Styles --- */
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Segoe UI', 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
     background: linear-gradient(135deg, var(--background-gradient-start), var(--background-gradient-end));
-    color: var(--text-color);
+    color: var(--text-color); /* This applies the main text color */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     box-sizing: border-box;
-    transition: background-color 0.5s ease, color 0.5s ease;
+    transition: background-color 0.5s ease, color 0.5s ease, background-image 0.5s ease;
     overflow-y: scroll; /* Always show scrollbar to prevent layout jump */
+    -webkit-font-smoothing: antialiased; /* Smoother fonts */
+    -moz-osx-font-smoothing: grayscale; /* Smoother fonts */
 }
 
 /* Custom Scrollbar */
@@ -2285,24 +2481,27 @@ body.modal-open {
 
 header {
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    color: var(--light-text-color);
-    padding: 2em 0;
+    color: var(--inverted-text-color); /* Uses the inverted text color */
+    padding: 2.5em 0 1.5em;
     text-align: center;
     box-shadow: 0 6px 15px var(--shadow-medium);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 header h1 {
     margin: 0;
-    font-size: 3.5em;
+    font-size: clamp(2.5em, 5vw, 3.8em); /* Responsive font size */
     letter-spacing: 2px;
     font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 }
 
 header p {
     margin: 0.5em 0 0;
-    font-size: 1.3em;
-    opacity: 0.9;
+    font-size: clamp(1em, 2.5vw, 1.4em); /* Responsive font size */
+    opacity: 0.95;
+    font-weight: 300;
 }
 
 /* --- Navigation --- */
@@ -2315,46 +2514,67 @@ header p {
     top: 0;
     z-index: 100;
     border-bottom: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
+    display: flex; /* For horizontal scrolling container */
+    overflow-x: auto; /* Allow horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
+
+.main-nav::-webkit-scrollbar {
+    height: 6px; /* Smaller scrollbar for nav */
+}
+.main-nav::-webkit-scrollbar-track {
+    background: var(--card-background);
+}
+.main-nav::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 3px;
+}
+
 
 .main-nav .container {
     display: flex;
     justify-content: center;
     gap: 1.2em;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Prevent wrapping for horizontal scroll */
+    padding: 0 1.5em; /* Ensure padding on ends for scroll */
+    min-width: max-content; /* Ensure container is wide enough for all buttons */
 }
 
 .nav-button {
     background-color: transparent;
-    border: none;
+    border: 1px solid transparent; /* Consistent border for smooth transition */
     color: var(--primary-color);
     padding: 1em 1.8em;
-    font-size: 1.2em;
+    font-size: 1.15em;
     cursor: pointer;
     border-radius: 10px;
-    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     display: flex;
     align-items: center;
     gap: 10px;
     white-space: nowrap;
     font-weight: 600;
+    flex-shrink: 0; /* Prevent shrinking in nav scroll */
 }
 
 .nav-button i {
-    font-size: 1.3em;
+    font-size: 1.2em;
 }
 
-.nav-button:hover {
+.nav-button:hover:not(:disabled) {
     background-color: var(--background-gradient-end);
     transform: translateY(-3px);
     box-shadow: 0 4px 10px var(--shadow-light);
+    border-color: var(--secondary-color);
 }
 
 .nav-button.active {
     background-color: var(--secondary-color);
-    color: var(--light-text-color);
+    color: var(--inverted-text-color); /* Uses the inverted text color */
     box-shadow: 0 4px 12px var(--shadow-medium);
     transform: translateY(-2px);
+    border-color: var(--secondary-color);
 }
 
 .nav-button.active:hover {
@@ -2378,7 +2598,7 @@ main {
 
 .app-section.active-section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Flexible grid layout */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Flexible grid layout */
     gap: 2.5em;
     opacity: 1;
     transform: translateY(0);
@@ -2387,11 +2607,11 @@ main {
 /* Card Styles */
 .card {
     background-color: var(--card-background);
-    border-radius: 15px;
+    border-radius: 18px;
     box-shadow: 0 10px 25px var(--shadow-light);
-    padding: 3em;
+    padding: 2.8em;
     border: 1px solid var(--border-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
     display: flex;
     flex-direction: column;
 }
@@ -2409,7 +2629,7 @@ main {
 h2 {
     color: var(--primary-color);
     margin-top: 0;
-    font-size: 2.5em;
+    font-size: clamp(1.8em, 4vw, 2.5em); /* Responsive font size */
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 0.8em;
     margin-bottom: 1.5em;
@@ -2428,28 +2648,37 @@ h3 {
     color: var(--secondary-color);
     margin-top: 2em;
     margin-bottom: 1.5em;
-    font-size: 1.8em;
+    font-size: clamp(1.4em, 3vw, 1.8em); /* Responsive font size */
     border-bottom: 1px dashed var(--border-color);
     padding-bottom: 0.6em;
     font-weight: 600;
 }
 
+.card-description {
+    font-size: 1.1em;
+    color: var(--text-color);
+    opacity: 0.9;
+    margin-bottom: 1.8em;
+    line-height: 1.5;
+}
+
 /* --- Buttons --- */
 button {
     background-color: var(--secondary-color);
-    color: var(--light-text-color);
+    color: var(--inverted-text-color); /* Uses the inverted text color */
     border: none;
     padding: 1em 2em;
     border-radius: 30px;
     font-size: 1.1em;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     white-space: nowrap;
     font-weight: 500;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
 button:hover:not(:disabled) {
@@ -2466,7 +2695,7 @@ button:active:not(:disabled) {
 button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.5;
     box-shadow: none;
     transform: none;
 }
@@ -2481,24 +2710,27 @@ button:disabled {
     padding: 0.7em 1em;
     font-size: 1.1em;
     border-radius: 50%;
-    min-width: 40px;
-    min-height: 40px;
+    min-width: 44px; /* Larger touch target */
+    min-height: 44px; /* Larger touch target */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 .btn-icon i {
     margin: 0;
 }
+.btn-success { background-color: var(--success-color); }
+.btn-success:hover:not(:disabled) { background-color: var(--success-hover); }
 
 .delete-button { background-color: var(--delete-color); }
 .delete-button:hover:not(:disabled) { background-color: var(--delete-hover); }
 
 .export-button { background-color: var(--success-color); }
-.export-button:hover { background-color: var(--success-hover); }
+.export-button:hover:not(:disabled) { background-color: var(--success-hover); }
 
 .import-button { background-color: var(--info-color); }
-.import-button:hover { background-color: var(--info-hover); }
+.import-button:hover:not(:disabled) { background-color: var(--info-hover); }
 
 .secondary-button { background-color: #9ca3af; }
-.secondary-button:hover { background-color: #6b7280; }
+.secondary-button:hover:not(:disabled) { background-color: #6b7280; }
 
 /* --- Forms & Inputs --- */
 .input-field, select {
@@ -2510,13 +2742,22 @@ button:disabled {
     outline: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
     background-color: var(--input-bg);
-    color: var(--text-color);
+    color: var(--text-color); /* Uses the main text color */
     min-width: 150px;
+    appearance: none; /* Remove default select arrow */
+    -webkit-appearance: none; /* Remove default select arrow for Safari */
+}
+
+select {
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%237986cb%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.6-6.4H18.9c-5%200-9.6%202-13.6%206.4-4%204-6.4%209.6-6.4%2015.6%200%206%202.4%2011.6%206.4%2015.6l127.3%20127.3c4%204%209.6%206.4%2015.6%206.4s11.6-2.4%2015.6-6.4L287%20100.6c4-4%206.4-9.6%206.4-15.6-.2-6-2.5-11.6-6.4-15.6z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 1em top 50%;
+    background-size: 0.8em auto;
 }
 
 .input-field:focus, select:focus {
     border-color: var(--secondary-color);
-    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2);
+    box-shadow: 0 0 0 4px var(--secondary-color-alpha); /* Use alpha for a softer glow */
 }
 
 .small-input {
@@ -2543,20 +2784,49 @@ ul li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.3s ease;
     flex-wrap: wrap;
     gap: 1em;
 }
 
 ul li:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
 ul li:last-child {
     margin-bottom: 0;
 }
+
+.info-message {
+    text-align: center;
+    font-style: italic;
+    color: var(--text-color);
+    opacity: 0.7;
+    padding: 1em;
+}
+
+.mini-list li { /* For dashboard recent items */
+    padding: 0.8em 1.2em;
+    font-size: 0.9em;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px dashed var(--border-color);
+    border-radius: 0;
+    background-color: transparent;
+}
+.mini-list li:hover {
+    transform: none;
+    background-color: var(--input-bg);
+}
+.mini-list li:last-child {
+    border-bottom: none;
+}
+.mini-list li .session-date, .mini-list li .session-duration {
+    font-weight: 500;
+}
+
 
 /* --- Meditation Specifics --- */
 .meditation-timer-card {
@@ -2567,33 +2837,69 @@ ul li:last-child {
 }
 
 .timer-display {
-    font-size: 5.5em;
+    font-size: clamp(3.5em, 8vw, 5.5em); /* Responsive font size */
     font-weight: bold;
     color: var(--primary-color);
     text-align: center;
-    margin: 1.5em 0;
+    margin: 1.5em 0 2em;
     background-color: var(--meditation-timer-bg);
     padding: 0.8em 1.2em;
     border-radius: 15px;
     border: 2px solid var(--secondary-color);
     box-shadow: inset 0 3px 10px var(--shadow-light);
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    letter-spacing: 1px;
 }
 
-.preset-buttons, .timer-controls {
+.meditation-controls-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    margin-bottom: 2em;
+}
+
+.preset-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+.preset-meditation-time {
+    background-color: var(--primary-color);
+    min-width: 80px; /* Ensure buttons don't get too small */
+}
+.preset-meditation-time:hover:not(:disabled) {
+    background-color: var(--button-hover-darken);
+}
+
+.custom-timer-input {
+    display: flex;
+    gap: 0.8em;
+    justify-content: center;
+    align-items: center;
+}
+.custom-timer-input .input-field {
+    max-width: 150px;
+    text-align: center;
+}
+.custom-timer-input button {
+    flex-shrink: 0;
+}
+
+.timer-controls {
     display: flex;
     justify-content: center;
     gap: 1em;
     margin-bottom: 2em;
     flex-wrap: wrap;
 }
-
-.preset-meditation-time {
-    background-color: var(--primary-color);
+.timer-controls button {
+    flex: 1 1 120px; /* Allow buttons to grow */
+    max-width: 180px;
 }
-.preset-meditation-time:hover:not(:disabled) {
-    background-color: var(--button-hover-darken);
-}
+.timer-controls #start-meditation { background-color: var(--success-color); }
+.timer-controls #start-meditation:hover:not(:disabled) { background-color: var(--success-hover); }
 
 .sound-controls {
     display: flex;
@@ -2609,9 +2915,15 @@ ul li:last-child {
     cursor: pointer;
 }
 
+.session-mood-emoji {
+    font-size: 1.2em;
+    margin-left: 0.5em;
+}
+
+/* Dashboard Specifics */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 1.2em;
     background-color: var(--stats-grid-bg);
     padding: 1.8em;
@@ -2622,25 +2934,30 @@ ul li:last-child {
 }
 
 .stats-grid div {
-    padding: 1em;
+    padding: 0.8em;
     border-bottom: 1px dashed var(--border-color);
     display: flex;
     flex-direction: column;
     gap: 0.3em;
 }
 
-.stats-grid div:nth-last-child(-n+2) { /* remove bottom border from last two items */
-    border-bottom: none;
+.stats-grid div:nth-child(odd) {
+    border-right: 1px dashed var(--border-color); /* Separator for columns */
 }
+.stats-grid div:last-child,
+.stats-grid div:nth-last-child(2):nth-child(odd) {
+    border-bottom: none; /* Remove bottom border for last row */
+}
+
 @media (max-width: 600px) { /* On smaller screens, single column */
-    .stats-grid div:nth-last-child(-n+2) { border-bottom: 1px dashed var(--border-color); }
+    .stats-grid div { border-right: none; border-bottom: 1px dashed var(--border-color); }
     .stats-grid div:last-child { border-bottom: none; }
 }
 
 
 .stats-grid strong {
     color: var(--primary-color);
-    font-size: 1.1em;
+    font-size: 1.05em;
     font-weight: 600;
 }
 
@@ -2661,19 +2978,22 @@ ul li:last-child {
 .book-input-area button {
     flex-shrink: 0;
 }
+.book-list li {
+    padding: 1.2em 1.8em; /* Slightly less padding */
+}
 .book-item-info {
-    flex: 1 1 55%;
+    flex: 1 1 50%;
     display: flex;
     flex-direction: column;
     gap: 0.5em;
 }
 
 .book-item-info span {
-    font-size: 0.95em;
+    font-size: 0.9em;
     opacity: 0.85;
 }
 .book-item-info strong {
-    font-size: 1.2em;
+    font-size: 1.15em;
     color: var(--primary-color);
 }
 
@@ -2685,9 +3005,9 @@ ul li:last-child {
 }
 
 .book-item-controls button {
-    padding: 0.7em 1.4em;
-    font-size: 0.95em;
-    border-radius: 25px;
+    padding: 0.6em 1.2em;
+    font-size: 0.9em;
+    border-radius: 20px;
 }
 
 .book-cover-thumbnail {
@@ -2698,15 +3018,17 @@ ul li:last-child {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     margin-right: 1em;
     flex-shrink: 0;
+    border: 1px solid var(--border-color);
 }
 
 /* --- Statistics Section --- */
 .chart-container {
     padding: 1.5em;
-    background-color: var(--background-gradient-start);
+    background-color: var(--list-item-bg); /* Use list-item-bg for charts too */
     border-radius: 10px;
     border: 1px solid var(--border-color);
     margin-top: 1.5em;
+    margin-bottom: 2em; /* Spacing between charts */
 }
 
 /* Meditation Calendar */
@@ -2717,7 +3039,7 @@ ul li:last-child {
     padding: 1em;
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    background-color: var(--stats-grid-bg);
+    background-color: var(--list-item-bg);
 }
 
 .calendar-header {
@@ -2736,17 +3058,23 @@ ul li:last-child {
     font-size: 0.9em;
     background-color: var(--card-background);
     border: 1px solid var(--border-color);
+    min-height: 35px; /* Ensure consistent height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .calendar-day-name {
     font-weight: bold;
     background-color: var(--secondary-color);
-    color: var(--light-text-color);
+    color: var(--inverted-text-color); /* Uses the inverted text color */
+    border-color: var(--primary-color);
 }
 
 .calendar-day.empty {
     background-color: var(--background-gradient-start);
     border-color: transparent;
+    opacity: 0.6;
 }
 
 .calendar-day.meditated {
@@ -2760,6 +3088,7 @@ ul li:last-child {
 .calendar-day.current-day {
     border: 2px solid var(--accent-color);
     box-shadow: 0 0 0 2px var(--accent-color);
+    font-weight: bold;
 }
 
 /* --- Goals Section --- */
@@ -2791,10 +3120,17 @@ ul li:last-child {
 }
 
 .goal-item.completed {
-    opacity: 0.7;
-    text-decoration: line-through;
+    opacity: 0.8;
     background-color: var(--success-color);
-    color: var(--light-text-color);
+    color: var(--inverted-text-color); /* Uses the inverted text color */
+    border-color: var(--success-hover);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+.goal-item.completed strong {
+    color: var(--inverted-text-color); /* Uses the inverted text color */
+}
+.goal-item.completed span {
+    color: rgba(255,255,255,0.8);
 }
 
 .goal-progress-bar-container {
@@ -2808,19 +3144,19 @@ ul li:last-child {
 
 .goal-progress-bar {
     height: 100%;
-    background-color: var(--secondary-color);
+    background-color: var(--progress-bar-fill);
     width: 0%;
     border-radius: 4px;
     transition: width 0.5s ease;
 }
 .goal-item.completed .goal-progress-bar {
-    background-color: var(--light-text-color);
+    background-color: var(--inverted-text-color); /* White progress bar for completed goals */
 }
 
 /* --- Achievements Section --- */
 .achievements-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.5em;
     padding: 1em;
 }
@@ -2836,24 +3172,26 @@ ul li:last-child {
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 10px var(--shadow-light);
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+    min-height: 160px; /* Ensure consistent card height */
 }
 
 .achievement-card i {
     font-size: 3em;
-    color: #ccc; /* Default grey for locked */
+    color: #a0a0a0; /* Default grey for locked */
     margin-bottom: 0.5em;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .achievement-card.unlocked {
     background-color: var(--background-gradient-end);
     border-color: var(--accent-color);
-    box-shadow: 0 4px 15px var(--warning-color);
+    box-shadow: 0 4px 15px rgba(var(--warning-color-rgb), 0.3); /* Use RGB for shadow */
 }
 
 .achievement-card.unlocked i {
     color: var(--accent-color);
-    text-shadow: 0 0 10px var(--accent-color);
+    text-shadow: 0 0 12px rgba(var(--warning-color-rgb), 0.7);
 }
 
 .achievement-card h4 {
@@ -2875,7 +3213,7 @@ ul li:last-child {
     padding: 1em 0;
     border-bottom: 1px dashed var(--border-color);
     flex-wrap: wrap; /* Allow wrapping */
-    gap: 0.5em;
+    gap: 0.8em;
 }
 
 .setting-item:last-of-type {
@@ -2884,23 +3222,34 @@ ul li:last-child {
 
 .setting-item span {
     font-size: 1.1em;
-    color: var(--text-color);
+    color: var(--text-color); /* Uses the main text color */
     flex-shrink: 0;
 }
 
-.setting-item .input-field, .setting-item select, .setting-item button {
-    margin-left: auto; /* Push input/button to the right */
+.setting-item .input-field, .setting-item select {
+    margin-left: auto; /* Push input/select to the right */
     flex-shrink: 0;
 }
-.data-management-buttons button {
-    margin-left: 0; /* Override margin-left: auto for row buttons */
+.setting-buttons-group {
+    display: flex;
+    gap: 0.8em;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+.setting-buttons-group button {
+    flex-shrink: 0;
 }
 .data-management-buttons {
     display: flex;
     flex-wrap: wrap;
     gap: 1em;
     justify-content: center;
+    margin-top: 2em;
 }
+.data-management-buttons button {
+    flex: 1 1 140px; /* Allow buttons to grow and wrap */
+}
+
 
 /* Toggle Switch (reused) */
 .switch {
@@ -2908,6 +3257,8 @@ ul li:last-child {
     display: inline-block;
     width: 50px;
     height: 28px;
+    margin-left: auto; /* Push to right */
+    flex-shrink: 0;
 }
 .switch input { opacity: 0; width: 0; height: 0; }
 .slider {
@@ -2919,13 +3270,18 @@ ul li:last-child {
     background-color: white; -webkit-transition: .4s; transition: .4s; border-radius: 50%;
 }
 input:checked + .slider { background-color: var(--secondary-color); }
-input:focus + .slider { box-shadow: 0 0 1px var(--secondary-color); }
+input:focus-visible + .slider { box-shadow: 0 0 0 3px var(--secondary-color-alpha); } /* Focus outline for keyboard nav */
 input:checked + .slider:before { -webkit-transform: translateX(22px); -ms-transform: translateX(22px); transform: translateX(22px); }
 
 #bell-volume {
     width: 150px;
     accent-color: var(--secondary-color);
     cursor: pointer;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+#daily-reminder-time {
+    width: 100px;
 }
 
 hr {
@@ -2940,9 +3296,11 @@ footer {
     padding: 1.8em;
     margin-top: 3em;
     background-color: var(--primary-color);
-    color: var(--light-text-color);
+    color: var(--inverted-text-color); /* Uses the inverted text color */
     font-size: 0.9em;
     box-shadow: 0 -4px 12px var(--shadow-medium);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
 
 /* --- Modals --- */
@@ -2954,13 +3312,16 @@ footer {
     width: 100%; height: 100%;
     overflow: auto;
     background-color: var(--modal-bg);
-    padding-top: 60px;
+    padding: 20px 0; /* Add some vertical padding */
     animation: fadeIn 0.3s ease-out;
+    display: flex; /* Use flex to center content */
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-content {
     background-color: var(--modal-content-bg);
-    margin: 3% auto;
+    margin: auto; /* Center with flex */
     padding: 3em;
     border: 1px solid var(--border-color);
     border-radius: 20px;
@@ -2969,9 +3330,14 @@ footer {
     box-shadow: 0 15px 40px var(--shadow-medium);
     position: relative;
     animation: slideInTop 0.4s ease-out;
-    color: var(--text-color);
-    max-height: 90vh; /* Limit height to prevent overflow */
+    color: var(--text-color); /* Uses the main text color */
+    max-height: 95vh; /* Limit height to prevent overflow on very small screens */
     overflow-y: auto; /* Scroll content if too tall */
+    display: flex; /* Make content itself a flex container for column layout */
+    flex-direction: column;
+}
+.modal-content.modal-small {
+    max-width: 450px; /* Smaller width for confirmation modal */
 }
 
 .modal-content h2 {
@@ -2979,6 +3345,11 @@ footer {
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 0.8em;
     margin-bottom: 1.5em;
+    font-size: clamp(1.6em, 3.5vw, 2.2em);
+}
+
+.modal-content h3 {
+    font-size: clamp(1.2em, 2.5vw, 1.6em);
 }
 
 .modal-content p {
@@ -2987,7 +3358,7 @@ footer {
 }
 
 .modal-content textarea {
-    width: calc(100% - 24px);
+    width: calc(100% - 24px); /* Account for padding */
     min-height: 100px;
     padding: 12px;
     border: 1px solid var(--border-color);
@@ -2997,19 +3368,20 @@ footer {
     resize: vertical;
     margin-bottom: 1.5em;
     background-color: var(--input-bg);
-    color: var(--text-color);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    color: var(--text-color); /* Uses the main text color */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .modal-content textarea:focus {
     border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+    box-shadow: 0 0 0 3px var(--secondary-color-alpha);
 }
 
 .modal-content button {
     margin-top: 1.5em;
     width: auto;
     min-width: 150px;
+    align-self: flex-end; /* Push button to right */
 }
 
 .close-button {
@@ -3033,7 +3405,14 @@ footer {
     justify-content: flex-end;
     gap: 1.5em;
     margin-top: 2em;
+    flex-wrap: wrap;
 }
+.modal-actions button {
+    margin-top: 0; /* Override default button margin-top */
+    flex: 1 1 120px; /* Make buttons flexible */
+    max-width: 180px;
+}
+
 
 /* Journal Modal Specifics */
 .journal-meta {
@@ -3041,15 +3420,17 @@ footer {
     flex-wrap: wrap;
     gap: 2em;
     margin-bottom: 1.5em;
+    width: 100%;
 }
 .mood-tracker, .energy-tracker {
     flex: 1 1 45%;
-    min-width: 250px;
+    min-width: 280px;
 }
 .mood-tracker h4, .energy-tracker h4 {
     margin-top: 0;
     margin-bottom: 0.8em;
     color: var(--secondary-color);
+    font-size: 1.2em;
 }
 .mood-emojis {
     display: flex;
@@ -3057,13 +3438,16 @@ footer {
     flex-wrap: wrap;
 }
 .mood-emojis .emoji {
-    font-size: 2em;
+    font-size: 2.2em;
     cursor: pointer;
-    padding: 5px;
-    border-radius: 8px;
+    padding: 8px;
+    border-radius: 10px;
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    user-select: none; /* Prevent text selection */
+    min-width: 44px; /* Ensure touch target */
+    text-align: center;
 }
 .mood-emojis .emoji:hover {
     transform: scale(1.1);
@@ -3073,18 +3457,21 @@ footer {
     background-color: var(--accent-color);
     border-color: var(--warning-hover);
     transform: scale(1.15);
-    box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 12px rgba(var(--warning-color-rgb), 0.5);
+    color: white; /* Ensure visibility for darker emojis */
 }
 .slider-energy {
-    width: calc(100% - 40px);
+    width: calc(100% - 60px); /* Adjust width */
     vertical-align: middle;
     accent-color: var(--secondary-color);
+    height: 8px;
+    cursor: pointer;
+    margin-right: 10px;
 }
 #energy-value {
     vertical-align: middle;
     font-weight: bold;
     color: var(--primary-color);
-    margin-left: 10px;
 }
 
 /* Book Modal Specifics */
@@ -3102,6 +3489,12 @@ footer {
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     flex-shrink: 0;
+    border: 1px solid var(--border-color);
+}
+.book-info-text {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 .book-modal-header h2 {
     margin-top: 0;
@@ -3109,15 +3502,20 @@ footer {
     border: none;
     padding: 0;
     margin-bottom: 0.5em;
+    color: var(--primary-color);
 }
 .book-modal-header p {
     margin: 0.3em 0;
-    font-size: 1.1em;
+    font-size: 1.05em;
 }
 .book-rating .fa-star {
     color: #ccc;
-    font-size: 1.5em;
+    font-size: 1.6em;
     cursor: pointer;
+    transition: color 0.2s ease, transform 0.1s ease;
+}
+.book-rating .fa-star:hover {
+    transform: scale(1.1);
 }
 .book-rating .fa-star.active {
     color: var(--accent-color);
@@ -3127,6 +3525,20 @@ footer {
     padding-top: 1em;
     border-top: 1px dashed var(--border-color);
 }
+.page-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    margin-bottom: 1em;
+}
+.page-input-group label strong {
+    font-size: 1.05em;
+    color: var(--primary-color);
+}
+.page-input-group input {
+    max-width: 100px;
+    text-align: center;
+}
 .progress-bar-container {
     width: 100%;
     height: 10px;
@@ -3134,6 +3546,7 @@ footer {
     border-radius: 5px;
     overflow: hidden;
     margin-top: 0.8em;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 .progress-bar {
     height: 100%;
@@ -3142,31 +3555,45 @@ footer {
     border-radius: 5px;
     transition: width 0.5s ease;
 }
-#modal-book-notes-list li {
+.notes-list {
+    margin-top: 1.5em;
+}
+.notes-list .note-item {
     background-color: var(--background-gradient-start);
     padding: 15px;
     margin-bottom: 10px;
     border-radius: 10px;
     border: 1px solid var(--border-color);
-    gap: 0.8em;
+    display: flex;
+    flex-direction: column; /* Stack content and date */
+    align-items: flex-start;
+    gap: 0.5em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
-#modal-book-notes-list li .note-content {
+.notes-list .note-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.notes-list .note-item .note-content {
     flex-grow: 1;
     white-space: pre-wrap;
     word-break: break-word;
     font-size: 1em;
+    color: var(--text-color); /* Uses the main text color */
 }
-#modal-book-notes-list li .note-date {
+.notes-list .note-item .note-date {
     font-size: 0.8em;
-    color: #777;
+    color: var(--text-color); /* Uses the main text color */
+    opacity: 0.7;
     text-align: right;
     width: 100%;
 }
-#modal-book-notes-list li .delete-note-btn {
+.notes-list .note-item .delete-note-btn {
     padding: 0.4em 0.8em;
     font-size: 0.8em;
     min-width: unset;
-    margin-top: 0;
+    margin-top: 0.5em;
+    align-self: flex-end; /* Align delete button to bottom right */
 }
 
 /* Interval Timer Modal Specifics */
@@ -3185,6 +3612,7 @@ footer {
     font-weight: bold;
     color: var(--primary-color);
     flex-shrink: 0;
+    font-size: 0.95em;
 }
 .interval-step input[type="number"], .interval-step select {
     width: 80px;
@@ -3226,13 +3654,13 @@ footer {
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     opacity: 0;
-    transform: translateX(100%);
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-    min-width: 250px;
-    max-width: 350px;
+    transform: translateX(120%); /* Start further right */
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    min-width: 280px;
+    max-width: 380px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .toast.show {
@@ -3242,16 +3670,17 @@ footer {
 
 .toast.hide {
     opacity: 0;
-    transform: translateX(100%);
+    transform: translateX(120%);
 }
 
 .toast i {
-    font-size: 1.5em;
+    font-size: 1.6em;
     color: var(--accent-color); /* Neutral color for icon */
 }
 .toast.success i { color: var(--success-color); }
 .toast.error i { color: var(--delete-color); }
 .toast.info i { color: var(--info-color); }
+.toast.warning i { color: var(--warning-color); }
 
 
 /* --- Keyframe Animations --- */
@@ -3263,72 +3692,73 @@ footer {
     .container {
         padding: 0 1em;
     }
-    header h1 {
-        font-size: 3em;
-    }
-    .main-nav .container {
-        gap: 0.8em;
-    }
-    .nav-button {
-        font-size: 1.1em;
-        padding: 0.8em 1.2em;
-    }
     .app-section.active-section {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 2em;
     }
     .card {
-        padding: 2.5em;
-    }
-    .timer-display {
-        font-size: 5em;
-    }
-    h2 {
-        font-size: 2.2em;
-    }
-    h3 {
-        font-size: 1.6em;
-    }
-    .modal-content {
-        max-width: 600px;
+        padding: 2.2em;
     }
 }
 
 @media (max-width: 768px) {
     header {
-        padding: 1.5em 0;
+        padding: 1.8em 0 1em;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
     }
     header h1 {
-        font-size: 2.5em;
+        font-size: 2.2em;
     }
     header p {
-        font-size: 1.1em;
+        font-size: 1em;
     }
     .main-nav {
         margin-bottom: 1.5em;
-        overflow-x: auto; /* Allow horizontal scrolling for many nav items */
-        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        justify-content: flex-start; /* Align to start for scrollable content */
+        border-radius: 0; /* Full width on mobile */
     }
     .main-nav .container {
-        flex-wrap: nowrap; /* Prevent wrapping in nav bar */
-        justify-content: flex-start;
-        padding: 0 1em;
-        min-width: max-content; /* Ensure enough width for all buttons */
+        padding: 0 0.8em; /* Reduced padding for more space */
+        gap: 0.6em;
     }
     .nav-button {
+        font-size: 0.95em;
+        padding: 0.8em 1em;
+        gap: 8px;
+    }
+    .nav-button i {
         font-size: 1em;
-        padding: 0.7em 1em;
     }
     .app-section.active-section {
         grid-template-columns: 1fr; /* Stack cards vertically */
         gap: 1.5em;
     }
     .card {
-        padding: 2em;
+        padding: 1.8em;
+        border-radius: 12px;
+    }
+    h2 {
+        font-size: 1.8em;
+        margin-bottom: 1em;
+        padding-bottom: 0.6em;
+    }
+    h3 {
+        font-size: 1.4em;
+        margin-top: 1.5em;
+        margin-bottom: 1em;
+        padding-bottom: 0.5em;
+    }
+    .card-description {
+        font-size: 0.95em;
+        margin-bottom: 1.5em;
     }
     .timer-display {
-        font-size: 4em;
+        font-size: 3.2em;
+        margin: 1em 0 1.5em;
+        padding: 0.6em 0.8em;
+    }
+    .meditation-controls-group {
+        gap: 1em;
+        margin-bottom: 1.5em;
     }
     .preset-buttons, .timer-controls, .sound-controls {
         flex-direction: column;
@@ -3343,6 +3773,14 @@ footer {
         width: auto; /* Allow auto width for icons when stacked */
         border-radius: 30px; /* Make them pill-shaped when wider */
     }
+    .custom-timer-input .input-field {
+        max-width: none; /* Full width */
+        width: 100%;
+    }
+    .custom-timer-input button {
+        width: 100%;
+    }
+
     .book-input-area, .search-input-area {
         flex-direction: column;
         align-items: stretch; /* Stretch items to full width */
@@ -3354,26 +3792,59 @@ footer {
     .book-input-area .btn-icon, .search-input-area .btn-icon {
         width: 100%;
     }
-    .book-item li {
+    .book-list li {
         flex-direction: column;
         align-items: flex-start;
+        padding: 1.2em 1.5em;
+    }
+    .book-cover-thumbnail {
+        margin-right: 0; /* No margin on smaller screens */
+        margin-bottom: 1em; /* Add space below image */
+        align-self: center; /* Center image */
+    }
+    .book-item-info {
+        width: 100%; /* Full width */
+        text-align: center;
     }
     .book-item-controls {
         width: 100%;
         justify-content: center;
     }
-    .stats-grid {
-        grid-template-columns: 1fr;
+    .stats-grid div { border-right: none; border-bottom: 1px dashed var(--border-color); }
+    .stats-grid div:last-child { border-bottom: none; }
+
+    .modal {
+        padding: 0; /* No padding, modal takes full height */
     }
     .modal-content {
-        width: 95%;
-        padding: 2em;
-        margin: 2% auto;
+        width: 100%;
+        min-height: 100vh; /* Make modal almost full screen */
+        border-radius: 0; /* No border radius */
+        padding: 1.5em;
+        margin: 0;
+        box-shadow: none;
+        max-height: unset; /* Remove max height constraint */
     }
+    .modal-content.modal-small {
+        min-height: unset; /* Restore min-height for small modal */
+        border-radius: 12px;
+        padding: 1.5em;
+        max-width: 90%;
+        margin: auto;
+    }
+
     .close-button {
-        font-size: 35px;
+        font-size: 30px;
         right: 15px;
-        top: 10px;
+        top: 15px;
+        background-color: var(--card-background);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .journal-meta, .book-modal-header {
         flex-direction: column;
@@ -3387,7 +3858,12 @@ footer {
         flex-direction: column;
         align-items: flex-start;
     }
-    .setting-item span, .setting-item .input-field, .setting-item select, .setting-item button {
+    .setting-item span {
+        margin-left: 0;
+        width: 100%;
+        text-align: left;
+    }
+    .setting-item .input-field, .setting-item select, .setting-item button {
         margin-left: 0;
         width: 100%;
         text-align: left;
@@ -3395,31 +3871,85 @@ footer {
     .setting-item .input-field.small-input {
         text-align: left;
     }
-    .data-management-buttons {
+    .setting-buttons-group, .data-management-buttons {
         flex-direction: column;
+        width: 100%;
+    }
+    #bell-volume, #ambient-volume {
+        width: 100%;
+        margin-left: 0;
+    }
+    #daily-reminder-time {
+        width: 100%;
     }
     #toast-container {
         top: unset;
-        bottom: 20px;
+        bottom: 15px;
         right: 10px;
         left: 10px;
     }
     .toast {
         max-width: unset;
-        transform: translateY(100%);
+        transform: translateY(120%);
     }
     .toast.show {
         transform: translateY(0);
     }
     .toast.hide {
-        transform: translateY(100%);
+        transform: translateY(120%);
+    }
+    footer {
+        padding: 1.5em;
+        margin-top: 2em;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+}
+
+/* Landscape orientation for mobile devices */
+@media (max-width: 900px) and (orientation: landscape) {
+    .main-nav .container {
+        padding: 0 1em;
+    }
+    .modal-content {
+        width: 90%;
+        max-height: 90vh;
+        border-radius: 12px;
+        margin: auto;
+        padding: 2em;
+    }
+    .modal-content.modal-small {
+        min-height: unset;
+    }
+    .journal-meta, .book-modal-header {
+        flex-direction: row; /* Allow side-by-side again if space permits */
+        text-align: left;
+    }
+    .mood-emojis {
+        justify-content: flex-start;
+    }
+    .timer-display {
+        font-size: 4em;
+    }
+    .timer-controls {
+        flex-direction: row;
+    }
+    .timer-controls button {
+        width: auto;
     }
 }
 
 --- END FILE: style.css ---
 
----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
 
 do the following : 
 
-Improve the website significantly. In every aspect of it. The thing I want to tell you is that. The website in case of the CSS in case of the different themes in it. The color combination and. Texts in them. Are not well aligned and. And the default theme which is the light mode, the serene theme. The texts are not coming out great, so fix that. Whilst improving the website significantly in every aspect of it. And also guide me where can I find those sounds that you have inputted. Features. Add a timer option also. And do whatever you think is necessary in this website and. Make it look like a professional website that can be accessed through mobile phones and through desktops as well. And the main focus is mobile phones so. Users can use this website as a web application. That's all. Any other improvements you think do them? And send me the final update. Thank you.
+1. fix all the bugs and glitches on this website.
+2. focus on making it fully for mobile devices. make it responsive that way.
+3. remove ambient sounds and bell sounds from the site.
+4. rename the app "yogify".
+5. upgrade the theme and overall design of the website.
+6. guide me fully.
+7. improve the visual appeal and attractiveness.
+8. make the interface of this site mobile friendly so that mobile users can access all its features well.

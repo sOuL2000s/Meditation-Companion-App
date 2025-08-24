@@ -1,26 +1,26 @@
-/* --- Global & Root Variables (Defaulting to Light Theme) --- */
+/* --- Global & Root Variables (Defaulting to Yogify Serene Theme) --- */
 :root {
-    /* Light Theme (Serene) - Refined Palette */
-    --primary-color: #5c6bc0; /* Indigo Blue */
-    --secondary-color: #7986cb; /* Lighter Indigo */
-    --accent-color: #ffb300; /* Amber */
-    --background-gradient-start: #e8eaf6; /* Light Lavender */
-    --background-gradient-end: #c5cae9; /* Medium Lavender */
-    --text-color: #212121; /* Main text color for readability on light backgrounds */
-    --inverted-text-color: #ffffff; /* Text color for elements with primary/secondary backgrounds (e.g., header, buttons) */
+    /* Yogify Serene (Default/Light) */
+    --primary-color: #3b82f6; /* Serene Blue */
+    --secondary-color: #22c55e; /* Vibrant Green */
+    --accent-color: #f59e0b; /* Warm Orange */
+    --background-gradient-start: #f0fdf4; /* Very Light Green-Blue */
+    --background-gradient-end: #dcfce7; /* Light Green */
+    --text-color: #1a202c; /* Dark text for readability */
+    --inverted-text-color: #ffffff; /* White for dark backgrounds */
     --card-background: #ffffff;
-    --border-color: #9fa8da; /* Muted Blue-grey */
-    --shadow-light: rgba(0, 0, 0, 0.07);
-    --shadow-medium: rgba(0, 0, 0, 0.12);
-    --input-bg: #f5f5f5; /* Very light grey */
-    --meditation-timer-bg: #e0e0e0; /* Slightly darker than input-bg, but still light */
-    --stats-grid-bg: #f5f5f5;
-    --list-item-bg: #f5f5f5;
+    --border-color: #e2e8f0; /* Soft border grey */
+    --shadow-light: rgba(0, 0, 0, 0.05);
+    --shadow-medium: rgba(0, 0, 0, 0.1);
+    --input-bg: #f8fafc; /* Off-white for inputs */
+    --meditation-timer-bg: #e0f2f7; /* Light aqua for timer */
+    --stats-grid-bg: #f8fafc;
+    --list-item-bg: #f8fafc;
     --modal-content-bg: #ffffff;
-    --progress-bar-bg: #e0e0e0;
+    --progress-bar-bg: #e2e8f0;
     --progress-bar-fill: var(--secondary-color);
-    --secondary-color-alpha: rgba(121, 134, 203, 0.2); /* Alpha version of secondary for shadows */
-    --button-hover-darken: #4b5a99; /* Specific darken for light theme primary */
+    --secondary-color-alpha: rgba(34, 197, 94, 0.2); /* Alpha version of secondary for shadows */
+    --button-hover-darken: #2563eb; /* Specific darken for primary button */
 
     /* General fixed colors (not theme-dependent) */
     --delete-color: #ef4444; /* Red */
@@ -36,111 +36,110 @@
     /* Modal general styles */
     --modal-bg: rgba(0, 0, 0, 0.65);
     /* Toast notifications */
-    --toast-bg: rgba(33,33,33,0.9);
+    --toast-bg: rgba(26, 32, 44, 0.9);
     --toast-text: #fff;
 }
 
 /* --- Theme Overrides --- */
 
-/* Light Theme (Serene) - Explicitly set for clarity, though already defaults in :root */
-body.light-theme {
-    --primary-color: #5c6bc0;
-    --secondary-color: #7986cb;
-    --accent-color: #ffb300;
-    --background-gradient-start: #e8eaf6;
-    --background-gradient-end: #c5cae9;
-    --text-color: #212121; /* Dark grey for light backgrounds */
-    --inverted-text-color: #ffffff; /* White for dark backgrounds */
+/* Yogify Serene (Default/Light) - Explicitly set for clarity */
+body.yogify-serene-theme {
+    --primary-color: #3b82f6;
+    --secondary-color: #22c55e;
+    --accent-color: #f59e0b;
+    --background-gradient-start: #f0fdf4;
+    --background-gradient-end: #dcfce7;
+    --text-color: #1a202c;
+    --inverted-text-color: #ffffff;
     --card-background: #ffffff;
-    --border-color: #9fa8da;
-    --shadow-light: rgba(0, 0, 0, 0.07);
-    --shadow-medium: rgba(0, 0, 0, 0.12);
-    --input-bg: #f5f5f5;
-    --meditation-timer-bg: #e0e0e0;
-    --stats-grid-bg: #f5f5f5;
-    --list-item-bg: #f5f5f5;
+    --border-color: #e2e8f0;
+    --shadow-light: rgba(0, 0, 0, 0.05);
+    --shadow-medium: rgba(0, 0, 0, 0.1);
+    --input-bg: #f8fafc;
+    --meditation-timer-bg: #e0f2f7;
+    --stats-grid-bg: #f8fafc;
+    --list-item-bg: #f8fafc;
     --modal-content-bg: #ffffff;
-    --progress-bar-bg: #e0e0e0;
+    --progress-bar-bg: #e2e8f0;
     --progress-bar-fill: var(--secondary-color);
-    --secondary-color-alpha: rgba(121, 134, 203, 0.2);
-    --button-hover-darken: #4b5a99; /* Specific darken for light theme primary */
+    --secondary-color-alpha: rgba(34, 197, 94, 0.2);
+    --button-hover-darken: #2563eb;
 }
 
-/* Dark Theme (Mystic Night) */
-body.dark-theme {
-    --primary-color: #b39ddb; /* Deep Lilac */
-    --secondary-color: #e0b0ff; /* Light Lavender */
-    --accent-color: #ffd54f; /* Yellow Amber */
-    --background-gradient-start: #1c0032; /* Very Dark Purple */
-    --background-gradient-end: #38006b; /* Dark Purple */
-    --text-color: #e0e0e0; /* Light grey for dark backgrounds */
-    --inverted-text-color: #ffffff; /* White for dark backgrounds */
-    --card-background: #2a004a;
-    --border-color: #5d0087;
-    --shadow-light: rgba(255, 255, 255, 0.05);
-    --shadow-medium: rgba(255, 255, 255, 0.1);
-    --input-bg: #3d006f;
-    --meditation-timer-bg: #2a004a;
-    --stats-grid-bg: #2a004a;
-    --list-item-bg: #2a004a;
-    --modal-content-bg: #2a004a;
-    --button-hover-darken: #9a76cc;
-    --progress-bar-bg: #4d0087;
-    --progress-bar-fill: var(--primary-color);
-    --secondary-color-alpha: rgba(224, 176, 255, 0.2);
-    --toast-bg: rgba(0,0,0,0.9);
-}
-
-/* Cosmic Whisper Theme */
-body.cosmic-theme {
-    --primary-color: #6a05ad; /* Deep Violet */
-    --secondary-color: #9d52d2; /* Lighter Violet */
-    --accent-color: #f7b731; /* Golden Yellow */
-    --background-gradient-start: #0a011a; /* Black-Blue Space */
-    --background-gradient-end: #1e0539; /* Deep Purple Space */
-    --text-color: #d1c4e9; /* Light Purple-grey */
-    --inverted-text-color: #ffffff; /* White for dark backgrounds */
-    --card-background: #15022e;
-    --border-color: #3b0a68;
-    --shadow-light: rgba(255, 255, 255, 0.05);
-    --shadow-medium: rgba(255, 255, 255, 0.1);
-    --input-bg: #28084f;
-    --meditation-timer-bg: #15022e;
-    --stats-grid-bg: #15022e;
-    --list-item-bg: #15022e;
-    --modal-content-bg: #1e0539;
-    --button-hover-darken: #570494;
-    --progress-bar-bg: #3b0a68;
+/* Yogify Nightfall (Dark Theme) */
+body.yogify-nightfall-theme {
+    --primary-color: #818cf8; /* Lighter Indigo */
+    --secondary-color: #a78bfa; /* Light Violet */
+    --accent-color: #fcd34d; /* Golden Yellow */
+    --background-gradient-start: #1e1b4b; /* Deep Navy */
+    --background-gradient-end: #312e81; /* Dark Purple-Blue */
+    --text-color: #e0e7ff; /* Light Lavender */
+    --inverted-text-color: #ffffff;
+    --card-background: #3f3f46; /* Dark Grey */
+    --border-color: #4f46e5; /* Indigo Border */
+    --shadow-light: rgba(255, 255, 255, 0.04);
+    --shadow-medium: rgba(255, 255, 255, 0.08);
+    --input-bg: #2d2a58; /* Darker input */
+    --meditation-timer-bg: #3730a3; /* Medium Blue-Purple */
+    --stats-grid-bg: #3f3f46;
+    --list-item-bg: #3f3f46;
+    --modal-content-bg: #3f3f46;
+    --progress-bar-bg: #4f46e5;
     --progress-bar-fill: var(--secondary-color);
-    --secondary-color-alpha: rgba(157, 82, 210, 0.2);
-    --toast-bg: rgba(0,0,0,0.9);
+    --secondary-color-alpha: rgba(167, 139, 250, 0.2);
+    --button-hover-darken: #6366f1; /* Darken primary for hover */
+    --toast-bg: rgba(30, 27, 75, 0.9);
 }
 
-/* Forest Bloom Theme */
-body.forest-theme {
-    --primary-color: #2e7d32; /* Deep Green */
-    --secondary-color: #66bb6a; /* Medium Green */
-    --accent-color: #ffa000; /* Dark Orange */
-    --background-gradient-start: #e8f5e9; /* Very Light Green */
-    --background-gradient-end: #c8e6c9; /* Light Green */
-    --text-color: #388e3c; /* Darker Green text */
-    --inverted-text-color: #ffffff; /* White for dark backgrounds */
+/* Yogify Stellar (Cosmic Theme) */
+body.yogify-stellar-theme {
+    --primary-color: #c084fc; /* Bright Purple */
+    --secondary-color: #a855f7; /* Medium Purple */
+    --accent-color: #fbbf24; /* Amber */
+    --background-gradient-start: #0f172a; /* Dark Blue-Grey */
+    --background-gradient-end: #1e293b; /* Slightly Lighter Dark Blue-Grey */
+    --text-color: #e2e8f0; /* Off-white Blue-Grey */
+    --inverted-text-color: #ffffff;
+    --card-background: #1f2937; /* Dark Grey-Blue */
+    --border-color: #475569; /* Slate Grey */
+    --shadow-light: rgba(255, 255, 255, 0.03);
+    --shadow-medium: rgba(255, 255, 255, 0.06);
+    --input-bg: #334155; /* Medium Grey-Blue */
+    --meditation-timer-bg: #293241; /* Darker Grey-Blue */
+    --stats-grid-bg: #1f2937;
+    --list-item-bg: #1f2937;
+    --modal-content-bg: #1f2937;
+    --progress-bar-bg: #475569;
+    --progress-bar-fill: var(--secondary-color);
+    --secondary-color-alpha: rgba(168, 85, 247, 0.2);
+    --button-hover-darken: #a78bfa; /* Darken primary for hover */
+    --toast-bg: rgba(15, 23, 42, 0.9);
+}
+
+/* Yogify Verdant (Forest Theme) */
+body.yogify-verdant-theme {
+    --primary-color: #166534; /* Dark Forest Green */
+    --secondary-color: #22c55e; /* Vibrant Green */
+    --accent-color: #facc15; /* Yellow */
+    --background-gradient-start: #f0fdf4; /* Lightest Green */
+    --background-gradient-end: #dcfce7; /* Light Green */
+    --text-color: #115e59; /* Dark Teal */
+    --inverted-text-color: #ffffff;
     --card-background: #ffffff;
-    --border-color: #a5d6a7;
-    --shadow-light: rgba(0, 0, 0, 0.07);
-    --shadow-medium: rgba(0, 0, 0, 0.12);
-    --input-bg: #f1f8e9; /* Off-white green tint */
-    --meditation-timer-bg: #c8e6c9;
-    --stats-grid-bg: #f1f8e9;
-    --list-item-bg: #f1f8e9;
+    --border-color: #a7f3d0; /* Light Teal Green */
+    --shadow-light: rgba(0, 0, 0, 0.04);
+    --shadow-medium: rgba(0, 0, 0, 0.08);
+    --input-bg: #ecfdf5; /* Very Light Teal */
+    --meditation-timer-bg: #d1fae5; /* Pale Green */
+    --stats-grid-bg: #ecfdf5;
+    --list-item-bg: #ecfdf5;
     --modal-content-bg: #ffffff;
-    --button-hover-darken: #246328;
-    --progress-bar-bg: #dcedc8;
+    --progress-bar-bg: #a7f3d0;
     --progress-bar-fill: var(--secondary-color);
-    --secondary-color-alpha: rgba(102, 187, 106, 0.2);
-    --toast-bg: rgba(0,0,0,0.85);
+    --secondary-color-alpha: rgba(34, 197, 94, 0.2);
+    --button-hover-darken: #0f4a27; /* Darken primary for hover */
+    --toast-bg: rgba(17, 94, 89, 0.9);
 }
-
 
 /* --- Global Styles --- */
 html {
@@ -148,19 +147,19 @@ html {
 }
 
 body {
-    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif; /* Modern, readable font */
     margin: 0;
     padding: 0;
     background: linear-gradient(135deg, var(--background-gradient-start), var(--background-gradient-end));
-    color: var(--text-color); /* This applies the main text color */
+    color: var(--text-color);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     box-sizing: border-box;
     transition: background-color 0.5s ease, color 0.5s ease, background-image 0.5s ease;
-    overflow-y: scroll; /* Always show scrollbar to prevent layout jump */
-    -webkit-font-smoothing: antialiased; /* Smoother fonts */
-    -moz-osx-font-smoothing: grayscale; /* Smoother fonts */
+    overflow-y: scroll;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom Scrollbar */
@@ -189,34 +188,34 @@ body.modal-open {
 }
 
 header {
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    color: var(--inverted-text-color); /* Uses the inverted text color */
+    background: linear-gradient(45deg, var(--primary-color), var(--info-color)); /* Consistent blue gradient */
+    color: var(--inverted-text-color);
     padding: 2.5em 0 1.5em;
     text-align: center;
     box-shadow: 0 6px 15px var(--shadow-medium);
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 25px; /* Softer radius */
+    border-bottom-right-radius: 25px;
 }
 
 header h1 {
     margin: 0;
-    font-size: clamp(2.5em, 5vw, 3.8em); /* Responsive font size */
-    letter-spacing: 2px;
+    font-size: clamp(2.5em, 5vw, 3.8em);
+    letter-spacing: 1px;
     font-weight: 700;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.2); /* Softer shadow */
 }
 
 header p {
     margin: 0.5em 0 0;
-    font-size: clamp(1em, 2.5vw, 1.4em); /* Responsive font size */
+    font-size: clamp(1em, 2.5vw, 1.4em);
     opacity: 0.95;
-    font-weight: 300;
+    font-weight: 400; /* Slightly bolder */
 }
 
 /* --- Navigation --- */
 .main-nav {
     background-color: var(--card-background);
-    padding: 1em 0;
+    padding: 0.8em 0; /* Slightly reduced padding */
     box-shadow: 0 3px 8px var(--shadow-light);
     margin-bottom: 2.5em;
     position: sticky;
@@ -224,13 +223,13 @@ header p {
     z-index: 100;
     border-bottom: 1px solid var(--border-color);
     border-top: 1px solid var(--border-color);
-    display: flex; /* For horizontal scrolling container */
-    overflow-x: auto; /* Allow horizontal scrolling */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    display: flex;
+    overflow-x: auto; /* Allow horizontal scrolling by default for smallest screens */
+    -webkit-overflow-scrolling: touch;
 }
 
 .main-nav::-webkit-scrollbar {
-    height: 6px; /* Smaller scrollbar for nav */
+    height: 6px;
 }
 .main-nav::-webkit-scrollbar-track {
     background: var(--card-background);
@@ -240,54 +239,63 @@ header p {
     border-radius: 3px;
 }
 
-
 .main-nav .container {
     display: flex;
-    justify-content: center;
-    gap: 1.2em;
-    flex-wrap: nowrap; /* Prevent wrapping for horizontal scroll */
-    padding: 0 1.5em; /* Ensure padding on ends for scroll */
+    justify-content: flex-start; /* Align to start for scroll on small screens */
+    gap: 1em; /* Reduced gap */
+    flex-wrap: nowrap; /* Prevent wrapping initially */
+    padding: 0 1.5em;
     min-width: max-content; /* Ensure container is wide enough for all buttons */
 }
 
+/* Tablet and larger mobile landscape - allow wrap if enough space */
+@media (min-width: 600px) {
+    .main-nav .container {
+        flex-wrap: wrap; /* Allow wrapping on larger mobile screens */
+        justify-content: center; /* Center buttons when wrapped */
+        overflow-x: visible; /* Disable horizontal scroll if wrapped */
+    }
+}
+
+
 .nav-button {
     background-color: transparent;
-    border: 1px solid transparent; /* Consistent border for smooth transition */
+    border: 1px solid var(--border-color); /* Visible border for distinction */
     color: var(--primary-color);
-    padding: 1em 1.8em;
-    font-size: 1.15em;
+    padding: 0.8em 1.5em; /* Slightly reduced padding */
+    font-size: clamp(0.9em, 2vw, 1.05em); /* Responsive font size */
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 25px; /* More rounded */
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     white-space: nowrap;
     font-weight: 600;
-    flex-shrink: 0; /* Prevent shrinking in nav scroll */
+    flex-shrink: 0;
 }
 
 .nav-button i {
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 .nav-button:hover:not(:disabled) {
     background-color: var(--background-gradient-end);
-    transform: translateY(-3px);
+    transform: translateY(-2px); /* Softer lift */
     box-shadow: 0 4px 10px var(--shadow-light);
     border-color: var(--secondary-color);
 }
 
 .nav-button.active {
     background-color: var(--secondary-color);
-    color: var(--inverted-text-color); /* Uses the inverted text color */
+    color: var(--inverted-text-color);
     box-shadow: 0 4px 12px var(--shadow-medium);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     border-color: var(--secondary-color);
 }
 
 .nav-button.active:hover {
-    background-color: var(--primary-color);
+    background-color: var(--success-hover); /* Darker green on active hover */
     transform: none;
     box-shadow: 0 2px 8px var(--shadow-light);
 }
@@ -301,44 +309,52 @@ main {
 .app-section {
     display: none;
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateY(20px); /* Smaller transform for smoother feel */
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .app-section.active-section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Flexible grid layout */
-    gap: 2.5em;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Flexible grid layout, slightly smaller min-width */
+    gap: 2em; /* Reduced gap */
     opacity: 1;
     transform: translateY(0);
 }
 
+/* Collapse to single column on screens smaller than ~600px */
+@media (max-width: 600px) {
+    .app-section.active-section {
+        grid-template-columns: 1fr;
+        gap: 1.5em; /* Further reduced gap */
+    }
+}
+
+
 /* Card Styles */
 .card {
     background-color: var(--card-background);
-    border-radius: 18px;
-    box-shadow: 0 10px 25px var(--shadow-light);
-    padding: 2.8em;
+    border-radius: 20px; /* More rounded corners */
+    box-shadow: 0 8px 20px var(--shadow-light); /* Lighter shadow */
+    padding: 2.5em; /* Reduced padding */
     border: 1px solid var(--border-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
     display: flex;
     flex-direction: column;
 }
 
 .card:hover {
-    transform: translateY(-7px);
-    box-shadow: 0 15px 35px var(--shadow-medium);
+    transform: translateY(-5px); /* Softer hover lift */
+    box-shadow: 0 12px 28px var(--shadow-medium); /* Slightly more pronounced on hover */
 }
 
 .card-full-width {
-    grid-column: 1 / -1; /* Make card span full width in grid */
+    grid-column: 1 / -1;
 }
-
 
 h2 {
     color: var(--primary-color);
     margin-top: 0;
-    font-size: clamp(1.8em, 4vw, 2.5em); /* Responsive font size */
+    font-size: clamp(1.8em, 4vw, 2.5em);
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 0.8em;
     margin-bottom: 1.5em;
@@ -348,131 +364,136 @@ h2 {
 }
 
 h2 i {
-    margin-right: 15px;
+    margin-right: 12px; /* Reduced margin */
     color: var(--accent-color);
-    font-size: 1.2em;
+    font-size: 1.1em; /* Slightly smaller icon */
 }
 
 h3 {
-    color: var(--secondary-color);
+    color: var(--info-color); /* Using info-color for subheadings */
     margin-top: 2em;
-    margin-bottom: 1.5em;
-    font-size: clamp(1.4em, 3vw, 1.8em); /* Responsive font size */
+    margin-bottom: 1.2em; /* Reduced margin */
+    font-size: clamp(1.4em, 3vw, 1.8em);
     border-bottom: 1px dashed var(--border-color);
     padding-bottom: 0.6em;
     font-weight: 600;
 }
 
 .card-description {
-    font-size: 1.1em;
+    font-size: 1em; /* Slightly smaller font */
     color: var(--text-color);
-    opacity: 0.9;
-    margin-bottom: 1.8em;
+    opacity: 0.85;
+    margin-bottom: 1.5em;
     line-height: 1.5;
 }
 
 /* --- Buttons --- */
 button {
-    background-color: var(--secondary-color);
-    color: var(--inverted-text-color); /* Uses the inverted text color */
+    background-color: var(--primary-color); /* Primary color for general buttons */
+    color: var(--inverted-text-color);
     border: none;
-    padding: 1em 2em;
-    border-radius: 30px;
-    font-size: 1.1em;
+    padding: 0.9em 1.8em; /* Slightly reduced padding */
+    border-radius: 25px; /* More rounded */
+    font-size: 1em;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px; /* Reduced gap */
     white-space: nowrap;
     font-weight: 500;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 10px var(--shadow-light);
 }
 
 button:hover:not(:disabled) {
-    background-color: var(--button-hover-darken);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px var(--shadow-light);
+    background-color: var(--button-hover-darken); /* Use specific darken */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px var(--shadow-medium);
 }
 
 button:active:not(:disabled) {
     transform: translateY(0);
-    box-shadow: inset 0 3px 8px rgba(0,0,0,0.3);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
 }
 
 button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: 0.6;
     box-shadow: none;
     transform: none;
 }
 
 .btn-sm {
-    padding: 0.7em 1.4em;
-    font-size: 0.95em;
-    border-radius: 25px;
+    padding: 0.6em 1.2em;
+    font-size: 0.9em;
+    border-radius: 20px;
 }
 
 .btn-icon {
-    padding: 0.7em 1em;
-    font-size: 1.1em;
+    padding: 0.6em 0.9em; /* Reduced padding */
+    font-size: 1em;
     border-radius: 50%;
-    min-width: 44px; /* Larger touch target */
-    min-height: 44px; /* Larger touch target */
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    min-width: 40px;
+    min-height: 40px;
+    box-shadow: 0 2px 8px var(--shadow-light);
+    background-color: var(--secondary-color); /* Consistent with accent */
 }
+.btn-icon:hover {
+    background-color: var(--success-hover);
+}
+
 .btn-icon i {
     margin: 0;
 }
-.btn-success { background-color: var(--success-color); }
+.btn-success { background-color: var(--secondary-color); } /* Use secondary for success */
 .btn-success:hover:not(:disabled) { background-color: var(--success-hover); }
 
 .delete-button { background-color: var(--delete-color); }
 .delete-button:hover:not(:disabled) { background-color: var(--delete-hover); }
 
-.export-button { background-color: var(--success-color); }
+.export-button { background-color: var(--secondary-color); } /* Consistent with success */
 .export-button:hover:not(:disabled) { background-color: var(--success-hover); }
 
 .import-button { background-color: var(--info-color); }
 .import-button:hover:not(:disabled) { background-color: var(--info-hover); }
 
-.secondary-button { background-color: #9ca3af; }
-.secondary-button:hover:not(:disabled) { background-color: #6b7280; }
+.secondary-button { background-color: #64748b; } /* Slate grey */
+.secondary-button:hover:not(:disabled) { background-color: #475569; }
 
 /* --- Forms & Inputs --- */
 .input-field, select {
     flex-grow: 1;
-    padding: 1em 1.2em;
+    padding: 0.9em 1.2em; /* Slightly reduced padding */
     border: 1px solid var(--border-color);
-    border-radius: 30px;
-    font-size: 1em;
+    border-radius: 25px; /* More rounded */
+    font-size: 0.95em;
     outline: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
     background-color: var(--input-bg);
-    color: var(--text-color); /* Uses the main text color */
-    min-width: 150px;
-    appearance: none; /* Remove default select arrow */
-    -webkit-appearance: none; /* Remove default select arrow for Safari */
+    color: var(--text-color);
+    min-width: 120px; /* Reduced min-width */
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 select {
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%237986cb%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.6-6.4H18.9c-5%200-9.6%202-13.6%206.4-4%204-6.4%209.6-6.4%2015.6%200%206%202.4%2011.6%206.4%2015.6l127.3%20127.3c4%204%209.6%206.4%2015.6%206.4s11.6-2.4%2015.6-6.4L287%20100.6c4-4%206.4-9.6%206.4-15.6-.2-6-2.5-11.6-6.4-15.6z%22%2F%3E%3C%2Fsvg%3E');
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.6-6.4H18.9c-5%200-9.6%202-13.6%206.4-4%204-6.4%209.6-6.4%2015.6%200%206%202.4%2011.6%206.4%2015.6l127.3%20127.3c4%204%209.6%206.4%2015.6%206.4s11.6-2.4%2015.6-6.4L287%20100.6c4-4%206.4-9.6%206.4-15.6-.2-6-2.5-11.6-6.4-15.6z%22%2F%3E%3C%2Fsvg%3E'); /* Updated arrow color */
     background-repeat: no-repeat;
-    background-position: right 1em top 50%;
-    background-size: 0.8em auto;
+    background-position: right 1em center; /* Centered vertically */
+    background-size: 0.7em auto; /* Slightly smaller arrow */
 }
 
 .input-field:focus, select:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 4px var(--secondary-color-alpha); /* Use alpha for a softer glow */
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--secondary-color-alpha); /* Use alpha for a softer glow */
 }
 
 .small-input {
     min-width: unset;
-    width: 120px;
-    padding: 0.8em 1em;
+    width: 100px; /* Slightly smaller default width */
+    padding: 0.7em 1em;
     border-radius: 20px;
 }
 
@@ -480,28 +501,28 @@ select {
 ul {
     list-style: none;
     padding: 0;
-    margin: 1.5em 0 0;
-    flex-grow: 1; /* Make lists take available space */
+    margin: 1.2em 0 0; /* Reduced margin */
+    flex-grow: 1;
 }
 
 ul li {
     background-color: var(--list-item-bg);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
-    margin-bottom: 1.2em;
-    padding: 1.5em 2em;
+    border-radius: 15px; /* More rounded */
+    margin-bottom: 1em; /* Reduced margin */
+    padding: 1.2em 1.8em; /* Reduced padding */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.03);
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.3s ease;
+    box-shadow: 0 2px 8px var(--shadow-light); /* Lighter shadow */
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease;
     flex-wrap: wrap;
-    gap: 1em;
+    gap: 0.8em; /* Reduced gap */
 }
 
 ul li:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transform: translateY(-2px); /* Softer lift */
+    box-shadow: 0 4px 12px var(--shadow-medium); /* Slightly more pronounced on hover */
 }
 
 ul li:last-child {
@@ -517,8 +538,8 @@ ul li:last-child {
 }
 
 .mini-list li { /* For dashboard recent items */
-    padding: 0.8em 1.2em;
-    font-size: 0.9em;
+    padding: 0.7em 1em; /* Reduced padding */
+    font-size: 0.85em; /* Slightly smaller font */
     box-shadow: none;
     border: none;
     border-bottom: 1px dashed var(--border-color);
@@ -539,23 +560,23 @@ ul li:last-child {
 
 /* --- Meditation Specifics --- */
 .meditation-timer-card {
-    grid-column: span 1; /* Occupy single column */
+    grid-column: span 1;
 }
 .meditation-history-card {
-    grid-column: span 1; /* Occupy single column */
+    grid-column: span 1;
 }
 
 .timer-display {
-    font-size: clamp(3.5em, 8vw, 5.5em); /* Responsive font size */
+    font-size: clamp(3.5em, 8vw, 5em); /* Responsive font size, slightly smaller max */
     font-weight: bold;
     color: var(--primary-color);
     text-align: center;
-    margin: 1.5em 0 2em;
+    margin: 1.2em 0 1.8em; /* Reduced margins */
     background-color: var(--meditation-timer-bg);
-    padding: 0.8em 1.2em;
+    padding: 0.7em 1em; /* Reduced padding */
     border-radius: 15px;
-    border: 2px solid var(--secondary-color);
-    box-shadow: inset 0 3px 10px var(--shadow-light);
+    border: 2px solid var(--info-color); /* Info color border */
+    box-shadow: inset 0 2px 8px var(--shadow-light);
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
     letter-spacing: 1px;
 }
@@ -563,189 +584,239 @@ ul li:last-child {
 .meditation-controls-group {
     display: flex;
     flex-direction: column;
-    gap: 1.5em;
-    margin-bottom: 2em;
+    gap: 1.2em; /* Reduced gap */
+    margin-bottom: 1.8em; /* Reduced margin */
 }
 
 .preset-buttons {
     display: flex;
     justify-content: center;
-    gap: 1em;
+    gap: 0.8em; /* Reduced gap */
     flex-wrap: wrap;
 }
 
 .preset-meditation-time {
-    background-color: var(--primary-color);
-    min-width: 80px; /* Ensure buttons don't get too small */
+    background-color: var(--info-color); /* Use info color for presets */
+    min-width: 70px; /* Slightly smaller min-width */
 }
 .preset-meditation-time:hover:not(:disabled) {
-    background-color: var(--button-hover-darken);
+    background-color: var(--info-hover);
 }
 
 .custom-timer-input {
     display: flex;
-    gap: 0.8em;
+    gap: 0.6em; /* Reduced gap */
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap; /* Allow wrapping of custom input and set button */
 }
 .custom-timer-input .input-field {
-    max-width: 150px;
+    max-width: 120px; /* Reduced max-width */
     text-align: center;
 }
-.custom-timer-input button {
-    flex-shrink: 0;
+@media (max-width: 400px) { /* On very small screens, stack custom input and button */
+    .custom-timer-input {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .custom-timer-input .input-field, .custom-timer-input button {
+        width: 100%;
+        max-width: none;
+        text-align: left;
+    }
 }
 
 .timer-controls {
     display: flex;
     justify-content: center;
-    gap: 1em;
-    margin-bottom: 2em;
+    gap: 0.8em; /* Reduced gap */
+    margin-bottom: 1.8em; /* Reduced margin */
     flex-wrap: wrap;
 }
 .timer-controls button {
-    flex: 1 1 120px; /* Allow buttons to grow */
-    max-width: 180px;
+    flex: 1 1 110px; /* Adjusted flex basis */
+    max-width: 160px; /* Reduced max-width */
 }
-.timer-controls #start-meditation { background-color: var(--success-color); }
+.timer-controls #start-meditation { background-color: var(--secondary-color); } /* Consistent success color */
 .timer-controls #start-meditation:hover:not(:disabled) { background-color: var(--success-hover); }
 
-.sound-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1em;
-    margin-top: 1em;
-    flex-wrap: wrap;
-}
-#ambient-volume {
-    width: 150px;
-    accent-color: var(--secondary-color);
-    cursor: pointer;
-}
 
 .session-mood-emoji {
-    font-size: 1.2em;
-    margin-left: 0.5em;
+    font-size: 1.1em; /* Slightly smaller emoji */
+    margin-left: 0.4em; /* Reduced margin */
 }
 
 /* Dashboard Specifics */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 1.2em;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Slightly smaller min-width */
+    gap: 1em; /* Reduced gap */
     background-color: var(--stats-grid-bg);
-    padding: 1.8em;
+    padding: 1.5em; /* Reduced padding */
     border-radius: 12px;
     border: 1px solid var(--border-color);
-    box-shadow: inset 0 2px 8px var(--shadow-light);
+    box-shadow: inset 0 1px 6px var(--shadow-light); /* Lighter inset shadow */
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
+/* Collapse stats grid to single column on very small screens */
+@media (max-width: 450px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .stats-grid div:nth-child(odd) { /* Remove vertical divider when stacked */
+        border-right: none;
+    }
+}
+
 .stats-grid div {
-    padding: 0.8em;
+    padding: 0.7em; /* Reduced padding */
     border-bottom: 1px dashed var(--border-color);
     display: flex;
     flex-direction: column;
-    gap: 0.3em;
+    gap: 0.2em; /* Reduced gap */
 }
 
 .stats-grid div:nth-child(odd) {
-    border-right: 1px dashed var(--border-color); /* Separator for columns */
+    border-right: 1px dashed var(--border-color);
 }
 .stats-grid div:last-child,
-.stats-grid div:nth-last-child(2):nth-child(odd) {
-    border-bottom: none; /* Remove bottom border for last row */
+.stats-grid div:nth-last-child(2):nth-child(odd) { /* Last two items in a 2-column grid or last item in any grid */
+    border-bottom: none;
 }
-
-@media (max-width: 600px) { /* On smaller screens, single column */
-    .stats-grid div { border-right: none; border-bottom: 1px dashed var(--border-color); }
-    .stats-grid div:last-child { border-bottom: none; }
+/* Ensure border-bottom is removed for last item in a single column layout */
+@media (max-width: 450px) {
+    .stats-grid div:last-child {
+        border-bottom: none;
+    }
 }
 
 
 .stats-grid strong {
     color: var(--primary-color);
-    font-size: 1.05em;
+    font-size: 1em; /* Slightly smaller font */
     font-weight: 600;
 }
 
 /* --- Book Specifics --- */
 .book-input-area, .search-input-area {
     display: flex;
-    gap: 1em;
-    margin-bottom: 1.8em;
+    gap: 0.8em; /* Reduced gap */
+    margin-bottom: 1.5em; /* Reduced margin */
     flex-wrap: wrap;
     align-items: center;
 }
-.book-input-area .input-field {
-    flex: 1 1 180px; /* Allow fields to grow but have a base */
+/* Ensure all inputs and buttons stack on smaller mobile screens */
+@media (max-width: 500px) {
+    .book-input-area, .search-input-area {
+        flex-direction: column;
+        align-items: stretch; /* Stretch to full width */
+    }
+    .book-input-area .input-field,
+    .book-input-area .small-input,
+    .search-input-area .input-field {
+        width: 100%;
+        max-width: none;
+    }
+    .book-input-area #upload-book-cover-btn,
+    .book-input-area #add-book,
+    .search-input-area #clear-book-search {
+        width: 100%;
+        max-width: none;
+        border-radius: 25px; /* Make them pill-shaped when full-width */
+    }
 }
-.book-input-area .small-input {
-    flex: 0 0 100px; /* Fixed size for pages */
-}
-.book-input-area button {
-    flex-shrink: 0;
-}
+
 .book-list li {
-    padding: 1.2em 1.8em; /* Slightly less padding */
+    padding: 1em 1.5em; /* Reduced padding */
+    flex-direction: row; /* Default to row on larger screens */
+    align-items: center;
 }
+/* Book list items should stack vertically on smaller mobile screens */
+@media (max-width: 500px) {
+    .book-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: center; /* Adjust text alignment within stacked item */
+    }
+    .book-cover-thumbnail {
+        margin-right: 0;
+        margin-bottom: 1em; /* Add space below image when stacked */
+        align-self: center; /* Center the image */
+    }
+    .book-item-info {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 1em; /* Space before controls */
+    }
+    .book-item-controls {
+        width: 100%;
+        justify-content: center; /* Center controls */
+        flex-direction: column; /* Stack buttons in controls */
+        gap: 0.6em;
+    }
+    .book-item-controls button {
+        width: 100%; /* Make control buttons full width */
+        max-width: none;
+    }
+}
+
 .book-item-info {
     flex: 1 1 50%;
     display: flex;
     flex-direction: column;
-    gap: 0.5em;
+    gap: 0.4em; /* Reduced gap */
 }
 
 .book-item-info span {
-    font-size: 0.9em;
-    opacity: 0.85;
+    font-size: 0.85em; /* Slightly smaller font */
+    opacity: 0.8;
 }
 .book-item-info strong {
-    font-size: 1.15em;
+    font-size: 1.1em; /* Slightly smaller font */
     color: var(--primary-color);
 }
 
 .book-item-controls {
     display: flex;
-    gap: 0.8em;
+    gap: 0.6em; /* Reduced gap */
     flex-wrap: wrap;
     justify-content: flex-end;
 }
 
 .book-item-controls button {
-    padding: 0.6em 1.2em;
-    font-size: 0.9em;
-    border-radius: 20px;
+    padding: 0.5em 1em; /* Reduced padding */
+    font-size: 0.8em; /* Reduced font size */
+    border-radius: 18px; /* Slightly less rounded */
 }
 
 .book-cover-thumbnail {
-    width: 60px;
-    height: 90px;
+    width: 50px; /* Slightly smaller thumbnail */
+    height: 75px;
     object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    margin-right: 1em;
+    border-radius: 6px; /* Slightly less rounded */
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    margin-right: 0.8em; /* Reduced margin */
     flex-shrink: 0;
     border: 1px solid var(--border-color);
 }
 
 /* --- Statistics Section --- */
 .chart-container {
-    padding: 1.5em;
-    background-color: var(--list-item-bg); /* Use list-item-bg for charts too */
+    padding: 1.2em; /* Reduced padding */
+    background-color: var(--list-item-bg);
     border-radius: 10px;
     border: 1px solid var(--border-color);
-    margin-top: 1.5em;
-    margin-bottom: 2em; /* Spacing between charts */
+    margin-top: 1.2em; /* Reduced margin */
+    margin-bottom: 1.8em; /* Reduced margin */
 }
 
 /* Meditation Calendar */
 .meditation-calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    padding: 1em;
+    gap: 4px; /* Reduced gap */
+    padding: 0.8em; /* Reduced padding */
     border: 1px solid var(--border-color);
     border-radius: 10px;
     background-color: var(--list-item-bg);
@@ -755,19 +826,19 @@ ul li:last-child {
     grid-column: 1 / -1;
     text-align: center;
     font-weight: bold;
-    font-size: 1.2em;
-    margin-bottom: 10px;
+    font-size: 1.1em; /* Slightly smaller font */
+    margin-bottom: 8px; /* Reduced margin */
     color: var(--primary-color);
 }
 
 .calendar-day-name, .calendar-day {
-    padding: 8px;
+    padding: 6px; /* Reduced padding */
     text-align: center;
-    border-radius: 5px;
-    font-size: 0.9em;
+    border-radius: 4px; /* Slightly less rounded */
+    font-size: 0.85em; /* Slightly smaller font */
     background-color: var(--card-background);
     border: 1px solid var(--border-color);
-    min-height: 35px; /* Ensure consistent height */
+    min-height: 32px; /* Consistent height */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -776,8 +847,8 @@ ul li:last-child {
 .calendar-day-name {
     font-weight: bold;
     background-color: var(--secondary-color);
-    color: var(--inverted-text-color); /* Uses the inverted text color */
-    border-color: var(--primary-color);
+    color: var(--inverted-text-color);
+    border-color: var(--secondary-color); /* Use secondary for border */
 }
 
 .calendar-day.empty {
@@ -787,11 +858,11 @@ ul li:last-child {
 }
 
 .calendar-day.meditated {
-    background-color: var(--success-color); /* Green for meditated days */
+    background-color: var(--secondary-color); /* Green for meditated days */
     color: white;
     font-weight: bold;
     border-color: var(--success-hover);
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.15);
 }
 
 .calendar-day.current-day {
@@ -803,51 +874,74 @@ ul li:last-child {
 /* --- Goals Section --- */
 .goal-input-area {
     display: flex;
-    gap: 1em;
-    margin-bottom: 2em;
+    gap: 0.8em; /* Reduced gap */
+    margin-bottom: 1.5em; /* Reduced margin */
     flex-wrap: wrap;
     align-items: center;
 }
-.goal-input-area .input-field {
-    flex: 1 1 150px;
-}
-.goal-input-area .small-input {
-    flex: 0 0 100px;
+/* Stack goal inputs and button on small screens */
+@media (max-width: 550px) {
+    .goal-input-area {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .goal-input-area .input-field,
+    .goal-input-area .small-input,
+    .goal-input-area button {
+        width: 100%;
+        max-width: none;
+    }
 }
 
 .goal-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1em 1.5em;
+    padding: 0.9em 1.2em; /* Reduced padding */
     border-radius: 10px;
     background-color: var(--list-item-bg);
     border: 1px solid var(--border-color);
-    margin-bottom: 1em;
+    margin-bottom: 0.8em; /* Reduced margin */
     flex-wrap: wrap;
-    gap: 1em;
+    gap: 0.8em;
+}
+/* Goal item text should stack on very small screens */
+@media (max-width: 400px) {
+    .goal-item {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    .goal-item > div { /* The div containing text and progress bar */
+        width: 100%;
+        margin-bottom: 0.8em; /* Space before button */
+    }
+    .goal-item button {
+        align-self: flex-end; /* Push delete button to bottom right */
+    }
 }
 
+
 .goal-item.completed {
-    opacity: 0.8;
-    background-color: var(--success-color);
-    color: var(--inverted-text-color); /* Uses the inverted text color */
+    opacity: 0.9; /* Slightly less opacity */
+    background-color: var(--secondary-color); /* Use secondary for completed goals */
+    color: var(--inverted-text-color);
     border-color: var(--success-hover);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px var(--shadow-medium);
 }
 .goal-item.completed strong {
-    color: var(--inverted-text-color); /* Uses the inverted text color */
+    color: var(--inverted-text-color);
 }
 .goal-item.completed span {
-    color: rgba(255,255,255,0.8);
+    color: rgba(255,255,255,0.85); /* Slightly brighter text */
 }
 
 .goal-progress-bar-container {
     width: 100%;
-    height: 8px;
+    height: 7px; /* Slightly thinner */
     background-color: var(--progress-bar-bg);
     border-radius: 4px;
-    margin-top: 0.5em;
+    margin-top: 0.4em; /* Reduced margin */
     overflow: hidden;
 }
 
@@ -856,61 +950,68 @@ ul li:last-child {
     background-color: var(--progress-bar-fill);
     width: 0%;
     border-radius: 4px;
-    transition: width 0.5s ease;
+    transition: width 0.4s ease; /* Slightly faster transition */
 }
 .goal-item.completed .goal-progress-bar {
-    background-color: var(--inverted-text-color); /* White progress bar for completed goals */
+    background-color: var(--inverted-text-color);
 }
 
 /* --- Achievements Section --- */
 .achievements-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5em;
-    padding: 1em;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Slightly smaller min-width */
+    gap: 1.2em; /* Reduced gap */
+    padding: 0.8em; /* Reduced padding */
+}
+
+/* Collapse achievements grid to single column on very small screens */
+@media (max-width: 450px) {
+    .achievements-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .achievement-card {
     background-color: var(--list-item-bg);
     border: 1px solid var(--border-color);
     border-radius: 15px;
-    padding: 1.5em;
+    padding: 1.2em; /* Reduced padding */
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px var(--shadow-light);
-    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
-    min-height: 160px; /* Ensure consistent card height */
+    box-shadow: 0 3px 10px var(--shadow-light);
+    transition: transform 0.15s ease, opacity 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    min-height: 150px; /* Consistent card height */
 }
 
 .achievement-card i {
-    font-size: 3em;
-    color: #a0a0a0; /* Default grey for locked */
-    margin-bottom: 0.5em;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+    font-size: 2.8em; /* Slightly smaller icon */
+    color: #94a3b8; /* Default grey for locked */
+    margin-bottom: 0.4em; /* Reduced margin */
+    transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 
 .achievement-card.unlocked {
     background-color: var(--background-gradient-end);
     border-color: var(--accent-color);
-    box-shadow: 0 4px 15px rgba(var(--warning-color-rgb), 0.3); /* Use RGB for shadow */
+    box-shadow: 0 3px 12px rgba(var(--warning-color-rgb), 0.2); /* Lighter shadow */
 }
 
 .achievement-card.unlocked i {
     color: var(--accent-color);
-    text-shadow: 0 0 12px rgba(var(--warning-color-rgb), 0.7);
+    text-shadow: 0 0 8px rgba(var(--warning-color-rgb), 0.5); /* Softer glow */
 }
 
 .achievement-card h4 {
-    margin: 0.5em 0;
+    margin: 0.4em 0; /* Reduced margin */
     color: var(--primary-color);
-    font-size: 1.2em;
+    font-size: 1.1em; /* Slightly smaller font */
 }
 
 .achievement-card p {
-    font-size: 0.9em;
+    font-size: 0.85em; /* Slightly smaller font */
     opacity: 0.8;
 }
 
@@ -919,29 +1020,56 @@ ul li:last-child {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1em 0;
+    padding: 0.9em 0; /* Reduced padding */
     border-bottom: 1px dashed var(--border-color);
     flex-wrap: wrap; /* Allow wrapping */
-    gap: 0.8em;
+    gap: 0.6em; /* Reduced gap */
 }
+/* Stack setting items on mobile */
+@media (max-width: 550px) {
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .setting-item span { /* Label */
+        width: 100%;
+        text-align: left;
+        margin-bottom: 0.4em;
+    }
+    .setting-item .input-field,
+    .setting-item select,
+    .setting-buttons-group { /* Control group */
+        width: 100%;
+        max-width: none;
+        margin-left: 0; /* Override auto margin */
+        justify-content: center; /* Center buttons within group */
+        flex-wrap: wrap; /* Allow buttons to wrap */
+    }
+    .setting-buttons-group button,
+    .setting-item #daily-reminder-time {
+        width: 100%;
+        max-width: none;
+    }
+}
+
 
 .setting-item:last-of-type {
     border-bottom: none;
 }
 
 .setting-item span {
-    font-size: 1.1em;
-    color: var(--text-color); /* Uses the main text color */
+    font-size: 1em; /* Slightly smaller font */
+    color: var(--text-color);
     flex-shrink: 0;
 }
 
 .setting-item .input-field, .setting-item select {
-    margin-left: auto; /* Push input/select to the right */
+    margin-left: auto;
     flex-shrink: 0;
 }
 .setting-buttons-group {
     display: flex;
-    gap: 0.8em;
+    gap: 0.6em; /* Reduced gap */
     flex-wrap: wrap;
     margin-left: auto;
 }
@@ -951,158 +1079,194 @@ ul li:last-child {
 .data-management-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 1em;
+    gap: 0.8em; /* Reduced gap */
     justify-content: center;
-    margin-top: 2em;
+    margin-top: 1.5em; /* Reduced margin */
 }
-.data-management-buttons button {
-    flex: 1 1 140px; /* Allow buttons to grow and wrap */
+/* Make data management buttons full width on small screens */
+@media (max-width: 500px) {
+    .data-management-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .data-management-buttons button {
+        width: 100%;
+        max-width: none;
+    }
 }
 
-
-/* Toggle Switch (reused) */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 28px;
-    margin-left: auto; /* Push to right */
-    flex-shrink: 0;
-}
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider {
-    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #ccc; -webkit-transition: .4s; transition: .4s; border-radius: 28px;
-}
-.slider:before {
-    position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px;
-    background-color: white; -webkit-transition: .4s; transition: .4s; border-radius: 50%;
-}
-input:checked + .slider { background-color: var(--secondary-color); }
-input:focus-visible + .slider { box-shadow: 0 0 0 3px var(--secondary-color-alpha); } /* Focus outline for keyboard nav */
-input:checked + .slider:before { -webkit-transform: translateX(22px); -ms-transform: translateX(22px); transform: translateX(22px); }
-
-#bell-volume {
-    width: 150px;
-    accent-color: var(--secondary-color);
-    cursor: pointer;
-    margin-left: auto;
-    flex-shrink: 0;
-}
 #daily-reminder-time {
-    width: 100px;
+    width: 90px; /* Slightly smaller width */
 }
 
 hr {
     border: none;
     border-top: 1px solid var(--border-color);
-    margin: 2em 0;
+    margin: 1.5em 0; /* Reduced margin */
 }
 
 /* --- Footer --- */
 footer {
     text-align: center;
-    padding: 1.8em;
-    margin-top: 3em;
+    padding: 1.5em; /* Reduced padding */
+    margin-top: 2.5em; /* Reduced margin */
     background-color: var(--primary-color);
-    color: var(--inverted-text-color); /* Uses the inverted text color */
-    font-size: 0.9em;
-    box-shadow: 0 -4px 12px var(--shadow-medium);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    color: var(--inverted-text-color);
+    font-size: 0.85em; /* Slightly smaller font */
+    box-shadow: 0 -3px 10px var(--shadow-medium);
+    border-top-left-radius: 25px; /* Softer radius */
+    border-top-right-radius: 25px;
 }
 
 /* --- Modals --- */
 .modal {
-    display: none;
+    display: none; /* Crucially, modals are hidden by default */
     position: fixed;
     z-index: 200;
     left: 0; top: 0;
     width: 100%; height: 100%;
-    overflow: auto;
+    overflow-y: auto; /* Allow internal scrolling if content overflows */
     background-color: var(--modal-bg);
-    padding: 20px 0; /* Add some vertical padding */
+    padding: 15px 0; /* Vertical padding for desktops */
     animation: fadeIn 0.3s ease-out;
-    display: flex; /* Use flex to center content */
+    /* JS will apply display: flex when opened */
     align-items: center;
     justify-content: center;
 }
 
 .modal-content {
     background-color: var(--modal-content-bg);
-    margin: auto; /* Center with flex */
-    padding: 3em;
+    margin: auto;
+    padding: 2.5em; /* Reduced padding */
     border: 1px solid var(--border-color);
     border-radius: 20px;
     width: 90%;
-    max-width: 700px;
-    box-shadow: 0 15px 40px var(--shadow-medium);
+    max-width: 600px; /* Reduced max-width */
+    box-shadow: 0 12px 30px var(--shadow-medium); /* Lighter shadow */
     position: relative;
-    animation: slideInTop 0.4s ease-out;
-    color: var(--text-color); /* Uses the main text color */
-    max-height: 95vh; /* Limit height to prevent overflow on very small screens */
-    overflow-y: auto; /* Scroll content if too tall */
-    display: flex; /* Make content itself a flex container for column layout */
+    animation: slideInTop 0.35s ease-out; /* Slightly faster */
+    color: var(--text-color);
+    max-height: 90vh; /* Reduced max height */
+    overflow-y: auto;
+    display: flex;
     flex-direction: column;
 }
 .modal-content.modal-small {
-    max-width: 450px; /* Smaller width for confirmation modal */
+    max-width: 400px; /* Smaller width for confirmation modal */
+    padding: 2em;
+}
+
+/* Modals become full-screen on mobile */
+@media (max-width: 768px) {
+    .modal {
+        padding: 0; /* No padding on container, modal takes full space */
+    }
+    .modal-content {
+        width: 100%;
+        min-height: 100vh; /* Occupy full screen height */
+        border-radius: 0;
+        padding: 1.2em; /* Reduced padding for content */
+        margin: 0;
+        box-shadow: none;
+        max-height: unset; /* Remove max height constraint */
+    }
+    .modal-content.modal-small {
+        min-height: unset; /* Restore min-height for small modal (e.g. confirmation) */
+        border-radius: 10px;
+        padding: 1.2em;
+        max-width: 90%; /* Still limit width of small modals */
+        margin: auto; /* Re-center small modals */
+    }
 }
 
 .modal-content h2 {
     color: var(--primary-color);
     border-bottom: 2px solid var(--border-color);
-    padding-bottom: 0.8em;
-    margin-bottom: 1.5em;
-    font-size: clamp(1.6em, 3.5vw, 2.2em);
+    padding-bottom: 0.7em; /* Reduced padding */
+    margin-bottom: 1.2em; /* Reduced margin */
+    font-size: clamp(1.6em, 3.5vw, 2em); /* Slightly smaller max font size */
 }
 
 .modal-content h3 {
-    font-size: clamp(1.2em, 2.5vw, 1.6em);
+    font-size: clamp(1.2em, 2.5vw, 1.5em); /* Slightly smaller max font size */
+    margin-top: 1.5em;
+    margin-bottom: 1em;
 }
 
 .modal-content p {
-    margin-bottom: 1em;
+    margin-bottom: 0.8em; /* Reduced margin */
     line-height: 1.6;
 }
 
 .modal-content textarea {
     width: calc(100% - 24px); /* Account for padding */
-    min-height: 100px;
-    padding: 12px;
+    min-height: 90px; /* Slightly smaller min-height */
+    padding: 10px; /* Reduced padding */
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    font-size: 1em;
+    font-size: 0.95em;
     line-height: 1.5;
     resize: vertical;
-    margin-bottom: 1.5em;
+    margin-bottom: 1.2em; /* Reduced margin */
     background-color: var(--input-bg);
-    color: var(--text-color); /* Uses the main text color */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    color: var(--text-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .modal-content textarea:focus {
-    border-color: var(--secondary-color);
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 3px var(--secondary-color-alpha);
 }
 
 .modal-content button {
-    margin-top: 1.5em;
+    margin-top: 1.2em; /* Reduced margin */
     width: auto;
-    min-width: 150px;
-    align-self: flex-end; /* Push button to right */
+    min-width: 140px;
+    align-self: flex-end;
+}
+/* Ensure modal buttons go full width on mobile */
+@media (max-width: 500px) {
+    .modal-content button {
+        width: 100%;
+        max-width: none;
+    }
+    .modal-actions { /* Align buttons in modal actions as well */
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .modal-actions button {
+        width: 100%;
+        max-width: none;
+    }
 }
 
+
 .close-button {
-    color: #aaa;
+    color: #888; /* Softer close button color */
     float: right;
-    font-size: 40px;
+    font-size: 36px; /* Slightly smaller */
     font-weight: bold;
     position: absolute;
-    right: 25px;
-    top: 15px;
+    right: 20px; /* Reduced position */
+    top: 12px; /* Reduced position */
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
+}
+/* Make close button more touch-friendly on mobile */
+@media (max-width: 768px) {
+    .close-button {
+        font-size: 28px;
+        right: 12px;
+        top: 10px;
+        background-color: var(--card-background); /* Give it a background for visibility */
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex; /* Use flex to center the X */
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
 }
 
 .close-button:hover {
@@ -1112,14 +1276,9 @@ footer {
 .modal-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 1.5em;
-    margin-top: 2em;
+    gap: 1.2em; /* Reduced gap */
+    margin-top: 1.5em; /* Reduced margin */
     flex-wrap: wrap;
-}
-.modal-actions button {
-    margin-top: 0; /* Override default button margin-top */
-    flex: 1 1 120px; /* Make buttons flexible */
-    max-width: 180px;
 }
 
 
@@ -1127,55 +1286,67 @@ footer {
 .journal-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 2em;
-    margin-bottom: 1.5em;
+    gap: 1.5em; /* Reduced gap */
+    margin-bottom: 1.2em; /* Reduced margin */
     width: 100%;
 }
-.mood-tracker, .energy-tracker {
-    flex: 1 1 45%;
-    min-width: 280px;
+/* Stack mood and energy trackers on very small screens */
+@media (max-width: 500px) {
+    .journal-meta {
+        flex-direction: column;
+        align-items: stretch; /* Stretch children to full width */
+        text-align: left; /* Align text to left */
+    }
+    .mood-tracker, .energy-tracker {
+        flex: 1 1 100%;
+        min-width: unset;
+    }
+    .mood-emojis {
+        justify-content: center; /* Center emojis when stacked */
+    }
 }
 .mood-tracker h4, .energy-tracker h4 {
     margin-top: 0;
-    margin-bottom: 0.8em;
-    color: var(--secondary-color);
-    font-size: 1.2em;
+    margin-bottom: 0.6em; /* Reduced margin */
+    color: var(--info-color); /* Info color for headings */
+    font-size: 1.1em; /* Slightly smaller font */
 }
 .mood-emojis {
     display: flex;
-    gap: 0.8em;
+    gap: 0.6em; /* Reduced gap */
     flex-wrap: wrap;
+    justify-content: flex-start; /* Align left by default */
 }
 .mood-emojis .emoji {
-    font-size: 2.2em;
+    font-size: 2em; /* Slightly smaller */
     cursor: pointer;
-    padding: 8px;
-    border-radius: 10px;
+    padding: 6px; /* Reduced padding */
+    border-radius: 8px; /* Slightly less rounded */
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
-    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    user-select: none; /* Prevent text selection */
-    min-width: 44px; /* Ensure touch target */
+    transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    user-select: none;
+    min-width: 40px;
     text-align: center;
 }
 .mood-emojis .emoji:hover {
-    transform: scale(1.1);
+    transform: scale(1.08); /* Softer scale */
     background-color: var(--background-gradient-end);
 }
 .mood-emojis .emoji.selected {
     background-color: var(--accent-color);
     border-color: var(--warning-hover);
-    transform: scale(1.15);
-    box-shadow: 0 0 12px rgba(var(--warning-color-rgb), 0.5);
-    color: white; /* Ensure visibility for darker emojis */
+    transform: scale(1.1); /* Softer scale */
+    box-shadow: 0 0 10px rgba(var(--warning-color-rgb), 0.4); /* Softer glow */
+    color: white;
 }
 .slider-energy {
-    width: calc(100% - 60px); /* Adjust width */
+    width: calc(100% - 50px); /* Adjusted width */
     vertical-align: middle;
     accent-color: var(--secondary-color);
-    height: 8px;
+    height: 7px; /* Slightly thinner */
     cursor: pointer;
-    margin-right: 10px;
+    margin-right: 8px; /* Reduced margin */
 }
 #energy-value {
     vertical-align: middle;
@@ -1186,17 +1357,28 @@ footer {
 /* Book Modal Specifics */
 .book-modal-header {
     display: flex;
-    gap: 1.5em;
+    gap: 1.2em; /* Reduced gap */
     align-items: flex-start;
-    margin-bottom: 2em;
+    margin-bottom: 1.5em; /* Reduced margin */
     flex-wrap: wrap;
 }
+/* Center image and stack text on very small screens */
+@media (max-width: 500px) {
+    .book-modal-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .modal-book-cover {
+        margin-bottom: 1em;
+    }
+}
 .modal-book-cover {
-    width: 120px;
-    height: 180px;
+    width: 100px; /* Reduced width */
+    height: 150px; /* Reduced height */
     object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
     flex-shrink: 0;
     border: 1px solid var(--border-color);
 }
@@ -1207,169 +1389,238 @@ footer {
 }
 .book-modal-header h2 {
     margin-top: 0;
-    font-size: 2em;
+    font-size: 1.8em; /* Slightly smaller */
     border: none;
     padding: 0;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.4em; /* Reduced margin */
     color: var(--primary-color);
 }
 .book-modal-header p {
-    margin: 0.3em 0;
-    font-size: 1.05em;
+    margin: 0.2em 0; /* Reduced margin */
+    font-size: 0.95em;
 }
 .book-rating .fa-star {
     color: #ccc;
-    font-size: 1.6em;
+    font-size: 1.4em; /* Slightly smaller */
     cursor: pointer;
-    transition: color 0.2s ease, transform 0.1s ease;
+    transition: color 0.15s ease, transform 0.1s ease;
 }
 .book-rating .fa-star:hover {
-    transform: scale(1.1);
+    transform: scale(1.08);
 }
 .book-rating .fa-star.active {
     color: var(--accent-color);
 }
 .book-modal-progress {
-    margin-bottom: 2em;
+    margin-bottom: 1.5em; /* Reduced margin */
     padding-top: 1em;
     border-top: 1px dashed var(--border-color);
 }
 .page-input-group {
     display: flex;
     align-items: center;
-    gap: 0.8em;
-    margin-bottom: 1em;
+    gap: 0.6em; /* Reduced gap */
+    margin-bottom: 0.8em; /* Reduced margin */
+    flex-wrap: wrap; /* Allow wrapping */
+}
+@media (max-width: 500px) {
+    .page-input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .page-input-group label {
+        width: 100%;
+        text-align: center;
+    }
+    .page-input-group input {
+        width: 100%;
+        max-width: none;
+    }
 }
 .page-input-group label strong {
-    font-size: 1.05em;
+    font-size: 0.95em;
     color: var(--primary-color);
 }
 .page-input-group input {
-    max-width: 100px;
+    max-width: 80px; /* Reduced max-width */
     text-align: center;
 }
 .progress-bar-container {
     width: 100%;
-    height: 10px;
+    height: 8px;
     background-color: var(--progress-bar-bg);
-    border-radius: 5px;
+    border-radius: 4px;
     overflow: hidden;
-    margin-top: 0.8em;
+    margin-top: 0.6em; /* Reduced margin */
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 .progress-bar {
     height: 100%;
     background-color: var(--progress-bar-fill);
     width: 0%;
-    border-radius: 5px;
-    transition: width 0.5s ease;
+    border-radius: 4px;
+    transition: width 0.4s ease;
 }
 .notes-list {
-    margin-top: 1.5em;
+    margin-top: 1.2em; /* Reduced margin */
 }
 .notes-list .note-item {
     background-color: var(--background-gradient-start);
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 10px;
+    padding: 12px; /* Reduced padding */
+    margin-bottom: 8px; /* Reduced margin */
+    border-radius: 8px;
     border: 1px solid var(--border-color);
     display: flex;
-    flex-direction: column; /* Stack content and date */
+    flex-direction: column;
     align-items: flex-start;
-    gap: 0.5em;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    gap: 0.4em; /* Reduced gap */
+    box-shadow: 0 1px 6px var(--shadow-light);
 }
 .notes-list .note-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px var(--shadow-medium);
 }
 .notes-list .note-item .note-content {
     flex-grow: 1;
     white-space: pre-wrap;
     word-break: break-word;
-    font-size: 1em;
-    color: var(--text-color); /* Uses the main text color */
+    font-size: 0.95em;
+    color: var(--text-color);
 }
 .notes-list .note-item .note-date {
-    font-size: 0.8em;
-    color: var(--text-color); /* Uses the main text color */
+    font-size: 0.75em;
+    color: var(--text-color);
     opacity: 0.7;
     text-align: right;
     width: 100%;
 }
 .notes-list .note-item .delete-note-btn {
-    padding: 0.4em 0.8em;
-    font-size: 0.8em;
+    padding: 0.3em 0.6em;
+    font-size: 0.75em;
     min-width: unset;
-    margin-top: 0.5em;
-    align-self: flex-end; /* Align delete button to bottom right */
+    margin-top: 0.4em;
+    align-self: flex-end;
 }
 
 /* Interval Timer Modal Specifics */
 .interval-step {
     display: flex;
     align-items: center;
-    gap: 1em;
-    margin-bottom: 1em;
-    padding: 0.8em;
+    gap: 0.8em; /* Reduced gap */
+    margin-bottom: 0.8em; /* Reduced margin */
+    padding: 0.7em; /* Reduced padding */
     border: 1px solid var(--border-color);
-    border-radius: 10px;
+    border-radius: 8px;
     background-color: var(--input-bg);
     flex-wrap: wrap;
+}
+/* Stack interval step inputs on small screens */
+@media (max-width: 500px) {
+    .interval-step {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .interval-step label {
+        width: 100%;
+        text-align: center;
+    }
+    .interval-step input, .interval-step select {
+        width: 100%;
+        max-width: none;
+    }
+    .interval-step .delete-step-btn {
+        align-self: flex-end;
+    }
 }
 .interval-step label {
     font-weight: bold;
     color: var(--primary-color);
     flex-shrink: 0;
-    font-size: 0.95em;
+    font-size: 0.9em;
 }
 .interval-step input[type="number"], .interval-step select {
-    width: 80px;
-    padding: 0.6em;
-    border-radius: 8px;
+    width: 70px; /* Reduced width */
+    padding: 0.5em; /* Reduced padding */
+    border-radius: 6px;
     flex-shrink: 0;
 }
 .interval-step .delete-step-btn {
-    margin-left: auto; /* Push delete button to the right */
-    padding: 0.5em 0.8em;
-    font-size: 0.9em;
+    margin-left: auto;
+    padding: 0.4em 0.7em;
+    font-size: 0.85em;
 }
 #interval-timer-modal button {
-    margin-top: 1.5em;
+    margin-top: 1.2em;
 }
 #add-interval-step {
-    background-color: var(--secondary-color);
+    background-color: var(--info-color); /* Use info color for add step */
 }
 #start-interval-meditation {
-    background-color: var(--success-color);
-    margin-left: 1em;
+    background-color: var(--secondary-color);
+    margin-left: 0.8em; /* Reduced margin */
 }
 
 /* --- Toast Notifications --- */
 #toast-container {
     position: fixed;
-    top: 20px;
+    top: 20px; /* Default top for desktop */
     right: 20px;
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px; /* Reduced gap */
 }
+
+/* Toast notifications repositioned to bottom on mobile */
+@media (max-width: 768px) {
+    #toast-container {
+        top: unset; /* Remove top constraint */
+        bottom: 15px; /* Position at bottom */
+        right: 15px;
+        left: 15px; /* Span full width (with padding) */
+        align-items: center; /* Center toasts horizontally */
+    }
+    .toast {
+        max-width: unset; /* Allow full width (minus container padding) */
+        width: 100%; /* Ensure it takes full width */
+        transform: translateY(120%); /* Slide up from bottom */
+    }
+    .toast.show {
+        transform: translateY(0);
+    }
+    .toast.hide {
+        transform: translateY(120%);
+    }
+}
+/* Adjust toast position for landscape mode on mobile */
+@media (max-width: 900px) and (orientation: landscape) {
+    #toast-container {
+        top: 15px; /* Move back to top-right in landscape */
+        bottom: unset;
+        left: unset;
+        right: 15px;
+        align-items: flex-end; /* Align to right */
+    }
+    .toast {
+        transform: translateX(120%); /* Slide from right */
+    }
+}
+
 
 .toast {
     background-color: var(--toast-bg);
     color: var(--toast-text);
-    padding: 15px 20px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    padding: 12px 16px; /* Reduced padding */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     opacity: 0;
-    transform: translateX(120%); /* Start further right */
-    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-    min-width: 280px;
-    max-width: 380px;
+    transform: translateX(120%);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Slightly faster transition */
+    min-width: 250px;
+    max-width: 350px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px; /* Reduced gap */
 }
 
 .toast.show {
@@ -1383,267 +1634,190 @@ footer {
 }
 
 .toast i {
-    font-size: 1.6em;
-    color: var(--accent-color); /* Neutral color for icon */
+    font-size: 1.4em; /* Slightly smaller icon */
+    color: var(--accent-color);
 }
-.toast.success i { color: var(--success-color); }
+.toast.success i { color: var(--secondary-color); } /* Use secondary for success */
 .toast.error i { color: var(--delete-color); }
-.toast.info i { color: var(--info-color); }
+.toast.info i { color: var(--primary-color); } /* Use primary for info */
 .toast.warning i { color: var(--warning-color); }
 
 
 /* --- Keyframe Animations --- */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideInTop { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes slideInTop { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } } /* Smaller slide */
 
-/* --- Responsive Adjustments --- */
-@media (max-width: 1200px) {
-    .container {
-        padding: 0 1em;
-    }
-    .app-section.active-section {
-        gap: 2em;
-    }
-    .card {
-        padding: 2.2em;
-    }
-}
+/* --- General Responsive Adjustments --- */
+/* Breakpoints:
+   - Max-width 768px: General mobile (portrait & landscape tablet)
+   - Max-width 600px: Smaller tablets & larger phones
+   - Max-width 500px: Most smartphones
+   - Max-width 450px: Very small smartphones
+   - Max-width 400px: Extremely small smartphones */
 
+/* General adjustments for tablet-sized screens (768px and below) */
 @media (max-width: 768px) {
+    .container {
+        padding: 0 1em; /* Reduce horizontal padding */
+    }
     header {
-        padding: 1.8em 0 1em;
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
+        padding: 1.5em 0 0.8em;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
     }
-    header h1 {
-        font-size: 2.2em;
-    }
-    header p {
-        font-size: 1em;
-    }
-    .main-nav {
-        margin-bottom: 1.5em;
-        border-radius: 0; /* Full width on mobile */
-    }
-    .main-nav .container {
-        padding: 0 0.8em; /* Reduced padding for more space */
-        gap: 0.6em;
-    }
-    .nav-button {
-        font-size: 0.95em;
-        padding: 0.8em 1em;
-        gap: 8px;
-    }
-    .nav-button i {
-        font-size: 1em;
-    }
-    .app-section.active-section {
-        grid-template-columns: 1fr; /* Stack cards vertically */
-        gap: 1.5em;
+    footer {
+        padding: 1.2em;
+        margin-top: 1.5em;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
     }
     .card {
-        padding: 1.8em;
+        padding: 1.8em; /* Further reduce card padding */
         border-radius: 12px;
     }
     h2 {
-        font-size: 1.8em;
-        margin-bottom: 1em;
-        padding-bottom: 0.6em;
-    }
-    h3 {
-        font-size: 1.4em;
-        margin-top: 1.5em;
-        margin-bottom: 1em;
+        font-size: clamp(1.4em, 5vw, 1.8em);
+        margin-bottom: 0.8em;
         padding-bottom: 0.5em;
     }
+    h3 {
+        font-size: clamp(1.1em, 4vw, 1.4em);
+        margin-top: 1.2em;
+        margin-bottom: 0.8em;
+        padding-bottom: 0.4em;
+    }
     .card-description {
-        font-size: 0.95em;
-        margin-bottom: 1.5em;
+        font-size: 0.9em;
+        margin-bottom: 1.2em;
     }
     .timer-display {
-        font-size: 3.2em;
-        margin: 1em 0 1.5em;
-        padding: 0.6em 0.8em;
+        font-size: clamp(2.5em, 10vw, 3.5em);
+        margin: 1em 0 1.2em;
+        padding: 0.5em 0.6em;
     }
-    .meditation-controls-group {
-        gap: 1em;
-        margin-bottom: 1.5em;
-    }
-    .preset-buttons, .timer-controls, .sound-controls {
-        flex-direction: column;
+    .meditation-controls-group, .timer-controls {
         gap: 0.8em;
+        margin-bottom: 1.2em;
+        flex-direction: column; /* Stack controls on mobile */
+        align-items: stretch;
     }
-    button {
+    .meditation-controls-group button, .timer-controls button {
         width: 100%;
-        padding: 0.9em 1.5em;
-        font-size: 1em;
+        max-width: none;
     }
-    .btn-icon {
-        width: auto; /* Allow auto width for icons when stacked */
-        border-radius: 30px; /* Make them pill-shaped when wider */
-    }
-    .custom-timer-input .input-field {
-        max-width: none; /* Full width */
-        width: 100%;
-    }
-    .custom-timer-input button {
-        width: 100%;
-    }
-
-    .book-input-area, .search-input-area {
-        flex-direction: column;
-        align-items: stretch; /* Stretch items to full width */
-        gap: 0.8em;
-    }
-    .book-input-area .input-field, .search-input-area .input-field {
-        width: 100%; /* Full width inputs */
-    }
-    .book-input-area .btn-icon, .search-input-area .btn-icon {
-        width: 100%;
-    }
-    .book-list li {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 1.2em 1.5em;
-    }
-    .book-cover-thumbnail {
-        margin-right: 0; /* No margin on smaller screens */
-        margin-bottom: 1em; /* Add space below image */
-        align-self: center; /* Center image */
-    }
-    .book-item-info {
-        width: 100%; /* Full width */
-        text-align: center;
-    }
-    .book-item-controls {
-        width: 100%;
+    .preset-buttons { /* Still allow wrapping within the stacked column */
+        flex-direction: row;
+        flex-wrap: wrap;
         justify-content: center;
+        gap: 0.6em;
     }
-    .stats-grid div { border-right: none; border-bottom: 1px dashed var(--border-color); }
-    .stats-grid div:last-child { border-bottom: none; }
-
-    .modal {
-        padding: 0; /* No padding, modal takes full height */
+    .preset-meditation-time {
+        flex: 1 1 80px; /* Give some flexibility */
+        max-width: 120px; /* Prevent over-stretching */
     }
-    .modal-content {
-        width: 100%;
-        min-height: 100vh; /* Make modal almost full screen */
-        border-radius: 0; /* No border radius */
-        padding: 1.5em;
-        margin: 0;
-        box-shadow: none;
-        max-height: unset; /* Remove max height constraint */
+    .input-field, select {
+        font-size: 0.9em;
+        padding: 0.8em 1em;
     }
-    .modal-content.modal-small {
-        min-height: unset; /* Restore min-height for small modal */
-        border-radius: 12px;
-        padding: 1.5em;
-        max-width: 90%;
-        margin: auto;
-    }
-
-    .close-button {
-        font-size: 30px;
-        right: 15px;
-        top: 15px;
-        background-color: var(--card-background);
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    .journal-meta, .book-modal-header {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    .mood-emojis {
-        justify-content: center;
-    }
-    .setting-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .setting-item span {
-        margin-left: 0;
-        width: 100%;
-        text-align: left;
-    }
-    .setting-item .input-field, .setting-item select, .setting-item button {
-        margin-left: 0;
-        width: 100%;
-        text-align: left;
-    }
-    .setting-item .input-field.small-input {
-        text-align: left;
-    }
-    .setting-buttons-group, .data-management-buttons {
-        flex-direction: column;
-        width: 100%;
-    }
-    #bell-volume, #ambient-volume {
-        width: 100%;
-        margin-left: 0;
-    }
-    #daily-reminder-time {
-        width: 100%;
-    }
-    #toast-container {
-        top: unset;
-        bottom: 15px;
-        right: 10px;
-        left: 10px;
-    }
-    .toast {
-        max-width: unset;
-        transform: translateY(120%);
-    }
-    .toast.show {
-        transform: translateY(0);
-    }
-    .toast.hide {
-        transform: translateY(120%);
-    }
-    footer {
-        padding: 1.5em;
-        margin-top: 2em;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
+    .small-input {
+        width: 80px; /* Adjust width */
+        padding: 0.7em 0.9em;
     }
 }
 
-/* Landscape orientation for mobile devices */
+/* Landscape orientation for mobile devices (up to 900px wide) */
 @media (max-width: 900px) and (orientation: landscape) {
+    .container {
+        padding: 0 1.5em; /* Restore some padding for landscape */
+    }
     .main-nav .container {
-        padding: 0 1em;
+        flex-wrap: wrap; /* Allow wrapping in landscape for better use of space */
+        justify-content: center;
+        overflow-x: visible;
+    }
+    .app-section.active-section {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Allow multiple columns again */
+        gap: 1.5em;
+    }
+    .card {
+        padding: 1.5em; /* Adjust card padding */
     }
     .modal-content {
-        width: 90%;
-        max-height: 90vh;
-        border-radius: 12px;
+        max-height: 90vh; /* Restrict height in landscape to prevent full-screen takeover */
+        border-radius: 15px;
         margin: auto;
-        padding: 2em;
-    }
-    .modal-content.modal-small {
-        min-height: unset;
+        padding: 1.8em;
+        min-height: unset; /* Do not force full height */
     }
     .journal-meta, .book-modal-header {
         flex-direction: row; /* Allow side-by-side again if space permits */
+        align-items: flex-start;
         text-align: left;
+    }
+    .mood-tracker, .energy-tracker {
+        flex: 1 1 48%; /* Restore flex for side-by-side */
+        min-width: unset;
     }
     .mood-emojis {
         justify-content: flex-start;
     }
+    .book-modal-header .modal-book-cover {
+        margin-bottom: 0; /* Remove bottom margin */
+        margin-right: 1em; /* Add right margin */
+        align-self: flex-start; /* Align to top left */
+    }
     .timer-display {
-        font-size: 4em;
+        font-size: clamp(3em, 6vw, 4.5em); /* Adjust font size */
     }
-    .timer-controls {
-        flex-direction: row;
+    .meditation-controls-group, .timer-controls {
+        flex-direction: row; /* Restore row layout for controls */
+        align-items: center;
+        justify-content: center;
     }
-    .timer-controls button {
+    .meditation-controls-group button, .timer-controls button {
         width: auto;
+        max-width: 150px;
+    }
+    .custom-timer-input {
+        flex-direction: row; /* Restore row layout */
+        align-items: center;
+    }
+    .custom-timer-input .input-field {
+        width: auto;
+        max-width: 120px;
+        text-align: center;
+    }
+    .custom-timer-input button {
+        width: auto;
+    }
+    .book-input-area, .search-input-area, .goal-input-area, .setting-item {
+        flex-direction: row; /* Restore row layout */
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .book-input-area .input-field, .search-input-area .input-field, .goal-input-area .input-field,
+    .setting-item .input-field, .setting-item select {
+        width: auto;
+        max-width: unset;
+    }
+    .book-input-area #upload-book-cover-btn, .book-input-area #add-book,
+    .search-input-area #clear-book-search, .goal-input-area button,
+    .setting-buttons-group button {
+        width: auto;
+        max-width: unset;
+        border-radius: 25px; /* Restore pill shape */
+    }
+    #daily-reminder-time {
+        width: 90px;
+    }
+    #toast-container {
+        top: 15px; /* Move back to top-right in landscape */
+        bottom: unset;
+        left: unset;
+        right: 15px;
+        align-items: flex-end; /* Align to right */
+    }
+    .toast {
+        transform: translateX(120%); /* Slide from right */
     }
 }

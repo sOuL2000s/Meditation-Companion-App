@@ -24,8 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setCustomMeditationBtn: document.getElementById('set-custom-meditation'),
         meditationSessionsList: document.getElementById('meditation-sessions-list'),
         openIntervalTimerBtn: document.getElementById('open-interval-timer-btn'),
-        ambientSoundSelector: document.getElementById('ambient-sound-selector'),
-        ambientVolumeControl: document.getElementById('ambient-volume'),
 
         // Book Section
         newBookCoverInput: document.getElementById('new-book-cover'),
@@ -63,8 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
         customBackgroundFileInput: document.getElementById('custom-background-file'),
         uploadCustomBackgroundBtn: document.getElementById('upload-custom-background-btn'),
         clearCustomBackgroundBtn: document.getElementById('clear-custom-background-btn'),
-        bellSoundToggle: document.getElementById('bell-sound-toggle'),
-        bellVolumeControl: document.getElementById('bell-volume'),
         dailyReminderTimeInput: document.getElementById('daily-reminder-time'),
         setDailyReminderBtn: document.getElementById('set-daily-reminder-btn'),
         clearDailyReminderBtn: document.getElementById('clear-daily-reminder-btn'),
@@ -88,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalBookTitle: document.getElementById('modal-book-title'),
         modalBookAuthor: document.getElementById('modal-book-author'),
         modalBookGenre: document.getElementById('modal-book-genre'),
-        modalBookStatusContainer: document.getElementById('modal-book-status-container'), // This will hold the select dropdown
+        modalBookStatusContainer: document.getElementById('modal-book-status-container'),
         modalBookRating: document.getElementById('modal-book-rating'),
         modalBookTotalPages: document.getElementById('modal-book-total-pages'),
         modalBookCurrentPage: document.getElementById('modal-book-current-page'),
@@ -121,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let meditationDurationTarget = 0; // In milliseconds, for presets & intervals
     let meditationType = 'standard'; // 'standard' or 'interval' or 'freestyle' (for 0 duration target)
     let currentIntervalIndex = 0;
-    let intervalTimerSteps = []; // [{duration, sound, label}]
+    let intervalTimerSteps = []; // [{duration, label}] (sounds removed)
 
     let currentReadingBookId = null;
     let bookReadingTimerInterval;
@@ -134,51 +130,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // books: [{ id, title, author, totalPages, currentPage, readingSessions: [{ startTime, endTime, durationMs }], notes: [{ id, text, date }], coverImage?, status?, rating?, genre? }]
     let books = loadData('books', []);
 
-    // goals: [{ id, type, value, period, currentProgress, completed, startDate, endDate? }]
+    // goals: [{ id, type, targetValue, period, currentProgress, completed, startDate, lastUpdate }]
     let goals = loadData('goals', []);
 
-    // settings: { theme, bellSound, bellVolume, ambientSound, ambientVolume, dailyReminderTime, customBackground }
+    // settings: { theme, dailyReminderTime, customBackground }
     let settings = loadData('settings', {
-        theme: 'light',
-        bellSound: true,
-        bellVolume: 0.5,
-        ambientSound: 'none',
-        ambientVolume: 0.5,
+        theme: 'yogify-serene', // New default theme
         dailyReminderTime: '',
         customBackground: null
     });
 
-    // achievementsList: [{ id, name, description, check(), unlocked, icon }] (stored without check function)
-    const achievementsList = loadData('achievementsList', [
-        { id: 'first_session', name: 'First Step', description: 'Complete your first meditation session.', unlocked: false, icon: 'fas fa-shoe-prints' },
-        { id: 'seven_day_streak', name: '7-Day Streak', description: 'Meditate for 7 consecutive days.', unlocked: false, icon: 'fas fa-fire' },
-        { id: '30_min_meditation', name: 'Deep Dive', description: 'Complete a meditation session of 30 minutes or more.', unlocked: false, icon: 'fas fa-mountain' },
-        { id: '10_hours_meditated', name: 'Seasoned Seeker', description: 'Accumulate 10 hours of meditation.', unlocked: false, icon: 'fas fa-star' },
-        { id: 'first_book_finished', name: 'Wisdom Gained', description: 'Mark your first spiritual book as "Finished".', unlocked: false, icon: 'fas fa-feather-alt' },
-        { id: 'five_books_finished', name: 'Enlightened Library', description: 'Finish 5 spiritual books.', unlocked: false, icon: 'fas fa-book-sparkles' },
-        { id: 'first_journal_entry', name: 'Inner Voice', description: 'Write your first meditation journal entry.', unlocked: false, icon: 'fas fa-pen-nib' },
-        { id: 'first_book_note', name: 'Reflective Reader', description: 'Add your first note to a spiritual book.', unlocked: false, icon: 'fas fa-highlighter' },
-    ]);
-
-
-    // --- Audio Context & Buffers ---
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const soundBuffers = {}; // To store loaded audio buffers
-    const ambientSoundSources = {}; // To store active ambient sound sources
-    let bellSoundVolumeNode, ambientSoundVolumeNode;
-
-    // Freesound.org URLs:
-    // Please note: These are example URLs from Freesound.org.
-    // Always check the specific license of each sound for your use case.
-    // You can download these or similar sounds from freesound.org.
-    // For Freesound, you usually need to create an account to download.
-    const BELL_SOUND_URL = 'https://freesound.org/data/previews/203/203061_2112423-lq.mp3'; // Meditation Bell (user: tmk_sound)
-    const AMBIENT_SOUND_URLS = {
-        rain: 'https://freesound.org/data/previews/25/25010_25086-lq.mp3', // Rain (user: Herbert Boland)
-        forest: 'https://freesound.org/data/previews/140/140645_1955038-lq.mp3', // Forest Birds (user: dobroide)
-        ocean: 'https://freesound.org/data/previews/165/165780_2984100-lq.mp3', // Ocean Waves (user: Erdie)
-        chimes: 'https://freesound.org/data/previews/131/131652_2415714-lq.mp3' // Wind Chimes (user: kyles)
-    };
+    // achievementsList: [{ id, name, description, check(), unlocked, icon }] (check function is part of the JS definition, only unlocked status is persisted)
+    // Define achievement check functions here to ensure they are always present.
+    const baseAchievements = [
+        { id: 'first_session', name: 'First Step', description: 'Complete your first meditation session.', unlocked: false, icon: 'fas fa-shoe-prints', check: () => meditationSessions.length >= 1 },
+        { id: 'seven_day_streak', name: '7-Day Streak', description: 'Meditate for 7 consecutive days.', unlocked: false, icon: 'fas fa-fire', check: () => calculateStreaks().longestStreak >= 7 },
+        { id: '30_min_meditation', name: 'Deep Dive', description: 'Complete a meditation session of 30 minutes or more.', unlocked: false, icon: 'fas fa-mountain', check: () => meditationSessions.some(s => s.durationMs >= 30 * 60 * 1000) },
+        { id: '10_hours_meditated', name: 'Seasoned Seeker', description: 'Accumulate 10 hours of meditation.', unlocked: false, icon: 'fas fa-star', check: () => meditationSessions.reduce((sum, s) => sum + s.durationMs, 0) >= 10 * 60 * 60 * 1000 },
+        { id: 'first_book_finished', name: 'Wisdom Gained', description: 'Mark your first spiritual book as "Finished".', unlocked: false, icon: 'fas fa-feather-alt', check: () => books.some(b => b.status === 'Finished') },
+        { id: 'five_books_finished', name: 'Enlightened Library', description: 'Finish 5 spiritual books.', unlocked: false, icon: 'fas fa-book-sparkles', check: () => books.filter(b => b.status === 'Finished').length >= 5 },
+        { id: 'first_journal_entry', name: 'Inner Voice', description: 'Write your first meditation journal entry.', unlocked: false, icon: 'fas fa-pen-nib', check: () => meditationSessions.some(s => s.journalEntry && s.journalEntry.length > 0) },
+        { id: 'first_book_note', name: 'Reflective Reader', description: 'Add your first note to a spiritual book.', unlocked: false, icon: 'fas fa-highlighter', check: () => books.some(b => b.notes && b.notes.length > 0) },
+    ];
+    let achievementsList = loadAchievementsWithChecks(baseAchievements, loadData('achievementsListStatus', []));
 
     // --- Charts ---
     let meditationTimeChart, meditationSessionsChart, moodDistributionChart, topTagsChart, bookReadingTimeChart;
@@ -215,6 +189,23 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(`Error saving data for key ${key}:`, e);
             showToast('Not enough storage space. Please clear some data.', 'error');
         }
+    }
+
+    /**
+     * Loads achievement status and merges with base achievement definitions.
+     * @param {Array} baseAch The full achievement definitions with check functions.
+     * @param {Array} storedStatus The stored unlocked status (id, unlocked).
+     * @returns {Array} The merged achievements list.
+     */
+    function loadAchievementsWithChecks(baseAch, storedStatus) {
+        const mergedList = [...baseAch]; // Deep copy to avoid modifying base
+        storedStatus.forEach(stored => {
+            const ach = mergedList.find(a => a.id === stored.id);
+            if (ach) {
+                ach.unlocked = stored.unlocked;
+            }
+        });
+        return mergedList;
     }
 
     /**
@@ -262,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {HTMLElement} modalElement
      */
     function openModal(modalElement) {
-        modalElement.style.display = 'block';
+        modalElement.style.display = 'flex'; // Use flex for centering
         document.body.classList.add('modal-open');
     }
 
@@ -303,73 +294,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
 
-    // --- Audio Functions ---
-    async function loadSound(url, name) {
-        try {
-            const response = await fetch(url);
-            const arrayBuffer = await response.arrayBuffer();
-            soundBuffers[name] = await audioContext.decodeAudioData(arrayBuffer);
-            // console.log(`Sound ${name} loaded.`);
-        } catch (error) {
-            console.error(`Error loading sound ${name}:`, error);
-            showToast(`Could not load sound: ${name}.`, 'error');
-        }
-    }
-
-    function playSound(buffer, volumeNode, loop = false) {
-        if (!buffer) {
-            console.warn(`Attempted to play undefined sound buffer: ${buffer}`);
-            return null;
-        }
-        if (audioContext.state === 'suspended') {
-            audioContext.resume(); // Resume audio context if it's suspended (e.g., on first user interaction)
-        }
-
-        const source = audioContext.createBufferSource();
-        source.buffer = buffer;
-        source.loop = loop;
-        source.connect(volumeNode);
-        volumeNode.connect(audioContext.destination);
-        source.start(0);
-        return source;
-    }
-
-    function stopSound(source) {
-        if (source) {
-            try {
-                source.stop();
-                source.disconnect();
-            } catch (e) {
-                // Audio node might have already stopped or been disconnected
-                // console.warn("Error stopping sound source (might already be stopped):", e);
-            }
-        }
-    }
-
-    function updateVolumeNodes() {
-        if (!bellSoundVolumeNode) {
-            bellSoundVolumeNode = audioContext.createGain();
-            ambientSoundVolumeNode = audioContext.createGain();
-        }
-        bellSoundVolumeNode.gain.value = settings.bellSound ? settings.bellVolume : 0;
-        ambientSoundVolumeNode.gain.value = settings.ambientVolume;
-    }
-
-    function stopAllAmbientSounds() {
-        for (const key in ambientSoundSources) {
-            stopSound(ambientSoundSources[key]);
-            delete ambientSoundSources[key];
-        }
-    }
-
-    function startAmbientSound(soundName) {
-        stopAllAmbientSounds();
-        if (soundName !== 'none' && soundBuffers[soundName]) {
-            ambientSoundSources[soundName] = playSound(soundBuffers[soundName], ambientSoundVolumeNode, true);
-        }
-    }
-
-
     // --- Meditation Logic ---
 
     function startMeditationTimer(durationMinutes = 0, type = 'standard') {
@@ -386,12 +310,12 @@ document.addEventListener('DOMContentLoaded', () => {
             meditationElapsedTime = 0;
             currentIntervalIndex = 0; // Reset for new session
         } else {
+            // Resume from pause
             meditationStartTime = Date.now() - meditationElapsedTime;
             meditationPaused = false;
         }
 
         updateMeditationButtonStates(true, false, false);
-        startAmbientSound(settings.ambientSound);
         showToast('Meditation started.', 'info');
 
         meditationTimerInterval = setInterval(() => {
@@ -400,20 +324,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (meditationType === 'standard' && meditationDurationTarget > 0 && meditationElapsedTime >= meditationDurationTarget) {
                 stopMeditationTimer();
-                playSound(soundBuffers['bell'], bellSoundVolumeNode);
                 showToast('Meditation session completed!', 'success');
             } else if (meditationType === 'interval' && intervalTimerSteps.length > 0) {
+                // Calculate total duration up to the current interval step
                 const totalIntervalDurationSoFar = intervalTimerSteps.slice(0, currentIntervalIndex + 1).reduce((sum, step) => sum + (step.duration * 1000), 0);
 
                 if (meditationElapsedTime >= totalIntervalDurationSoFar) {
                     currentIntervalIndex++;
                     if (currentIntervalIndex < intervalTimerSteps.length) {
                         const nextStep = intervalTimerSteps[currentIntervalIndex];
-                        playSound(soundBuffers[nextStep.sound], bellSoundVolumeNode);
                         showToast(`Next Interval: ${nextStep.label} (${nextStep.duration}s)`, 'info');
                     } else {
                         stopMeditationTimer();
-                        playSound(soundBuffers['bell'], bellSoundVolumeNode);
                         showToast('Interval meditation completed!', 'success');
                     }
                 }
@@ -427,16 +349,14 @@ document.addEventListener('DOMContentLoaded', () => {
         meditationTimerInterval = null;
         meditationPaused = true;
         updateMeditationButtonStates(false, true, false);
-        stopAllAmbientSounds();
         showToast('Meditation paused.', 'info');
     }
 
     function stopMeditationTimer() {
-        if (!meditationTimerInterval && !meditationPaused) return;
+        if (!meditationTimerInterval && !meditationPaused) return; // Not running and not paused, nothing to stop
 
         clearInterval(meditationTimerInterval);
         meditationTimerInterval = null;
-        stopAllAmbientSounds();
 
         const durationMs = meditationElapsedTime;
 
@@ -478,7 +398,6 @@ document.addEventListener('DOMContentLoaded', () => {
         meditationDurationTarget = 0;
         meditationType = 'standard';
         currentIntervalIndex = 0;
-        stopAllAmbientSounds();
         elements.meditationTimerDisplay.textContent = '00:00:00';
         elements.customMeditationMinutesInput.value = ''; // Clear custom input
         updateMeditationButtonStates(false, true, true);
@@ -488,7 +407,11 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.startMeditationBtn.disabled = isTimerRunning && !isTimerPaused;
         elements.pauseMeditationBtn.disabled = !isTimerRunning || isTimerPaused;
         elements.stopMeditationBtn.disabled = !isTimerRunning && !isTimerPaused;
-        elements.resetMeditationBtn.disabled = !isTimerRunning && !isTimerPaused;
+        elements.resetMeditationBtn.disabled = isTimerRunning; // Reset should be enabled when paused or stopped
+        if (!isTimerRunning && !isTimerPaused && meditationElapsedTime === 0) { // Initial state
+             elements.resetMeditationBtn.disabled = true;
+        }
+
         elements.presetMeditationButtons.forEach(btn => btn.disabled = isTimerRunning);
         elements.openIntervalTimerBtn.disabled = isTimerRunning;
         elements.setCustomMeditationBtn.disabled = isTimerRunning;
@@ -516,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${session.mood ? `<span class="session-mood-emoji" title="Mood: ${session.mood}"> ${getEmojiForMood(session.mood)}</span>` : ''}
                     ${tags}
                 </div>
-                <button class="view-journal-btn btn-sm" data-session-id="${session.id}" title="View/Edit Journal"><i class="fas fa-feather-alt"></i></button>
+                <button class="view-journal-btn btn-sm" data-session-id="${session.id}" title="View/Edit Journal" aria-label="View or edit journal for session on ${date.toLocaleDateString()}"><i class="fas fa-feather-alt"></i></button>
             `;
             elements.meditationSessionsList.appendChild(li);
         });
@@ -561,10 +484,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return { currentStreak: 0, longestStreak: 0 };
         }
 
-        const uniqueDates = [...new Set(meditationSessions
+        const uniqueDatesMs = [...new Set(meditationSessions
             .map(session => {
                 const d = new Date(session.startTime);
-                return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime(); // Normalize to midnight
+                d.setHours(0,0,0,0); // Normalize to midnight
+                return d.getTime();
             }))]
             .sort((a, b) => a - b); // Sort chronologically
 
@@ -573,20 +497,23 @@ document.addEventListener('DOMContentLoaded', () => {
         let tempCurrentStreak = 0;
         let lastDateMs = null;
 
-        const todayMs = new Date();
-        todayMs.setHours(0,0,0,0);
-        const yesterdayMs = new Date(todayMs);
-        yesterdayMs.setDate(todayMs.getDate() - 1);
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const todayMs = today.getTime();
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+        const yesterdayMs = yesterday.getTime();
 
-        for (let i = 0; i < uniqueDates.length; i++) {
-            const currentDateMs = uniqueDates[i];
+
+        for (let i = 0; i < uniqueDatesMs.length; i++) {
+            const currentDateMs = uniqueDatesMs[i];
             if (lastDateMs === null) {
                 tempCurrentStreak = 1;
             } else {
                 const dayDiff = (currentDateMs - lastDateMs) / (1000 * 60 * 60 * 24);
-                if (dayDiff === 1) {
+                if (dayDiff === 1) { // Consecutive day
                     tempCurrentStreak++;
-                } else if (dayDiff > 1) {
+                } else if (dayDiff > 1) { // Gap
                     tempCurrentStreak = 1;
                 }
             }
@@ -594,23 +521,17 @@ document.addEventListener('DOMContentLoaded', () => {
             lastDateMs = currentDateMs;
         }
 
-        // Calculate current streak based on today or yesterday
-        currentStreak = 0;
-        if (uniqueDates.includes(todayMs.getTime())) {
-            currentStreak = tempCurrentStreak; // If today has a session, current streak is the last calculated one
-        } else if (uniqueDates.includes(yesterdayMs.getTime())) {
-            // If the last session was yesterday, current streak is the streak ending yesterday
-            let streakEndingYesterday = 0;
-            let tempDate = yesterdayMs.getTime();
-            for (let i = uniqueDates.length - 1; i >= 0; i--) {
-                if (uniqueDates[i] === tempDate) {
-                    streakEndingYesterday++;
-                    tempDate -= (1000 * 60 * 60 * 24);
-                } else if (uniqueDates[i] < tempDate) {
-                    break;
-                }
-            }
-            currentStreak = streakEndingYesterday;
+        // Calculate current streak based on today or yesterday having a session
+        const latestUniqueDate = uniqueDatesMs[uniqueDatesMs.length - 1];
+
+        if (latestUniqueDate === todayMs) {
+            currentStreak = tempCurrentStreak;
+        } else if (latestUniqueDate === yesterdayMs) {
+            // If the last session was yesterday, current streak is the streak ending yesterday.
+            // This 'tempCurrentStreak' already reflects the streak ending at latestUniqueDate.
+            currentStreak = tempCurrentStreak;
+        } else {
+            currentStreak = 0; // No session today or yesterday, streak broken
         }
         
         return { currentStreak, longestStreak };
@@ -619,11 +540,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function openMeditationJournalModal(sessionId) {
         const session = meditationSessions.find(s => s.id === sessionId);
         if (session) {
-            // Reset mood selection
-            elements.journalMoodEmojis.forEach(emoji => emoji.classList.remove('selected'));
+            // Reset mood selection and set accessibility attributes
+            elements.journalMoodEmojis.forEach(emoji => {
+                emoji.classList.remove('selected');
+                emoji.setAttribute('aria-checked', 'false');
+            });
             if (session.mood) {
                 const selectedEmoji = document.querySelector(`.mood-emojis .emoji[data-mood="${session.mood}"]`);
-                if (selectedEmoji) selectedEmoji.classList.add('selected');
+                if (selectedEmoji) {
+                    selectedEmoji.classList.add('selected');
+                    selectedEmoji.setAttribute('aria-checked', 'true');
+                }
             }
 
             elements.journalEnergyLevel.value = session.energy !== null ? session.energy : 5;
@@ -670,13 +597,9 @@ document.addEventListener('DOMContentLoaded', () => {
         div.className = 'interval-step';
         div.innerHTML = `
             <label>Step ${stepCount + 1}:</label>
-            <input type="number" value="60" min="5" placeholder="Seconds" data-type="duration" class="input-field small-input"><span>s</span>
-            <select data-type="sound" class="input-field small-input">
-                <option value="bell">Bell</option>
-                <option value="chimes">Chimes</option>
-            </select>
-            <input type="text" placeholder="Label (e.g., Focus)" data-type="label" class="input-field">
-            <button class="delete-step-btn delete-button btn-sm"><i class="fas fa-times"></i></button>
+            <input type="number" value="60" min="5" placeholder="Seconds" data-type="duration" class="input-field small-input" aria-label="Step ${stepCount + 1} duration in seconds"><span>s</span>
+            <input type="text" placeholder="Label (e.g., Focus)" data-type="label" class="input-field" aria-label="Step ${stepCount + 1} label">
+            <button class="delete-step-btn delete-button btn-sm" aria-label="Delete Step"><i class="fas fa-times"></i></button>
         `;
         elements.intervalStepsContainer.appendChild(div);
         div.querySelector('.delete-step-btn').onclick = (e) => e.target.closest('.interval-step').remove();
@@ -686,10 +609,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const steps = [];
         elements.intervalStepsContainer.querySelectorAll('.interval-step').forEach(stepDiv => {
             const duration = parseInt(stepDiv.querySelector('[data-type="duration"]').value, 10);
-            const sound = stepDiv.querySelector('[data-type="sound"]').value;
             const label = stepDiv.querySelector('[data-type="label"]').value || `Step ${steps.length + 1}`;
             if (!isNaN(duration) && duration > 0) {
-                steps.push({ duration, sound, label });
+                steps.push({ duration, label });
             }
         });
         return steps;
@@ -709,12 +631,17 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('Please enter a book title!', 'error');
             return;
         }
+        if (totalPages < 0) {
+            showToast('Total pages cannot be negative!', 'error');
+            return;
+        }
+
 
         books.push({
             id: generateId(),
             title: title,
             author: author || 'Unknown Author',
-            totalPages: isNaN(totalPages) || totalPages < 0 ? 0 : totalPages,
+            totalPages: isNaN(totalPages) ? 0 : totalPages,
             currentPage: 0,
             readingSessions: [],
             notes: [],
@@ -729,7 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.newBookPagesInput.value = '';
         elements.newBookGenreInput.value = '';
         newBookCoverBase64 = null; // Clear selected cover
-        elements.uploadBookCoverBtn.innerHTML = '<i class="fas fa-image"></i>'; // Reset button icon
+        elements.uploadBookCoverBtn.innerHTML = '<i class="fas fa-image"></i> Upload Cover Image'; // Reset button icon & text
         renderBooks();
         updateBookStatistics();
         updateAchievements();
@@ -739,7 +666,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startBookReading(bookId) {
         if (currentReadingBookId) {
-            showToast('Please stop reading the current book before starting another.', 'info');
+            if (currentReadingBookId === bookId) {
+                 showToast('You are already reading this book.', 'info');
+            } else {
+                 showToast('Please stop reading the current book before starting another.', 'info');
+            }
             return;
         }
 
@@ -750,16 +681,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (book && book.status !== 'Reading') {
             book.status = 'Reading';
             saveData('books', books);
-            renderBooks();
+            renderBooks(); // Re-render to update status display
         }
         updateBookButtonsState();
         showToast(`Started reading "${book.title}".`, 'info');
     }
 
     function stopBookReading(bookId) {
-        if (currentReadingBookId !== bookId) return;
+        if (currentReadingBookId !== bookId) return; // Only stop if it's the currently tracked book
 
-        clearInterval(bookReadingTimerInterval);
+        clearInterval(bookReadingTimerInterval); // Ensure any interval is cleared (though not used currently)
         const endTime = Date.now();
         const durationMs = endTime - bookReadingStartTime;
 
@@ -804,7 +735,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return book.title.toLowerCase().includes(lowerCaseFilter) ||
                    book.author.toLowerCase().includes(lowerCaseFilter) ||
                    book.genre.toLowerCase().includes(lowerCaseFilter);
-        });
+        }).sort((a,b) => a.title.localeCompare(b.title)); // Sort alphabetically
 
         if (filteredBooks.length === 0 && filterText === '') {
             elements.booksList.innerHTML = '<li class="info-message">No spiritual books added yet. Add your first scroll of wisdom!</li>';
@@ -822,7 +753,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const coverSrc = book.coverImage || './img/default_book.png'; // Fallback to default image
 
             li.innerHTML = `
-                <img src="${coverSrc}" alt="Book Cover" class="book-cover-thumbnail">
+                <img src="${coverSrc}" alt="Book Cover of ${book.title}" class="book-cover-thumbnail">
                 <div class="book-item-info">
                     <strong>${book.title}</strong>
                     <span>by ${book.author} | ${book.genre || 'N/A'}</span>
@@ -830,16 +761,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span>Total Read: ${formatDuration(totalReadingMs)}</span>
                 </div>
                 <div class="book-item-controls">
-                    <button class="start-reading" data-book-id="${book.id}" title="Start Reading">
+                    <button class="start-reading btn-sm" data-book-id="${book.id}" title="Start Reading" aria-label="Start reading ${book.title}">
                         <i class="fas fa-play"></i>
                     </button>
-                    <button class="stop-reading" data-book-id="${book.id}" title="Stop Reading">
+                    <button class="stop-reading btn-sm" data-book-id="${book.id}" title="Stop Reading" aria-label="Stop reading ${book.title}">
                         <i class="fas fa-stop"></i>
                     </button>
-                    <button class="view-book-details btn-sm" data-book-id="${book.id}" title="View Details & Notes">
+                    <button class="view-book-details btn-sm" data-book-id="${book.id}" title="View Details & Notes" aria-label="View details for ${book.title}">
                         <i class="fas fa-info-circle"></i>
                     </button>
-                    <button class="delete-book delete-button btn-sm" data-book-id="${book.id}" title="Delete Book">
+                    <button class="delete-book delete-button btn-sm" data-book-id="${book.id}" title="Delete Book" aria-label="Delete ${book.title}">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
@@ -871,7 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('Cannot delete a book while it is being read. Please stop the timer first.', 'error');
             return;
         }
-        showConfirmationModal('Are you sure you want to delete this book and all its reading records?', () => {
+        showConfirmationModal('Are you sure you want to delete this book and all its reading records? This action cannot be undone.', () => {
             books = books.filter(book => book.id !== bookId);
             saveData('books', books);
             renderBooks();
@@ -903,7 +834,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const progress = book.totalPages > 0 ? ((book.currentPage / book.totalPages) * 100).toFixed(1) : 0;
             elements.modalBookProgress.textContent = `${progress}%`;
             elements.modalProgressBar.style.width = `${progress}%`;
-            elements.modalProgressBar.ariaValueNow = progress; // For accessibility
+            elements.modalProgressBar.ariaValueNow = progress;
         };
         updateProgressDisplay();
 
@@ -918,7 +849,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateGoals();
             } else {
                 e.target.value = book.currentPage; // Revert to previous valid page
-                showToast('Invalid page number! Must be between 0 and total pages.', 'error');
+                showToast(`Invalid page number! Must be between 0 and ${book.totalPages}.`, 'error');
             }
         };
 
@@ -928,18 +859,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const star = document.createElement('i');
             star.className = `fas fa-star ${i <= book.rating ? 'active' : ''}`;
             star.dataset.rating = i;
+            star.setAttribute('role', 'radio');
+            star.setAttribute('aria-label', `${i} stars`);
+            star.setAttribute('aria-checked', i <= book.rating ? 'true' : 'false');
+            star.tabIndex = 0; // Make stars keyboard navigable
             star.onclick = () => {
                 book.rating = i;
                 saveData('books', books);
                 openBookDetailsModal(bookId); // Re-render stars
                 showToast(`Rated "${book.title}" ${i} stars.`, 'info');
             };
+            // Add keyboard navigation for stars
+            star.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    book.rating = i;
+                    saveData('books', books);
+                    openBookDetailsModal(bookId); // Re-render stars
+                    showToast(`Rated "${book.title}" ${i} stars.`, 'info');
+                }
+            });
             elements.modalBookRating.appendChild(star);
         }
 
         // Dropdown for Status
         const statusSelect = document.createElement('select');
         statusSelect.className = 'input-field small-input';
+        statusSelect.setAttribute('aria-label', `Change status for ${book.title}`);
         ['Reading', 'Finished', 'Want to Read'].forEach(status => {
             const option = document.createElement('option');
             option.value = status;
@@ -969,6 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveData('books', books);
                 elements.modalBookNotesInput.value = '';
                 renderBookNotes(book);
+                updateAchievements(); // Check for 'first_book_note' achievement
                 showToast('Note added!', 'success');
             } else {
                 showToast('Note cannot be empty!', 'warning');
@@ -991,7 +938,7 @@ document.addEventListener('DOMContentLoaded', () => {
             li.innerHTML = `
                 <div class="note-content">${note.text}</div>
                 <span class="note-date">${new Date(note.date).toLocaleDateString()} ${new Date(note.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                <button class="delete-note-btn delete-button btn-sm" data-note-id="${note.id}"><i class="fas fa-times"></i></button>
+                <button class="delete-note-btn delete-button btn-sm" data-note-id="${note.id}" aria-label="Delete note"><i class="fas fa-times"></i></button>
             `;
             elements.modalBookNotesList.appendChild(li);
         });
@@ -1009,6 +956,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Statistics & Charts ---
 
+    // Helper to get CSS variable for chart colors
+    function getCssVar(name) {
+        return getComputedStyle(document.body).getPropertyValue(name).trim();
+    }
+
     function createOrUpdateChart(chartVar, canvasId, type, data, options) {
         const ctx = document.getElementById(canvasId).getContext('2d');
         if (chartVar) {
@@ -1018,26 +970,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderMeditationCharts() {
+        const textColor = getCssVar('--text-color');
+        const primaryColor = getCssVar('--primary-color');
+        const secondaryColor = getCssVar('--secondary-color');
+        const accentColor = getCssVar('--accent-color');
+        const borderColor = getCssVar('--border-color');
+        const cardBg = getCssVar('--card-background');
+        const secondaryColorAlpha = getCssVar('--secondary-color-alpha');
+
+
         // Common chart options
         const commonOptions = {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
+                legend: { labels: { color: textColor } },
+                tooltip: {
+                    bodyColor: textColor,
+                    titleColor: primaryColor,
+                    backgroundColor: cardBg,
+                    borderColor: borderColor,
+                    borderWidth: 1,
+                }
             },
             scales: {
                 x: {
                     type: 'time',
                     time: { unit: 'day', tooltipFormat: 'MMM d, yyyy' },
-                    title: { display: true, text: 'Date', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                    title: { display: true, text: 'Date', color: primaryColor },
+                    ticks: { color: textColor },
+                    grid: { color: borderColor }
                 },
                 y: {
                     beginAtZero: true,
-                    title: { display: true, text: 'Value', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                    title: { display: true, text: 'Value', color: primaryColor },
+                    ticks: { color: textColor },
+                    grid: { color: borderColor }
                 }
             }
         };
@@ -1055,10 +1023,10 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Daily Meditation Time (minutes)',
                 data: medTimeData,
-                borderColor: getComputedStyle(document.body).getPropertyValue('--secondary-color'),
+                borderColor: secondaryColor,
                 tension: 0.3,
                 fill: true,
-                backgroundColor: 'rgba(124, 58, 237, 0.2)', // Light fill for line chart
+                backgroundColor: secondaryColorAlpha, // Use alpha version of secondary
                 pointRadius: 3,
                 pointHoverRadius: 6
             }]
@@ -1076,8 +1044,8 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Daily Meditation Sessions',
                 data: sessionCountData,
-                backgroundColor: getComputedStyle(document.body).getPropertyValue('--primary-color'),
-                borderColor: getComputedStyle(document.body).getPropertyValue('--primary-color'),
+                backgroundColor: primaryColor,
+                borderColor: primaryColor,
                 borderWidth: 1
             }]
         }, { ...commonOptions, scales: { ...commonOptions.scales, y: { ...commonOptions.scales.y, title: { display: true, text: 'Sessions' }, ticks: { precision: 0 } } } });
@@ -1093,13 +1061,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const moodData = Object.values(moodCounts);
         const moodColors = moodLabels.map(mood => { // Assign consistent colors
             switch (mood) {
-                case 'calm': return '#81C784'; // Greenish
-                case 'focused': return '#64B5F6'; // Blueish
-                case 'peaceful': return '#BA68C8'; // Purplish
-                case 'energetic': return '#FFEB3B'; // Yellowish
-                case 'tired': return '#90A4AE'; // Greyish
-                case 'anxious': return '#EF5350'; // Reddish
-                case 'happy': return '#FFD54F'; // Orangeish
+                case 'calm': return '#66bb6a'; // Light Green
+                case 'focused': return '#42a5f5'; // Light Blue
+                case 'peaceful': return '#ab47bc'; // Purple
+                case 'energetic': return '#ffee58'; // Yellow
+                case 'tired': return '#9e9e9e'; // Grey
+                case 'anxious': return '#ef5350'; // Red
+                case 'happy': return '#ffca28'; // Amber
                 default: return '#CCCCCC';
             }
         });
@@ -1109,16 +1077,21 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 data: moodData,
                 backgroundColor: moodColors,
-                borderColor: getComputedStyle(document.body).getPropertyValue('--card-background'),
+                borderColor: cardBg,
                 borderWidth: 2
             }]
         }, {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'top', labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
-                title: { display: true, text: 'Mood Distribution', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
+                legend: { position: 'top', labels: { color: textColor } },
+                title: { display: true, text: 'Mood Distribution', color: primaryColor },
                 tooltip: {
+                    bodyColor: textColor,
+                    titleColor: primaryColor,
+                    backgroundColor: cardBg,
+                    borderColor: borderColor,
+                    borderWidth: 1,
                     callbacks: {
                         label: function(context) {
                             let label = context.label || '';
@@ -1156,8 +1129,8 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Tag Usage',
                 data: tagData,
-                backgroundColor: getComputedStyle(document.body).getPropertyValue('--accent-color'),
-                borderColor: getComputedStyle(document.body).getPropertyValue('--accent-color'),
+                backgroundColor: accentColor,
+                borderColor: accentColor,
                 borderWidth: 1
             }]
         }, {
@@ -1165,26 +1138,40 @@ document.addEventListener('DOMContentLoaded', () => {
             maintainAspectRatio: false,
             indexAxis: 'y', // Horizontal bars
             plugins: {
-                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
-                title: { display: true, text: 'Top Meditation Tags', color: getComputedStyle(document.body).getPropertyValue('--primary-color') }
+                legend: { labels: { color: textColor } },
+                title: { display: true, text: 'Top Meditation Tags', color: primaryColor },
+                tooltip: {
+                    bodyColor: textColor,
+                    titleColor: primaryColor,
+                    backgroundColor: cardBg,
+                    borderColor: borderColor,
+                    borderWidth: 1,
+                }
             },
             scales: {
                 x: {
                     beginAtZero: true,
-                    title: { display: true, text: 'Count', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { precision: 0, color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                    title: { display: true, text: 'Count', color: primaryColor },
+                    ticks: { precision: 0, color: textColor },
+                    grid: { color: borderColor }
                 },
                 y: {
-                    title: { display: true, text: 'Tag', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                    title: { display: true, text: 'Tag', color: primaryColor },
+                    ticks: { color: textColor },
+                    grid: { color: borderColor }
                 }
             }
         });
     }
 
     function updateBookStatistics() {
+        const textColor = getCssVar('--text-color');
+        const primaryColor = getCssVar('--primary-color');
+        const secondaryColor = getCssVar('--secondary-color');
+        const borderColor = getCssVar('--border-color');
+        const cardBg = getCssVar('--card-background');
+
+
         // Book Reading Time Chart
         const bookReadingTotals = {};
         books.forEach(book => {
@@ -1199,28 +1186,35 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Total Reading Time (hours)',
                 data: bookData,
-                backgroundColor: getComputedStyle(document.body).getPropertyValue('--secondary-color'),
-                borderColor: getComputedStyle(document.body).getPropertyValue('--secondary-color'),
+                backgroundColor: secondaryColor,
+                borderColor: secondaryColor,
                 borderWidth: 1
             }]
         }, {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color') } },
-                title: { display: true, text: 'Book Reading Time by Book', color: getComputedStyle(document.body).getPropertyValue('--primary-color') }
+                legend: { labels: { color: textColor } },
+                title: { display: true, text: 'Book Reading Time by Book', color: primaryColor },
+                tooltip: {
+                    bodyColor: textColor,
+                    titleColor: primaryColor,
+                    backgroundColor: cardBg,
+                    borderColor: borderColor,
+                    borderWidth: 1,
+                }
             },
             scales: {
                 x: {
                     beginAtZero: true,
-                    title: { display: true, text: 'Book Title', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                    title: { display: true, text: 'Book Title', color: primaryColor },
+                    ticks: { color: textColor },
+                    grid: { color: borderColor }
                 },
                 y: {
-                    title: { display: true, text: 'Hours', color: getComputedStyle(document.body).getPropertyValue('--primary-color') },
-                    ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-color') },
-                    grid: { color: getComputedStyle(document.body).getPropertyValue('--border-color') }
+                    title: { display: true, text: 'Hours', color: primaryColor },
+                    ticks: { color: textColor },
+                    grid: { color: borderColor }
                 }
             }
         });
@@ -1309,7 +1303,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentProgress: 0, // Will be calculated by updateGoals
             completed: false,
             startDate: new Date().toISOString(),
-            lastUpdate: new Date().toISOString()
+            lastUpdate: null // Will be set on completion
         };
         goals.push(newGoal);
         saveData('goals', goals);
@@ -1321,23 +1315,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateGoals() {
         const now = new Date();
-        goals.forEach(goal => {
-            if (goal.completed) return; // Don't update completed goals
+        const startOfThisWeek = new Date(now);
+        startOfThisWeek.setDate(now.getDate() - now.getDay()); // Sunday (adjust if your week starts on Monday)
+        startOfThisWeek.setHours(0,0,0,0);
 
-            let currentProgress = 0;
+        const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        startOfThisMonth.setHours(0,0,0,0);
+
+        let changed = false;
+
+        goals.forEach(goal => {
+            if (goal.completed) return;
+
             let relevantMeditations = [];
             let relevantBooks = [];
+            let currentProgress = 0;
 
             if (goal.period === 'week') {
-                const startOfWeek = new Date(now);
-                startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday (adjust if your week starts on Monday)
-                startOfWeek.setHours(0,0,0,0);
-                relevantMeditations = meditationSessions.filter(s => new Date(s.startTime) >= startOfWeek);
-                // For books, we'll continue to count finished books overall for simplicity, as per-week finished books is complex
-                relevantBooks = books; 
+                relevantMeditations = meditationSessions.filter(s => new Date(s.startTime) >= startOfThisWeek);
+                relevantBooks = books; // Currently, book goals are overall, not per week/month
             } else if (goal.period === 'month') {
-                const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-                relevantMeditations = meditationSessions.filter(s => new Date(s.startTime) >= startOfMonth);
+                relevantMeditations = meditationSessions.filter(s => new Date(s.startTime) >= startOfThisMonth);
                 relevantBooks = books;
             } else { // 'overall'
                 relevantMeditations = meditationSessions;
@@ -1352,15 +1350,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentProgress = relevantBooks.filter(b => b.status === 'Finished').length;
             }
 
-            goal.currentProgress = currentProgress;
-            if (goal.currentProgress >= goal.targetValue) {
+            // Check if progress actually changed before updating
+            if (goal.currentProgress !== currentProgress) {
+                goal.currentProgress = currentProgress;
+                changed = true;
+            }
+
+            if (goal.currentProgress >= goal.targetValue && !goal.completed) {
                 goal.completed = true;
                 goal.lastUpdate = new Date().toISOString(); // Mark completion date
                 showToast(`Goal Completed: ${GOAL_TYPES[goal.type].label} of ${goal.targetValue} ${GOAL_TYPES[goal.type].unit} ${goal.period === 'overall' ? '' : 'per ' + goal.period}!`, 'success');
+                changed = true;
             }
         });
-        saveData('goals', goals);
-        renderGoals();
+
+        if (changed) {
+            saveData('goals', goals);
+            renderGoals();
+        }
     }
 
     function renderGoals() {
@@ -1387,7 +1394,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <span>Progress: ${progress}%</span>
                 </div>
-                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}" title="Delete Goal"><i class="fas fa-trash-alt"></i></button>
+                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}" title="Delete Goal" aria-label="Delete goal: ${GOAL_TYPES[goal.type].label} ${goal.targetValue} ${GOAL_TYPES[goal.type].unit}"></button>
             `;
             elements.activeGoalsList.appendChild(li);
         });
@@ -1403,7 +1410,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <span>Completed on: ${new Date(goal.lastUpdate).toLocaleDateString()}</span>
                 </div>
-                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}" title="Delete Goal"><i class="fas fa-trash-alt"></i></button>
+                <button class="delete-goal-btn delete-button btn-sm" data-id="${goal.id}" title="Delete Goal" aria-label="Delete completed goal: ${GOAL_TYPES[goal.type].label} ${goal.targetValue} ${GOAL_TYPES[goal.type].unit}"></button>
             `;
             elements.completedGoalsList.appendChild(li);
         });
@@ -1414,7 +1421,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function deleteGoal(goalId) {
-        showConfirmationModal('Are you sure you want to delete this goal?', () => {
+        showConfirmationModal('Are you sure you want to delete this goal? This action cannot be undone.', () => {
             goals = goals.filter(g => g.id !== goalId);
             saveData('goals', goals);
             renderGoals();
@@ -1426,43 +1433,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Achievements Logic ---
 
-    // Define check functions dynamically to allow for data updates
-    const achievementCheckFunctions = {
-        'first_session': () => meditationSessions.length >= 1,
-        'seven_day_streak': () => calculateStreaks().longestStreak >= 7,
-        '30_min_meditation': () => meditationSessions.some(s => s.durationMs >= 30 * 60 * 1000),
-        '10_hours_meditated': () => meditationSessions.reduce((sum, s) => sum + s.durationMs, 0) >= 10 * 60 * 60 * 1000,
-        'first_book_finished': () => books.some(b => b.status === 'Finished'),
-        'five_books_finished': () => books.filter(b => b.status === 'Finished').length >= 5,
-        'first_journal_entry': () => meditationSessions.some(s => s.journalEntry && s.journalEntry.length > 0),
-        'first_book_note': () => books.some(b => b.notes && b.notes.length > 0),
-    };
-
-
     function updateAchievements() {
         let changed = false;
         achievementsList.forEach(achievement => {
-            // Apply the check function from the map
-            if (!achievement.unlocked && achievementCheckFunctions[achievement.id] && achievementCheckFunctions[achievement.id]()) {
+            if (!achievement.unlocked && achievement.check()) { // Call the check function
                 achievement.unlocked = true;
                 changed = true;
                 showToast(`Achievement Unlocked: ${achievement.name}!`, 'success');
             }
         });
         if (changed) {
-            saveData('achievementsList', achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked }))); // Save only id and unlocked status
+            // Save only id and unlocked status
+            saveData('achievementsListStatus', achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked })));
             renderAchievements();
         }
     }
 
     function renderAchievements() {
         elements.achievementsGrid.innerHTML = '';
-        // Use the globally defined achievementsList which should have its unlocked status updated
         achievementsList.forEach(achievement => {
             const card = document.createElement('div');
             card.className = `achievement-card ${achievement.unlocked ? 'unlocked' : ''}`;
+            card.setAttribute('aria-label', achievement.unlocked ? `Achievement unlocked: ${achievement.name}. ${achievement.description}` : `Achievement locked: ${achievement.name}. ${achievement.description}`);
             card.innerHTML = `
-                <i class="${achievement.icon}"></i>
+                <i class="${achievement.icon}" aria-hidden="true"></i>
                 <h4>${achievement.name}</h4>
                 <p>${achievement.description}</p>
             `;
@@ -1475,10 +1469,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function applySettings() {
         document.body.className = `${settings.theme}-theme`; // Set theme class
         elements.themeSelector.value = settings.theme;
-        elements.bellSoundToggle.checked = settings.bellSound;
-        elements.bellVolumeControl.value = settings.bellVolume;
-        elements.ambientSoundSelector.value = settings.ambientSound;
-        elements.ambientVolumeControl.value = settings.ambientVolume;
         elements.dailyReminderTimeInput.value = settings.dailyReminderTime;
 
         if (settings.customBackground) {
@@ -1489,17 +1479,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             document.body.style.backgroundImage = '';
         }
-
-        updateVolumeNodes(); // Update gain node values
-        startAmbientSound(settings.ambientSound); // Restart ambient sound if active
+        // Re-render charts to pick up new theme colors
+        if (document.getElementById('statistics-section').classList.contains('active-section')) {
+             renderMeditationCharts();
+             updateBookStatistics();
+        }
     }
 
     function saveSettings() {
         settings.theme = elements.themeSelector.value;
-        settings.bellSound = elements.bellSoundToggle.checked;
-        settings.bellVolume = parseFloat(elements.bellVolumeControl.value);
-        settings.ambientSound = elements.ambientSoundSelector.value;
-        settings.ambientVolume = parseFloat(elements.ambientVolumeControl.value);
         settings.dailyReminderTime = elements.dailyReminderTimeInput.value;
 
         saveData('settings', settings);
@@ -1507,14 +1495,12 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('Settings saved!', 'info');
     }
 
+    let reminderTimeoutId = null; // Use timeout for initial, then interval for repeats
     let reminderIntervalId = null;
 
     function setDailyReminder() {
-        // Clear existing interval if any
-        if (reminderIntervalId) {
-            clearInterval(reminderIntervalId);
-            reminderIntervalId = null;
-        }
+        // Clear any existing reminders first
+        clearDailyReminder();
 
         if (!settings.dailyReminderTime) {
             showToast('Please select a time for the reminder.', 'error');
@@ -1544,27 +1530,24 @@ document.addEventListener('DOMContentLoaded', () => {
     function scheduleReminder() {
         const [hour, minute] = settings.dailyReminderTime.split(':').map(Number);
 
-        // Schedule the initial notification
         const now = new Date();
         let nextReminder = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0, 0);
 
         if (nextReminder.getTime() <= now.getTime()) {
-            // If the time has already passed today, schedule for tomorrow
-            nextReminder.setDate(nextReminder.getDate() + 1);
+            nextReminder.setDate(nextReminder.getDate() + 1); // Schedule for tomorrow
         }
 
         const timeUntilNextReminder = nextReminder.getTime() - now.getTime();
 
-        // Use setTimeout for the first notification, then setInterval for daily repeats
-        reminderIntervalId = setTimeout(() => {
-            new Notification('Mystic Vision', {
+        reminderTimeoutId = setTimeout(() => {
+            new Notification('Yogify Reminder', {
                 body: 'Time for your daily meditation!',
-                icon: './img/icon.png' // Ensure you have an icon.png in your img folder
+                icon: './img/icon.png' // Ensure this path is correct
             });
 
             // Set interval for subsequent daily reminders (every 24 hours)
             reminderIntervalId = setInterval(() => {
-                new Notification('Mystic Vision', {
+                new Notification('Yogify Reminder', {
                     body: 'Time for your daily meditation!',
                     icon: './img/icon.png'
                 });
@@ -1572,13 +1555,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }, timeUntilNextReminder);
 
         showToast(`Daily meditation reminder set for ${settings.dailyReminderTime}.`, 'success');
+        settings.dailyReminderTime = elements.dailyReminderTimeInput.value; // Save selected time
+        saveData('settings', settings);
     }
 
 
     function clearDailyReminder() {
+        if (reminderTimeoutId) {
+            clearTimeout(reminderTimeoutId);
+            reminderTimeoutId = null;
+        }
         if (reminderIntervalId) {
             clearInterval(reminderIntervalId);
-            clearTimeout(reminderIntervalId); // Clear both in case it's the initial timeout
             reminderIntervalId = null;
         }
         settings.dailyReminderTime = '';
@@ -1593,9 +1581,9 @@ document.addEventListener('DOMContentLoaded', () => {
             books: books,
             goals: goals,
             settings: settings,
-            achievementsList: achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked }))
+            achievementsListStatus: achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked }))
         };
-        const filename = `mystic_vision_data_${new Date().toISOString().slice(0, 10)}.json`;
+        const filename = `yogify_data_${new Date().toISOString().slice(0, 10)}.json`;
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -1621,18 +1609,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (importedData.books) books = importedData.books;
                     if (importedData.goals) goals = importedData.goals;
                     if (importedData.settings) settings = importedData.settings;
-                    if (importedData.achievementsList) {
-                        importedData.achievementsList.forEach(importedAch => {
-                            const localAch = achievementsList.find(la => la.id === importedAch.id);
-                            if (localAch) localAch.unlocked = importedAch.unlocked;
-                        });
+                    if (importedData.achievementsListStatus) { // Check for the new key
+                        achievementsList = loadAchievementsWithChecks(baseAchievements, importedData.achievementsListStatus);
                     }
 
                     saveData('meditationSessions', meditationSessions);
                     saveData('books', books);
                     saveData('goals', goals);
                     saveData('settings', settings);
-                    saveData('achievementsList', achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked })));
+                    saveData('achievementsListStatus', achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked })));
 
                     initializeApp();
                     showToast('Data imported successfully! The page will refresh.', 'success');
@@ -1656,8 +1641,8 @@ document.addEventListener('DOMContentLoaded', () => {
             meditationSessions = [];
             books = [];
             goals = [];
-            settings = { theme: 'light', bellSound: true, bellVolume: 0.5, ambientSound: 'none', ambientVolume: 0.5, dailyReminderTime: '', customBackground: null };
-            achievementsList.forEach(a => a.unlocked = false); // Reset achievements
+            settings = { theme: 'yogify-serene', dailyReminderTime: '', customBackground: null };
+            achievementsList = loadAchievementsWithChecks(baseAchievements, []); // Reset achievements to default unlocked=false
             initializeApp();
             showToast('All data cleared! The page will refresh.', 'success');
             closeModal(elements.confirmationModal);
@@ -1717,7 +1702,7 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.startMeditationBtn.addEventListener('click', () => {
         const customMinutes = parseInt(elements.customMeditationMinutesInput.value, 10);
         if (!isNaN(customMinutes) && customMinutes > 0) {
-            startMeditationTimer(customMinutes);
+            startMeditationTimer(customMinutes, 'standard');
         } else {
             // If no custom minutes are set or it's 0, treat as freestyle
             startMeditationTimer(0, 'freestyle');
@@ -1765,8 +1750,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     elements.journalMoodEmojis.forEach(emoji => {
         emoji.addEventListener('click', () => {
-            elements.journalMoodEmojis.forEach(e => e.classList.remove('selected'));
+            elements.journalMoodEmojis.forEach(e => {
+                e.classList.remove('selected');
+                e.setAttribute('aria-checked', 'false');
+            });
             emoji.classList.add('selected');
+            emoji.setAttribute('aria-checked', 'true');
+        });
+        // Add keyboard navigation for mood emojis
+        emoji.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                elements.journalMoodEmojis.forEach(el => {
+                    el.classList.remove('selected');
+                    el.setAttribute('aria-checked', 'false');
+                });
+                emoji.classList.add('selected');
+                emoji.setAttribute('aria-checked', 'true');
+            }
         });
     });
     elements.journalEnergyLevel.addEventListener('input', (e) => {
@@ -1778,11 +1779,11 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.newBookCoverInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
-            if (file.size > 500 * 1024) { // 500 KB limit
-                showToast('Image size too large! Max 500KB.', 'error');
+            if (file.size > 500 * 1024) { // 500 KB limit for book covers
+                showToast('Book cover image size too large! Max 500KB.', 'error');
                 e.target.value = ''; // Clear the input
                 newBookCoverBase64 = null;
-                elements.uploadBookCoverBtn.innerHTML = '<i class="fas fa-image"></i>';
+                elements.uploadBookCoverBtn.innerHTML = '<i class="fas fa-image"></i> Upload Cover Image'; // Reset button text
                 return;
             }
             const reader = new FileReader();
@@ -1842,10 +1843,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Settings listeners
     elements.themeSelector.addEventListener('change', saveSettings);
-    elements.bellSoundToggle.addEventListener('change', saveSettings);
-    elements.bellVolumeControl.addEventListener('input', saveSettings);
-    elements.ambientSoundSelector.addEventListener('change', saveSettings);
-    elements.ambientVolumeControl.addEventListener('input', saveSettings);
     elements.setDailyReminderBtn.addEventListener('click', setDailyReminder);
     elements.clearDailyReminderBtn.addEventListener('click', clearDailyReminder);
 
@@ -1854,7 +1851,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const file = e.target.files[0];
         if (file) {
             if (file.size > 1024 * 1024) { // 1 MB limit for background
-                showToast('Image size too large! Max 1MB.', 'error');
+                showToast('Background image size too large! Max 1MB.', 'error');
                 e.target.value = '';
                 return;
             }
@@ -1881,14 +1878,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initialization ---
     async function initializeApp() {
-        // Load all sounds first
-        await loadSound(BELL_SOUND_URL, 'bell');
-        await loadSound(AMBIENT_SOUND_URLS.rain, 'rain');
-        await loadSound(AMBIENT_SOUND_URLS.forest, 'forest');
-        await loadSound(AMBIENT_SOUND_URLS.ocean, 'ocean');
-        await loadSound(AMBIENT_SOUND_URLS.chimes, 'chimes');
-        
-        applySettings();
+        applySettings(); // This will apply the theme
         updateMeditationButtonStates(false, true, true);
         renderMeditationSessions();
         updateMeditationStats();
@@ -1896,8 +1886,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateBookStatistics(); // Call to initialize book charts
         renderGoals();
         updateGoals(); // Initial goal check
-        // Achievements should be updated *after* other data, then rendered
-        updateAchievements(); 
+        updateAchievements(); // Achievements should be updated *after* other data
         renderAchievements();
 
         if (settings.dailyReminderTime) {
