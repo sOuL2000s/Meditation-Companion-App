@@ -64,6 +64,7 @@
         <section id="meditation-section" class="app-section" aria-labelledby="meditation-heading">
             <div class="card meditation-timer-card">
                 <h2 id="meditation-heading"><i class="fas fa-om"></i> Meditation Sanctuary</h2>
+                <p class="card-description">Choose a preset, set a custom duration, or start freestyle.</p>
                 <div class="timer-display" id="meditation-timer-display">00:00:00</div>
                 <div class="meditation-controls-group">
                     <div class="preset-buttons">
@@ -87,25 +88,26 @@
                 </div>
             </div>
 
-            <!-- New General Countdown Card -->
-            <div class="card general-timer-card">
-                <h2><i class="fas fa-hourglass-half"></i> General Countdown</h2>
+            <!-- Custom Countdown Meditation Card -->
+            <div class="card custom-countdown-card">
+                <h2><i class="fas fa-hourglass-start"></i> Custom Countdown Meditation</h2>
+                <p class="card-description">Set a specific countdown duration for your practice.</p>
                 <div class="timer-input-group">
-                    <input type="number" id="countdown-hours" min="0" max="23" placeholder="H" class="input-field tiny-input" aria-label="Countdown hours">
-                    <span>:</span>
-                    <input type="number" id="countdown-minutes" min="0" max="59" placeholder="M" class="input-field tiny-input" aria-label="Countdown minutes">
-                    <span>:</span>
-                    <input type="number" id="countdown-seconds" min="0" max="59" placeholder="S" class="input-field tiny-input" aria-label="Countdown seconds">
+                    <input type="number" id="countdown-hours" min="0" max="23" placeholder="H" class="input-field tiny-input" aria-label="Countdown hours" value="00">
+                    <span class="colon">:</span>
+                    <input type="number" id="countdown-minutes" min="0" max="59" placeholder="M" class="input-field tiny-input" aria-label="Countdown minutes" value="00">
+                    <span class="colon">:</span>
+                    <input type="number" id="countdown-seconds" min="0" max="59" placeholder="S" class="input-field tiny-input" aria-label="Countdown seconds" value="00">
                 </div>
                 <div class="countdown-display" id="general-countdown-display">00:00:00</div>
                 <div class="countdown-controls">
-                    <button id="start-countdown" aria-label="Start Countdown"><i class="fas fa-play"></i> Start</button>
-                    <button id="pause-countdown" disabled aria-label="Pause Countdown"><i class="fas fa-pause"></i> Pause</button>
-                    <button id="stop-countdown" disabled aria-label="Stop Countdown"><i class="fas fa-stop"></i> Stop</button>
-                    <button id="reset-countdown" aria-label="Reset Countdown"><i class="fas fa-redo-alt"></i> Reset</button>
+                    <button id="start-countdown" aria-label="Start Countdown Meditation"><i class="fas fa-play"></i> Start</button>
+                    <button id="pause-countdown" disabled aria-label="Pause Countdown Meditation"><i class="fas fa-pause"></i> Pause</button>
+                    <button id="stop-countdown" disabled aria-label="Stop Countdown Meditation"><i class="fas fa-stop"></i> Stop</button>
+                    <button id="reset-countdown" aria-label="Reset Countdown Meditation"><i class="fas fa-redo-alt"></i> Reset</button>
                 </div>
                 <div class="countdown-options">
-                    <input type="text" id="countdown-label" placeholder="e.g., Cooking Timer, Study Break" class="input-field" aria-label="Optional countdown label">
+                    <input type="text" id="countdown-label" placeholder="e.g., Deep Breathing, Body Scan" class="input-field" aria-label="Optional countdown label">
                     <div class="notification-toggle">
                         <span>Notify on Finish:</span>
                         <label class="switch" aria-label="Toggle notification on finish">

@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         meditationSessionsList: document.getElementById('meditation-sessions-list'),
         openIntervalTimerBtn: document.getElementById('open-interval-timer-btn'),
 
-        // General Countdown Timer (New)
+        // Custom Countdown Meditation (formerly General Countdown Timer)
         countdownHoursInput: document.getElementById('countdown-hours'),
         countdownMinutesInput: document.getElementById('countdown-minutes'),
         countdownSecondsInput: document.getElementById('countdown-seconds'),
@@ -131,16 +131,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIntervalIndex = 0;
     let intervalTimerSteps = []; // [{duration, label}] (sounds removed)
 
-    // General Countdown Timer state (New)
-    let generalCountdownInterval = null;
-    let generalCountdownRemainingMs = 0;
-    let generalCountdownInitialMs = 0; // The total duration user set
-    let generalCountdownPaused = false;
-    let generalCountdownEndTime = 0; // When the timer should end if running
+    // Custom Countdown Meditation state
+    let customCountdownInterval = null;
+    let customCountdownStartTime = 0; // The actual time countdown began for this session
+    let customCountdownRemainingMs = 0; // Time left on the countdown
+    let customCountdownInitialSetMs = 0; // The total duration user initially set
+    let customCountdownPaused = false;
+    let customCountdownEndTime = 0; // When the timer should end if running
 
     let currentReadingBookId = null;
     let bookReadingTimerInterval;
     let bookReadingStartTime = 0;
+
+    // This flag indicates which meditation-recording timer is currently active
+    // null: no timer active
+    // 'meditation': Meditation Sanctuary timer is active
+    // 'custom-countdown': Custom Countdown Meditation is active
+    let activeRecordingSessionType = null;
+
 
     // --- Data Structures (Persisted in localStorage) ---
     // meditationSessions: [{ id, startTime, endTime, durationMs, date, journalEntry?, mood?, energy?, tags?, type? }]
@@ -159,10 +167,10 @@ document.addEventListener('DOMContentLoaded', () => {
         customBackground: null
     });
 
-    // generalCountdown: { remainingMs, initialMs, paused, endTime, label, notify }
-    let generalCountdownState = loadData('generalCountdownState', {
+    // customCountdownState: { remainingMs, initialSetMs, paused, endTime, label, notify }
+    let customCountdownState = loadData('customCountdownState', {
         remainingMs: 0,
-        initialMs: 0,
+        initialSetMs: 0,
         paused: false,
         endTime: 0,
         label: '',
@@ -324,11 +332,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
 
-    // --- Meditation Logic ---
+    // --- Meditation Logic (Main Sanctuary Timer) ---
 
     function startMeditationTimer(durationMinutes = 0, type = 'standard') {
-        if (meditationTimerInterval) {
-            showToast('Meditation already running!', 'warning');
+        if (activeRecordingSessionType) {
+            showToast('Another meditation timer is already active!', 'warning');
             return;
         }
 
@@ -340,12 +348,13 @@ document.addEventListener('DOMContentLoaded', () => {
             meditationElapsedTime = 0;
             currentIntervalIndex = 0; // Reset for new session
         } else {
-            // Resume from pause
             meditationStartTime = Date.now() - meditationElapsedTime;
             meditationPaused = false;
         }
+        
+        activeRecordingSessionType = 'meditation';
+        updateAllTimerButtonStates(); // Update all timer buttons
 
-        updateMeditationButtonStates(true, false, false);
         showToast('Meditation started.', 'info');
 
         meditationTimerInterval = setInterval(() => {
@@ -356,7 +365,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 stopMeditationTimer();
                 showToast('Meditation session completed!', 'success');
             } else if (meditationType === 'interval' && intervalTimerSteps.length > 0) {
-                // Calculate total duration up to the current interval step
                 const totalIntervalDurationSoFar = intervalTimerSteps.slice(0, currentIntervalIndex + 1).reduce((sum, step) => sum + (step.duration * 1000), 0);
 
                 if (meditationElapsedTime >= totalIntervalDurationSoFar) {
@@ -378,12 +386,13 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(meditationTimerInterval);
         meditationTimerInterval = null;
         meditationPaused = true;
-        updateMeditationButtonStates(false, true, false);
+        activeRecordingSessionType = 'meditation'; // Still considered active but paused
+        updateAllTimerButtonStates();
         showToast('Meditation paused.', 'info');
     }
 
     function stopMeditationTimer() {
-        if (!meditationTimerInterval && !meditationPaused) return; // Not running and not paused, nothing to stop
+        if (!meditationTimerInterval && !meditationPaused) return;
 
         clearInterval(meditationTimerInterval);
         meditationTimerInterval = null;
@@ -430,23 +439,48 @@ document.addEventListener('DOMContentLoaded', () => {
         currentIntervalIndex = 0;
         elements.meditationTimerDisplay.textContent = '00:00:00';
         elements.customMeditationMinutesInput.value = ''; // Clear custom input
-        updateMeditationButtonStates(false, true, true);
+        
+        activeRecordingSessionType = null;
+        updateAllTimerButtonStates();
     }
 
-    function updateMeditationButtonStates(isTimerRunning, isTimerPaused, isTimerReset) {
-        elements.startMeditationBtn.disabled = isTimerRunning && !isTimerPaused;
-        elements.pauseMeditationBtn.disabled = !isTimerRunning || isTimerPaused;
-        elements.stopMeditationBtn.disabled = !isTimerRunning && !isTimerPaused;
-        elements.resetMeditationBtn.disabled = isTimerRunning; // Reset should be enabled when paused or stopped
-        if (!isTimerRunning && !isTimerPaused && meditationElapsedTime === 0) { // Initial state
-             elements.resetMeditationBtn.disabled = true;
-        }
+    // --- General function to update ALL timer button states ---
+    function updateAllTimerButtonStates() {
+        // Meditation Sanctuary Timer States
+        const isMeditationRunning = meditationTimerInterval !== null;
+        const isMeditationPaused = meditationPaused;
+        const isMeditationActive = isMeditationRunning || isMeditationPaused;
+        const isMeditationIdle = !isMeditationActive && meditationElapsedTime === 0;
 
-        elements.presetMeditationButtons.forEach(btn => btn.disabled = isTimerRunning);
-        elements.openIntervalTimerBtn.disabled = isTimerRunning;
-        elements.setCustomMeditationBtn.disabled = isTimerRunning;
-        elements.customMeditationMinutesInput.disabled = isTimerRunning;
+        elements.startMeditationBtn.disabled = isMeditationRunning || activeRecordingSessionType === 'custom-countdown';
+        elements.pauseMeditationBtn.disabled = !isMeditationRunning;
+        elements.stopMeditationBtn.disabled = (!isMeditationActive && meditationElapsedTime === 0) || activeRecordingSessionType === 'custom-countdown';
+        elements.resetMeditationBtn.disabled = isMeditationIdle || activeRecordingSessionType === 'custom-countdown';
+
+        elements.presetMeditationButtons.forEach(btn => btn.disabled = isMeditationActive || activeRecordingSessionType === 'custom-countdown');
+        elements.openIntervalTimerBtn.disabled = isMeditationActive || activeRecordingSessionType === 'custom-countdown';
+        elements.setCustomMeditationBtn.disabled = isMeditationActive || activeRecordingSessionType === 'custom-countdown';
+        elements.customMeditationMinutesInput.disabled = isMeditationActive || activeRecordingSessionType === 'custom-countdown';
+
+
+        // Custom Countdown Meditation Timer States
+        const isCountdownRunning = customCountdownInterval !== null;
+        const isCountdownPaused = customCountdownPaused;
+        const isCountdownActive = isCountdownRunning || isCountdownPaused;
+        const isCountdownIdle = !isCountdownActive && customCountdownRemainingMs === 0;
+
+        elements.startCountdownBtn.disabled = isCountdownRunning || activeRecordingSessionType === 'meditation';
+        elements.pauseCountdownBtn.disabled = !isCountdownRunning;
+        elements.stopCountdownBtn.disabled = (!isCountdownActive && customCountdownRemainingMs === 0) || activeRecordingSessionType === 'meditation';
+        elements.resetCountdownBtn.disabled = isCountdownIdle || activeRecordingSessionType === 'meditation';
+
+        elements.countdownHoursInput.disabled = isCountdownActive || activeRecordingSessionType === 'meditation';
+        elements.countdownMinutesInput.disabled = isCountdownActive || activeRecordingSessionType === 'meditation';
+        elements.countdownSecondsInput.disabled = isCountdownActive || activeRecordingSessionType === 'meditation';
+        elements.countdownLabelInput.disabled = isCountdownActive || activeRecordingSessionType === 'meditation';
+        elements.countdownNotificationToggle.disabled = isCountdownActive || activeRecordingSessionType === 'meditation';
     }
+
 
     function renderMeditationSessions() {
         elements.meditationSessionsList.innerHTML = ''; // Clear all
@@ -465,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
             li.innerHTML = `
                 <div>
                     <span class="session-date">${date.toLocaleDateString()} at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                    <br><strong class="session-duration">${formatDuration(session.durationMs)}</strong> (${session.type === 'interval' ? 'Interval' : 'Standard'})
+                    <br><strong class="session-duration">${formatDuration(session.durationMs)}</strong> (${session.type === 'interval' ? 'Interval' : session.type === 'freestyle' ? 'Freestyle' : session.type === 'custom-countdown' ? 'Countdown' : 'Standard'})
                     ${session.mood ? `<span class="session-mood-emoji" title="Mood: ${session.mood}"> ${getEmojiForMood(session.mood)}</span>` : ''}
                     ${tags}
                 </div>
@@ -647,37 +681,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return steps;
     }
 
-    // --- General Countdown Timer Logic (New) ---
+    // --- Custom Countdown Meditation Logic ---
 
-    function updateCountdownDisplay() {
-        elements.generalCountdownDisplay.textContent = formatTime(generalCountdownRemainingMs);
-        const hours = Math.floor(generalCountdownRemainingMs / (1000 * 60 * 60));
-        const minutes = Math.floor((generalCountdownRemainingMs % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((generalCountdownRemainingMs % (1000 * 60)) / 1000);
-        elements.countdownHoursInput.value = hours;
-        elements.countdownMinutesInput.value = minutes;
-        elements.countdownSecondsInput.value = seconds;
+    function updateCustomCountdownDisplay() {
+        elements.generalCountdownDisplay.textContent = formatTime(customCountdownRemainingMs);
+        const hours = Math.floor(customCountdownRemainingMs / (1000 * 60 * 60));
+        const minutes = Math.floor((customCountdownRemainingMs % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((customCountdownRemainingMs % (1000 * 60)) / 1000);
+        elements.countdownHoursInput.value = String(hours).padStart(2, '0');
+        elements.countdownMinutesInput.value = String(minutes).padStart(2, '0');
+        elements.countdownSecondsInput.value = String(seconds).padStart(2, '0');
     }
 
-    function updateCountdownButtonStates(isRunning, isPaused) {
-        elements.countdownHoursInput.disabled = isRunning || isPaused;
-        elements.countdownMinutesInput.disabled = isRunning || isPaused;
-        elements.countdownSecondsInput.disabled = isRunning || isPaused;
-        elements.countdownLabelInput.disabled = isRunning || isPaused;
-        elements.countdownNotificationToggle.disabled = isRunning || isPaused;
-
-        elements.startCountdownBtn.disabled = isRunning;
-        elements.pauseCountdownBtn.disabled = !isRunning;
-        elements.stopCountdownBtn.disabled = !isRunning && !isPaused;
-        elements.resetCountdownBtn.disabled = isRunning; // Reset should be available when paused or stopped
-        if (!isRunning && !isPaused && generalCountdownRemainingMs === 0) {
-            elements.resetCountdownBtn.disabled = true;
-        }
-    }
-
-    function startCountdown() {
-        if (generalCountdownInterval) {
-            showToast('Countdown already running!', 'warning');
+    function startCustomCountdown() {
+        if (activeRecordingSessionType) {
+            showToast('Another meditation timer is already active!', 'warning');
             return;
         }
 
@@ -685,152 +703,190 @@ document.addEventListener('DOMContentLoaded', () => {
         const m = parseInt(elements.countdownMinutesInput.value) || 0;
         const s = parseInt(elements.countdownSecondsInput.value) || 0;
 
-        let totalMs = (h * 3600 + m * 60 + s) * 1000;
+        let totalMsForThisRun = (h * 3600 + m * 60 + s) * 1000;
 
-        if (totalMs <= 0 && generalCountdownRemainingMs <= 0) {
+        if (totalMsForThisRun <= 0 && customCountdownRemainingMs <= 0) {
             showToast('Please set a duration for the countdown!', 'error');
             return;
         }
 
-        if (!generalCountdownPaused) {
-            generalCountdownInitialMs = totalMs;
-            generalCountdownRemainingMs = totalMs;
+        if (!customCountdownPaused) {
+            customCountdownInitialSetMs = totalMsForThisRun; // Only set initial total if not resuming from pause
+            customCountdownRemainingMs = totalMsForThisRun;
+            customCountdownStartTime = Date.now(); // Record when this session *actually starts* for recording
         } else {
-            totalMs = generalCountdownRemainingMs; // Resume from remaining time
-            generalCountdownPaused = false;
+            customCountdownStartTime = Date.now() - (customCountdownInitialSetMs - customCountdownRemainingMs); // Adjust start time for pause
+            customCountdownPaused = false;
         }
-
-        if (generalCountdownRemainingMs <= 0) { // If it was paused at 0 or set to 0 initially
+        
+        if (customCountdownRemainingMs <= 0) {
             showToast('Countdown finished. Please set a new duration.', 'info');
-            resetCountdown();
+            resetCustomCountdown();
             return;
         }
         
-        generalCountdownEndTime = Date.now() + generalCountdownRemainingMs;
+        customCountdownEndTime = Date.now() + customCountdownRemainingMs;
+        activeRecordingSessionType = 'custom-countdown';
+        updateAllTimerButtonStates();
 
-        updateCountdownButtonStates(true, false);
-        elements.countdownLabelInput.disabled = true; // Disable label edit while running
-        elements.countdownNotificationToggle.disabled = true; // Disable notification toggle while running
         showToast(`Countdown "${elements.countdownLabelInput.value || 'Timer'}" started.`, 'info');
 
-        generalCountdownInterval = setInterval(() => {
-            generalCountdownRemainingMs = generalCountdownEndTime - Date.now();
+        customCountdownInterval = setInterval(() => {
+            customCountdownRemainingMs = customCountdownEndTime - Date.now();
 
-            if (generalCountdownRemainingMs <= 0) {
-                generalCountdownRemainingMs = 0;
-                stopCountdown(true); // Call stop with 'finished' flag
+            if (customCountdownRemainingMs <= 0) {
+                customCountdownRemainingMs = 0;
+                stopCustomCountdown(true); // Call stop with 'finished' flag
                 showToast(`Countdown "${elements.countdownLabelInput.value || 'Timer'}" finished!`, 'success');
             }
-            updateCountdownDisplay();
-            saveCountdownState(); // Save state every second
+            updateCustomCountdownDisplay();
+            saveCustomCountdownState(); // Save state every second
         }, 1000);
     }
 
-    function pauseCountdown() {
-        if (!generalCountdownInterval) return;
-        clearInterval(generalCountdownInterval);
-        generalCountdownInterval = null;
-        generalCountdownPaused = true;
-        generalCountdownEndTime = 0; // Clear end time when paused
-        updateCountdownButtonStates(false, true);
-        saveCountdownState();
+    function pauseCustomCountdown() {
+        if (!customCountdownInterval) return;
+        clearInterval(customCountdownInterval);
+        customCountdownInterval = null;
+        customCountdownPaused = true;
+        customCountdownEndTime = 0; // Clear end time when paused
+        activeRecordingSessionType = 'custom-countdown'; // Still considered active but paused
+        updateAllTimerButtonStates();
+        saveCustomCountdownState();
         showToast(`Countdown "${elements.countdownLabelInput.value || 'Timer'}" paused.`, 'info');
     }
 
-    function stopCountdown(finished = false) {
-        if (!generalCountdownInterval && !generalCountdownPaused) return; // Not running and not paused
+    function stopCustomCountdown(finished = false) {
+        if (!customCountdownInterval && !customCountdownPaused) return;
 
-        clearInterval(generalCountdownInterval);
-        generalCountdownInterval = null;
-        generalCountdownPaused = false;
-        generalCountdownEndTime = 0;
+        clearInterval(customCountdownInterval);
+        customCountdownInterval = null;
+        
+        const durationMs = customCountdownInitialSetMs - customCountdownRemainingMs; // Total time elapsed during active countdown
+
+        if (durationMs > 5000) { // Only record sessions longer than 5 seconds
+            const session = {
+                id: generateId(),
+                startTime: customCountdownStartTime,
+                endTime: Date.now(),
+                durationMs: durationMs,
+                date: new Date(customCountdownStartTime).toDateString(),
+                type: 'custom-countdown', // Specific type for this timer
+                mood: null,
+                energy: null,
+                tags: elements.countdownLabelInput.value ? [elements.countdownLabelInput.value] : [], // Use label as initial tag
+                journalEntry: '',
+                gratitudeEntry: ''
+            };
+            meditationSessions.push(session);
+            saveData('meditationSessions', meditationSessions);
+            renderMeditationSessions();
+            updateMeditationStats();
+            updateAchievements();
+            updateGoals();
+            openMeditationJournalModal(session.id);
+            showToast('Countdown meditation session recorded!', 'success');
+        } else if (!finished) { // Don't show for finished timers that are too short
+            showToast('Countdown meditation session was too short to record (min 5s).', 'info');
+        }
 
         if (finished) {
-            if (generalCountdownState.notify && Notification.permission === 'granted') {
-                new Notification('Yogify Countdown', {
-                    body: `${elements.countdownLabelInput.value || 'Your timer'} has finished!`,
+            if (customCountdownState.notify && Notification.permission === 'granted') {
+                new Notification('Yogify Countdown Meditation', {
+                    body: `${elements.countdownLabelInput.value || 'Your custom countdown'} has finished!`,
                     icon: './img/icon.png'
                 });
             }
-            resetCountdown(); // Full reset after finishing
+            resetCustomCountdown(); // Full reset after finishing
         } else {
             showToast(`Countdown "${elements.countdownLabelInput.value || 'Timer'}" stopped.`, 'info');
-            resetCountdown(); // Full reset if manually stopped
+            resetCustomCountdown(); // Full reset if manually stopped
         }
     }
 
-    function resetCountdown() {
-        clearInterval(generalCountdownInterval);
-        generalCountdownInterval = null;
-        generalCountdownRemainingMs = 0;
-        generalCountdownInitialMs = 0;
-        generalCountdownPaused = false;
-        generalCountdownEndTime = 0;
+    function resetCustomCountdown() {
+        clearInterval(customCountdownInterval);
+        customCountdownInterval = null;
+        customCountdownStartTime = 0;
+        customCountdownRemainingMs = 0;
+        customCountdownInitialSetMs = 0;
+        customCountdownPaused = false;
+        customCountdownEndTime = 0;
         
-        elements.countdownHoursInput.value = '';
-        elements.countdownMinutesInput.value = '';
-        elements.countdownSecondsInput.value = '';
+        elements.countdownHoursInput.value = '00';
+        elements.countdownMinutesInput.value = '00';
+        elements.countdownSecondsInput.value = '00';
         elements.generalCountdownDisplay.textContent = '00:00:00';
 
         elements.countdownLabelInput.value = ''; // Clear label
         elements.countdownNotificationToggle.checked = false; // Reset notification toggle
 
-        updateCountdownButtonStates(false, false);
-        saveCountdownState();
+        activeRecordingSessionType = null;
+        updateAllTimerButtonStates();
+        saveCustomCountdownState();
     }
 
-    function saveCountdownState() {
-        generalCountdownState = {
-            remainingMs: generalCountdownRemainingMs,
-            initialMs: generalCountdownInitialMs,
-            paused: generalCountdownPaused,
-            endTime: generalCountdownEndTime,
+    function saveCustomCountdownState() {
+        customCountdownState = {
+            remainingMs: customCountdownRemainingMs,
+            initialSetMs: customCountdownInitialSetMs,
+            paused: customCountdownPaused,
+            endTime: customCountdownEndTime,
             label: elements.countdownLabelInput.value,
             notify: elements.countdownNotificationToggle.checked
         };
-        saveData('generalCountdownState', generalCountdownState);
+        saveData('customCountdownState', customCountdownState);
     }
 
-    function loadCountdownState() {
-        elements.countdownLabelInput.value = generalCountdownState.label;
-        elements.countdownNotificationToggle.checked = generalCountdownState.notify;
+    function loadCustomCountdownState() {
+        elements.countdownLabelInput.value = customCountdownState.label;
+        elements.countdownNotificationToggle.checked = customCountdownState.notify;
 
-        if (generalCountdownState.paused) {
-            generalCountdownRemainingMs = generalCountdownState.remainingMs;
-            generalCountdownInitialMs = generalCountdownState.initialMs;
-            generalCountdownPaused = true;
-            updateCountdownDisplay();
-            updateCountdownButtonStates(false, true); // Set to paused state
-            showToast(`Countdown "${generalCountdownState.label || 'Timer'}" was paused.`, 'info');
-        } else if (generalCountdownState.endTime > 0) {
+        if (customCountdownState.paused) {
+            customCountdownRemainingMs = customCountdownState.remainingMs;
+            customCountdownInitialSetMs = customCountdownState.initialSetMs;
+            customCountdownPaused = true;
+            activeRecordingSessionType = 'custom-countdown';
+            updateCustomCountdownDisplay();
+            updateAllTimerButtonStates(); // Set to paused state
+            showToast(`Countdown "${customCountdownState.label || 'Timer'}" was paused.`, 'info');
+        } else if (customCountdownState.endTime > 0) {
             // Timer was running, calculate remaining time
-            generalCountdownRemainingMs = generalCountdownState.endTime - Date.now();
-            generalCountdownInitialMs = generalCountdownState.initialMs;
+            customCountdownRemainingMs = customCountdownState.endTime - Date.now();
+            customCountdownInitialSetMs = customCountdownState.initialSetMs;
 
-            if (generalCountdownRemainingMs <= 0) {
+            if (customCountdownRemainingMs <= 0) {
                 // Timer finished while app was closed
-                generalCountdownRemainingMs = 0;
-                updateCountdownDisplay();
-                updateCountdownButtonStates(false, false);
-                if (generalCountdownState.notify && Notification.permission === 'granted') {
-                    new Notification('Yogify Countdown', {
-                        body: `${generalCountdownState.label || 'Your timer'} finished while you were away!`,
+                customCountdownRemainingMs = 0;
+                updateCustomCountdownDisplay();
+                activeRecordingSessionType = null; // Clear active session type
+                updateAllTimerButtonStates(); // Set to idle state
+                if (customCountdownState.notify && Notification.permission === 'granted') {
+                    new Notification('Yogify Countdown Meditation', {
+                        body: `${customCountdownState.label || 'Your custom countdown'} finished while you were away!`,
                         icon: './img/icon.png'
                     });
                 }
-                resetCountdown(); // Fully reset
-                showToast(`Countdown "${generalCountdownState.label || 'Timer'}" finished!`, 'success');
+                resetCustomCountdown(); // Fully reset
+                showToast(`Countdown "${customCountdownState.label || 'Timer'}" finished!`, 'success');
             } else {
                 // Timer is still running
-                generalCountdownPaused = false; // Set to not paused to restart it
-                updateCountdownDisplay();
-                startCountdown(); // Restart the interval
-                showToast(`Countdown "${generalCountdownState.label || 'Timer'}" resumed.`, 'info');
+                customCountdownPaused = false; // Set to not paused to restart it
+                customCountdownStartTime = Date.now() - (customCountdownInitialSetMs - customCountdownRemainingMs); // Recalculate startTime
+                updateCustomCountdownDisplay();
+                startCustomCountdown(); // Restart the interval
+                showToast(`Countdown "${customCountdownState.label || 'Timer'}" resumed.`, 'info');
             }
         } else {
-            // No active timer, set initial display
-            updateCountdownDisplay();
-            updateCountdownButtonStates(false, false);
+            // No active timer, set initial display from inputs
+            const h = parseInt(elements.countdownHoursInput.value) || 0;
+            const m = parseInt(elements.countdownMinutesInput.value) || 0;
+            const s = parseInt(elements.countdownSecondsInput.value) || 0;
+            customCountdownRemainingMs = (h * 3600 + m * 60 + s) * 1000;
+            customCountdownInitialSetMs = customCountdownRemainingMs;
+            updateCustomCountdownDisplay();
+            activeRecordingSessionType = null;
+            updateAllTimerButtonStates(); // Ensure buttons are reset
         }
     }
 
@@ -1638,16 +1694,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function deleteGoal(goalId) {
-        showConfirmationModal('Are you sure you want to delete this goal? This action cannot be undone.', () => {
-            goals = goals.filter(g => g.id !== goalId);
-            saveData('goals', goals);
-            renderGoals();
-            showToast('Goal deleted.', 'info');
-            closeModal(elements.confirmationModal);
-        });
-    }
-
 
     // --- Achievements Logic ---
 
@@ -1799,7 +1845,7 @@ document.addEventListener('DOMContentLoaded', () => {
             books: books,
             goals: goals,
             settings: settings,
-            generalCountdownState: generalCountdownState, // Include countdown state
+            customCountdownState: customCountdownState, // Include countdown state
             achievementsListStatus: achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked }))
         };
         const filename = `yogify_data_${new Date().toISOString().slice(0, 10)}.json`;
@@ -1828,7 +1874,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (importedData.books) books = importedData.books;
                     if (importedData.goals) goals = importedData.goals;
                     if (importedData.settings) settings = importedData.settings;
-                    if (importedData.generalCountdownState) generalCountdownState = importedData.generalCountdownState; // Import countdown state
+                    if (importedData.customCountdownState) customCountdownState = importedData.customCountdownState; // Import countdown state
                     if (importedData.achievementsListStatus) { // Check for the new key
                         achievementsList = loadAchievementsWithChecks(baseAchievements, importedData.achievementsListStatus);
                     }
@@ -1837,7 +1883,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     saveData('books', books);
                     saveData('goals', goals);
                     saveData('settings', settings);
-                    saveData('generalCountdownState', generalCountdownState); // Save imported countdown state
+                    saveData('customCountdownState', customCountdownState); // Save imported countdown state
                     saveData('achievementsListStatus', achievementsList.map(a => ({ id: a.id, unlocked: a.unlocked })));
 
                     initializeApp();
@@ -1863,7 +1909,7 @@ document.addEventListener('DOMContentLoaded', () => {
             books = [];
             goals = [];
             settings = { theme: 'yogify-serene', dailyReminderTime: '', customBackground: null };
-            generalCountdownState = { remainingMs: 0, initialMs: 0, paused: false, endTime: 0, label: '', notify: false }; // Reset countdown state
+            customCountdownState = { remainingMs: 0, initialSetMs: 0, paused: false, endTime: 0, label: '', notify: false }; // Reset countdown state
             achievementsList = loadAchievementsWithChecks(baseAchievements, []); // Reset achievements to default unlocked=false
             initializeApp();
             showToast('All data cleared! The page will refresh.', 'success');
@@ -1899,7 +1945,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateDashboard();
         } else if (sectionId === 'meditation-section') {
             renderMeditationSessions();
-            loadCountdownState(); // Ensure countdown state is loaded/resumed when section is visible
+            loadCustomCountdownState(); // Ensure countdown state is loaded/resumed when section is visible
         } else if (sectionId === 'books-section') {
             renderBooks();
             elements.bookSearchInput.value = ''; // Clear search on section change
@@ -1950,10 +1996,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const minutes = parseInt(e.target.dataset.minutes, 10);
             elements.customMeditationMinutesInput.value = minutes; // Set custom input field
             showToast(`Meditation preset set for ${minutes} minutes. Click Start when ready!`, 'info');
+            updateAllTimerButtonStates(); // Update states for visual feedback
         });
     });
 
     elements.openIntervalTimerBtn.addEventListener('click', () => {
+        if (activeRecordingSessionType) {
+            showToast('Another meditation timer is already active!', 'warning');
+            return;
+        }
         elements.intervalStepsContainer.innerHTML = ''; // Clear existing steps
         addIntervalStep(); // Add first default step
         openModal(elements.intervalTimerModal);
@@ -1963,9 +2014,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const steps = getIntervalStepsFromUI();
         if (steps.length > 0) {
             intervalTimerSteps = steps;
-            resetMeditationDisplay();
-            closeModal(elements.intervalTimerModal);
+            resetMeditationDisplay(); // Resets main meditation timer, also clears activeRecordingSessionType
+            // After reset, we can start interval timer
             startMeditationTimer(0, 'interval'); // Duration 0 as it's interval controlled
+            closeModal(elements.intervalTimerModal);
         } else {
             showToast('Please add at least one interval step.', 'warning');
         }
@@ -1997,43 +2049,58 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.journalEnergyValue.textContent = e.target.value;
     });
 
-    // General Countdown Timer Event Listeners (New)
-    elements.startCountdownBtn.addEventListener('click', startCountdown);
-    elements.pauseCountdownBtn.addEventListener('click', pauseCountdown);
-    elements.stopCountdownBtn.addEventListener('click', () => stopCountdown(false));
-    elements.resetCountdownBtn.addEventListener('click', resetCountdown);
-    // Persist changes to label and notify toggle
-    elements.countdownLabelInput.addEventListener('input', saveCountdownState);
+    // Custom Countdown Meditation Event Listeners
+    elements.startCountdownBtn.addEventListener('click', startCustomCountdown);
+    elements.pauseCountdownBtn.addEventListener('click', pauseCustomCountdown);
+    elements.stopCountdownBtn.addEventListener('click', () => stopCustomCountdown(false));
+    elements.resetCountdownBtn.addEventListener('click', resetCustomCountdown);
+    
+    elements.countdownLabelInput.addEventListener('input', saveCustomCountdownState);
     elements.countdownNotificationToggle.addEventListener('change', () => {
         if (elements.countdownNotificationToggle.checked && Notification.permission === 'default') {
             Notification.requestPermission(); // Request permission when user enables toggle
         }
-        saveCountdownState();
+        saveCustomCountdownState();
     });
+    
     // Input validation for countdown inputs
     [elements.countdownHoursInput, elements.countdownMinutesInput, elements.countdownSecondsInput].forEach(input => {
         input.addEventListener('input', (e) => {
             let value = parseInt(e.target.value, 10);
-            if (isNaN(value) || value < e.target.min) {
-                e.target.value = e.target.min;
-            } else if (value > e.target.max) {
-                e.target.value = e.target.max;
+            const min = parseInt(e.target.min, 10);
+            const max = parseInt(e.target.max, 10);
+
+            if (isNaN(value)) {
+                e.target.value = ''; // Allow empty for typing
+            } else if (value < min) {
+                e.target.value = min;
+            } else if (value > max) {
+                e.target.value = max;
             }
-            if (e.target.value.length === 1 && value < 10) { // Pad single digits with leading zero for display in input
+
+            // Pad with leading zero only if it's a single digit and not empty
+            if (e.target.value !== '' && String(value).length === 1 && value < 10) {
                 e.target.value = String(value).padStart(2, '0');
             }
-            if (e.target.value === '') e.target.value = '00'; // Default to 00 if cleared
-            if (generalCountdownInterval === null && !generalCountdownPaused) { // Only update display if not running/paused
+            
+            if (activeRecordingSessionType === null || (activeRecordingSessionType === 'custom-countdown' && customCountdownPaused)) {
                  const h = parseInt(elements.countdownHoursInput.value) || 0;
                  const m = parseInt(elements.countdownMinutesInput.value) || 0;
                  const s = parseInt(elements.countdownSecondsInput.value) || 0;
                  elements.generalCountdownDisplay.textContent = formatTime((h * 3600 + m * 60 + s) * 1000);
             }
-            saveCountdownState(); // Save state on input change
+            saveCustomCountdownState(); // Save state on input change
         });
-         input.addEventListener('blur', (e) => { // Ensure 00 on blur if empty
+         input.addEventListener('blur', (e) => { // Ensure 00 on blur if empty or invalid
              if (e.target.value === '' || isNaN(parseInt(e.target.value))) {
                  e.target.value = '00';
+                 // Update display if timer is not running
+                 if (activeRecordingSessionType === null || (activeRecordingSessionType === 'custom-countdown' && customCountdownPaused)) {
+                    const h = parseInt(elements.countdownHoursInput.value) || 0;
+                    const m = parseInt(elements.countdownMinutesInput.value) || 0;
+                    const s = parseInt(elements.countdownSecondsInput.value) || 0;
+                    elements.generalCountdownDisplay.textContent = formatTime((h * 3600 + m * 60 + s) * 1000);
+                }
              }
          });
     });
@@ -2144,7 +2211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initialization ---
     async function initializeApp() {
         applySettings(); // This will apply the theme
-        updateMeditationButtonStates(false, true, true);
+        updateAllTimerButtonStates(); // Set initial button states for both timers
         renderMeditationSessions();
         updateMeditationStats();
         renderBooks();
@@ -2158,23 +2225,22 @@ document.addEventListener('DOMContentLoaded', () => {
             setDailyReminder(); // Re-schedule reminder on load
         }
         
-        // Load countdown state only if the meditation section is active
-        // Otherwise, it will be loaded when the section is shown via showSection()
+        // Load custom countdown state only if the meditation section is active initially
         if (document.getElementById('meditation-section').classList.contains('active-section')) {
-            loadCountdownState();
+            loadCustomCountdownState();
         } else {
-            // Otherwise, initialize the inputs with values from localStorage if they exist, but don't start the timer.
-            // This ensures inputs reflect last saved state even if not running.
-            const h = Math.floor(generalCountdownState.initialMs / (1000 * 60 * 60));
-            const m = Math.floor((generalCountdownState.initialMs % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((generalCountdownState.initialMs % (1000 * 60)) / 1000);
-            elements.countdownHoursInput.value = h > 0 ? String(h).padStart(2, '0') : '00';
-            elements.countdownMinutesInput.value = m > 0 ? String(m).padStart(2, '0') : '00';
-            elements.countdownSecondsInput.value = s > 0 ? String(s).padStart(2, '0') : '00';
-            elements.generalCountdownDisplay.textContent = formatTime(generalCountdownState.initialMs || 0); // Display initial duration
-            elements.countdownLabelInput.value = generalCountdownState.label;
-            elements.countdownNotificationToggle.checked = generalCountdownState.notify;
-            updateCountdownButtonStates(false, false); // Ensure buttons are reset
+            // If not active, ensure inputs are populated but timer is not auto-started
+            const h = Math.floor(customCountdownState.initialSetMs / (1000 * 60 * 60));
+            const m = Math.floor((customCountdownState.initialSetMs % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((customCountdownState.initialSetMs % (1000 * 60)) / 1000);
+            elements.countdownHoursInput.value = String(h).padStart(2, '0');
+            elements.countdownMinutesInput.value = String(m).padStart(2, '0');
+            elements.countdownSecondsInput.value = String(s).padStart(2, '0');
+            elements.generalCountdownDisplay.textContent = formatTime(customCountdownState.initialSetMs || 0);
+            elements.countdownLabelInput.value = customCountdownState.label;
+            elements.countdownNotificationToggle.checked = customCountdownState.notify;
+            activeRecordingSessionType = null; // Ensure no timer is marked as active if starting on non-meditation section
+            updateAllTimerButtonStates(); // Apply correct button states based on no active timer
         }
 
         showSection('dashboard-section'); // Show dashboard by default

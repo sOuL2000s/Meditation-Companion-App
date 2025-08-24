@@ -315,7 +315,8 @@ main {
 
 .app-section.active-section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Flexible grid layout, slightly smaller min-width */
+    /* Adjusted minmax for better two-column fit before collapsing */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
     gap: 2em; /* Reduced gap */
     opacity: 1;
     transform: translateY(0);
@@ -354,7 +355,8 @@ main {
 h2 {
     color: var(--primary-color);
     margin-top: 0;
-    font-size: clamp(1.8em, 4vw, 2.5em);
+    /* Adjusted clamp for better scaling on smaller screens */
+    font-size: clamp(1.4em, 5vw, 2.2em); 
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 0.8em;
     margin-bottom: 1.5em;
@@ -502,6 +504,8 @@ select {
     padding: 0.7em 0.4em; /* Reduced padding to fit */
     text-align: center;
     -moz-appearance: textfield; /* Remove number input arrows for Firefox */
+    /* Ensure vertical alignment */
+    vertical-align: middle; 
 }
 /* Hide number input arrows for Chrome, Safari, Edge */
 .tiny-input::-webkit-outer-spin-button,
@@ -581,7 +585,8 @@ ul li:last-child {
 }
 
 .timer-display {
-    font-size: clamp(3.5em, 8vw, 5em); /* Responsive font size, slightly smaller max */
+    /* Adjusted clamp for better scaling on smaller screens */
+    font-size: clamp(2.5em, 10vw, 3.5em); 
     font-weight: bold;
     color: var(--primary-color);
     text-align: center;
@@ -660,17 +665,21 @@ ul li:last-child {
     margin-left: 0.4em; /* Reduced margin */
 }
 
-/* --- General Countdown Card (New Feature) --- */
-.general-timer-card {
+/* --- Custom Countdown Meditation Card --- */
+.custom-countdown-card {
     grid-column: span 1; /* Occupy single column */
     text-align: center; /* Center content within the card */
 }
 
-.general-timer-card h2 {
+.custom-countdown-card h2 {
     justify-content: center; /* Center icon and text */
 }
+/* Reduce description margin for the countdown card */
+.custom-countdown-card .card-description {
+    margin-bottom: 1em;
+}
 
-.general-timer-card .timer-input-group {
+.custom-countdown-card .timer-input-group {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -678,28 +687,33 @@ ul li:last-child {
     margin-bottom: 1.5em;
     flex-wrap: wrap; /* Allow wrapping on very small screens */
 }
+/* Stack H:M:S inputs vertically on very small screens */
 @media (max-width: 400px) {
-    .general-timer-card .timer-input-group {
-        flex-direction: column; /* Stack H:M:S inputs vertically */
+    .custom-countdown-card .timer-input-group {
+        flex-direction: column;
         gap: 0.8em;
     }
-    .general-timer-card .timer-input-group input {
+    .custom-countdown-card .timer-input-group input {
         width: 100%;
         max-width: none;
     }
-    .general-timer-card .timer-input-group span { /* Hide ":" when stacked */
+    .custom-countdown-card .timer-input-group .colon { /* Hide ":" when stacked */
         display: none;
     }
 }
 
-.general-timer-card .timer-input-group span {
+.custom-countdown-card .timer-input-group .colon { /* Specific for the colon separator */
     font-size: 1.5em;
     font-weight: bold;
     color: var(--primary-color);
+    /* Ensure vertical alignment with inputs */
+    line-height: 1; /* Match line-height to input height if possible */
+    vertical-align: middle; 
 }
 
-.general-timer-card .countdown-display {
-    font-size: clamp(3.5em, 8vw, 5em);
+.custom-countdown-card .countdown-display {
+    /* Adjusted clamp for better scaling on smaller screens */
+    font-size: clamp(2.5em, 10vw, 3.5em); 
     font-weight: bold;
     color: var(--primary-color);
     margin: 0 0 1.8em;
@@ -711,45 +725,45 @@ ul li:last-child {
     letter-spacing: 1px;
 }
 
-.general-timer-card .countdown-controls {
+.custom-countdown-card .countdown-controls {
     display: flex;
     justify-content: center;
     gap: 0.8em;
     margin-bottom: 1.5em;
     flex-wrap: wrap;
 }
-.general-timer-card .countdown-controls button {
+.custom-countdown-card .countdown-controls button {
     flex: 1 1 110px;
     max-width: 160px;
 }
-@media (max-width: 450px) { /* Stack countdown controls on smaller screens */
-    .general-timer-card .countdown-controls {
+/* Stack countdown controls on smaller screens */
+@media (max-width: 450px) {
+    .custom-countdown-card .countdown-controls {
         flex-direction: column;
         align-items: stretch;
     }
-    .general-timer-card .countdown-controls button {
+    .custom-countdown-card .countdown-controls button {
         width: 100%;
         max-width: none;
     }
 }
 
-
-.general-timer-card .countdown-options {
+.custom-countdown-card .countdown-options {
     display: flex;
     flex-direction: column;
     gap: 1em;
     align-items: center;
 }
-.general-timer-card .countdown-options .input-field {
+.custom-countdown-card .countdown-options .input-field {
     width: 100%;
     max-width: 300px; /* Limit width of label input */
 }
-.general-timer-card .countdown-options .notification-toggle {
+.custom-countdown-card .countdown-options .notification-toggle {
     display: flex;
     align-items: center;
     gap: 0.8em;
 }
-.general-timer-card .countdown-options .notification-toggle span {
+.custom-countdown-card .countdown-options .notification-toggle span {
     font-size: 1em;
     color: var(--text-color);
 }
@@ -786,6 +800,128 @@ ul li:last-child {
     }
     .stats-grid div:nth-child(odd) { /* Remove vertical divider when stacked */
         border-right: none;
+    }
+}
+
+/* --- Meditation Timers - Specific Responsive Adjustments --- */
+/* For very small smartphones (e.g., iPhone SE) */
+@media (max-width: 400px) {
+    /* Meditation Sanctuary Timer Controls */
+    .meditation-controls-group {
+        align-items: stretch; /* Ensure children stretch to full width */
+    }
+    .custom-timer-input {
+        flex-direction: column; /* Stack custom input and set button */
+        align-items: stretch;
+    }
+    .custom-timer-input .input-field,
+    .custom-timer-input button {
+        width: 100%;
+        max-width: none;
+    }
+    .timer-controls {
+        flex-direction: column; /* Stack start/pause/stop/reset buttons */
+        align-items: stretch;
+    }
+    .timer-controls button {
+        width: 100%;
+        max-width: none;
+    }
+
+    /* Custom Countdown Meditation Controls */
+    .custom-countdown-card .timer-input-group {
+        flex-direction: column; /* Stack H:M:S inputs vertically */
+        align-items: stretch;
+        gap: 0.8em; /* Increase gap between stacked inputs */
+    }
+    .custom-countdown-card .timer-input-group input {
+        width: 100%; /* Make inputs full width */
+        max-width: none;
+    }
+    .custom-countdown-card .timer-input-group .colon {
+        display: none; /* Hide colons when inputs are stacked */
+    }
+    .custom-countdown-card .countdown-controls {
+        flex-direction: column; /* Stack countdown control buttons */
+        align-items: stretch;
+    }
+    .custom-countdown-card .countdown-controls button {
+        width: 100%;
+        max-width: none;
+    }
+    /* Ensure countdown options stack well */
+    .custom-countdown-card .countdown-options .input-field {
+        width: 100%;
+        max-width: none;
+    }
+    .custom-countdown-card .countdown-options .notification-toggle {
+        width: 100%;
+        justify-content: space-between; /* Space out toggle and label */
+    }
+}
+
+/* Adjustments for tablet-sized screens (768px and below) - existing block */
+@media (max-width: 768px) {
+    /* ... existing rules ... */
+    
+    /* Modify existing rules related to timer controls here as well,
+       to ensure smooth transition from smaller to larger mobile screens */
+    .meditation-controls-group, .timer-controls, .countdown-controls {
+        gap: 0.8em;
+        margin-bottom: 1.2em;
+        /* CHANGE: Remove flex-direction: column; and align-items: stretch; here */
+        /* These will now be handled by the more specific 400px media query above
+           for full stacking, and flex-wrap will handle wrapping on larger mobiles. */
+    }
+    /* Add this if it's not already there and desired for tablets */
+    .preset-buttons {
+        flex-direction: row; /* Ensure presets wrap horizontally even if parent is column */
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6em;
+    }
+    .preset-meditation-time {
+        flex: 1 1 80px; /* Give some flexibility */
+        max-width: 120px; /* Prevent over-stretching */
+    }
+}
+
+/* Landscape orientation for mobile devices (up to 900px wide) - existing block */
+@media (max-width: 900px) and (orientation: landscape) {
+    /* ... existing rules ... */
+
+    /* Ensure that if we switch to landscape on a small device, the timers try to go side-by-side again */
+    .meditation-controls-group, .timer-controls, .countdown-controls {
+        flex-direction: row; /* Allow row layout in landscape again */
+        align-items: center;
+        justify-content: center;
+    }
+    .meditation-controls-group button, .timer-controls button, .countdown-controls button {
+        width: auto;
+        max-width: 150px;
+    }
+    .custom-timer-input {
+        flex-direction: row; /* Restore row layout */
+        align-items: center;
+    }
+    .custom-timer-input .input-field {
+        width: auto;
+        max-width: 120px;
+        text-align: center;
+    }
+    .custom-timer-input button {
+        width: auto;
+    }
+    .custom-countdown-card .timer-input-group { /* Restore row layout for H:M:S */
+        flex-direction: row;
+        gap: 0.5em;
+    }
+    .custom-countdown-card .timer-input-group input {
+        width: 50px; /* Restore fixed width */
+        max-width: none;
+    }
+    .custom-countdown-card .timer-input-group .colon {
+        display: inline; /* Show ":" again */
     }
 }
 
@@ -876,7 +1012,7 @@ ul li:last-child {
         gap: 0.6em;
     }
     .book-item-controls button {
-        width: 100%; /* Make control buttons full width */
+        width: 100%;
         max-width: none;
     }
 }
@@ -1044,7 +1180,7 @@ ul li:last-child {
 
 .goal-item.completed {
     opacity: 0.9; /* Slightly less opacity */
-    background-color: var(--secondary-color); /* Use secondary for completed goals */
+    background-color: var(--secondary-color);
     color: var(--inverted-text-color);
     border-color: var(--success-hover);
     box-shadow: 0 2px 8px var(--shadow-medium);
@@ -1910,15 +2046,15 @@ footer {
     .custom-timer-input button {
         width: auto;
     }
-    .general-timer-card .timer-input-group { /* Restore row layout for H:M:S */
+    .custom-countdown-card .timer-input-group { /* Restore row layout for H:M:S */
         flex-direction: row;
         gap: 0.5em;
     }
-    .general-timer-card .timer-input-group input {
+    .custom-countdown-card .timer-input-group input {
         width: 50px; /* Restore fixed width */
         max-width: none;
     }
-    .general-timer-card .timer-input-group span {
+    .custom-countdown-card .timer-input-group .colon {
         display: inline; /* Show ":" again */
     }
     .book-input-area, .search-input-area, .goal-input-area, .setting-item {
